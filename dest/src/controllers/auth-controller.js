@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const users_data_js_1 = __importDefault(require("../data/users-data.js"));
 const service_errors_js_1 = __importDefault(require("../common/service-errors.js"));
-const users_service_js_1 = __importDefault(require("../services/users-service.js"));
+const auth_service_js_1 = __importDefault(require("../services/auth-service.js"));
 const create_token_js_1 = __importDefault(require("../authentication/create-token.js"));
 const validate_body_js_1 = __importDefault(require("../middleware/validate-body.js"));
 const login_user_schema_js_1 = __importDefault(require("../validator/login-user-schema.js"));
@@ -25,7 +25,7 @@ const authController = express_1.default.Router();
 authController
     .post('/login', validate_body_js_1.default('user', login_user_schema_js_1.default), errorHandler_js_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    const { error, result } = yield users_service_js_1.default.login(users_data_js_1.default)(email, password);
+    const { error, result } = yield auth_service_js_1.default.login(users_data_js_1.default)(email, password);
     if (error === service_errors_js_1.default.INVALID_LOGIN) {
         res.status(401).send({
             message: 'Invalid email or password.',
@@ -42,8 +42,8 @@ authController
     }
 })))
     .delete('/logout', authMiddleware_js_1.default, errorHandler_js_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers.authorization && req.headers.authorization.replace('Bearer ', '');
-    const _ = yield users_service_js_1.default.logout(users_data_js_1.default)(token);
+    const token = req.headers.authorization.replace('Bearer ', '');
+    const _ = yield auth_service_js_1.default.logout(users_data_js_1.default)(token);
     res.status(200).send({
         message: 'You have logged out successfully!',
     });

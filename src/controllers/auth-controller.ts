@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import usersData from '../data/users-data.js';
 import errors from '../common/service-errors.js';
-import usersService from '../services/users-service.js';
+import authService from '../services/auth-service.js';
 import createToken from '../authentication/create-token.js';
 import validateBody from '../middleware/validate-body.js';
 import loginUserSchema from '../validator/login-user-schema.js';
@@ -13,7 +13,7 @@ const authController = express.Router();
 authController
   .post('/login', validateBody('user', loginUserSchema), errorHandler(async (req: Request, res: Response) => {
     const { email, password }: {email: string, password: string}= req.body;
-    const { error, result } = await usersService.login(usersData)(email, password);
+    const { error, result } = await authService.login(usersData)(email, password);
 
     if (error === errors.INVALID_LOGIN) {
       res.status(401).send({
@@ -32,8 +32,8 @@ authController
   }))
 
   .delete('/logout', authMiddleware, errorHandler(async (req: Request, res: Response) => {
-    const token = req.headers.authorization && req.headers.authorization.replace('Bearer ', '');
-    const _ = await usersService.logout(usersData)(token);
+    const token = req.headers.authorization.replace('Bearer ', '');
+    const _ = await authService.logout(usersData)(token);
 
     res.status(200).send({
       message: 'You have logged out successfully!',

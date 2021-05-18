@@ -1,6 +1,6 @@
 import db from './pool.js';
 
-const tokenExists = async (token: string) => {
+const tokenExists = async (token: String) => {
   const sql = `
     SELECT *
     FROM tokens
