@@ -6,9 +6,9 @@ const create = async (user: {email: string, password:string,role:string}) => {
     INSERT INTO users (
       email, 
       password,
-      role_id
+      role
     )
-    VALUES (?, ?, (SELECT role_id FROM roles WHERE type = ?))
+    VALUES (?, ?, ?)
   `;
 
   const createdUser = await db.query(sql, [
@@ -52,7 +52,7 @@ const loginUser = async (email: string) => {
       u.email as email, 
       u.password as password,
       u.user_id as userId,
-      r.type as role
+      u.role as role
     FROM users u
     LEFT JOIN roles r USING (role_id)
     WHERE u.is_deleted = 0 AND email = ?
@@ -73,10 +73,25 @@ const logoutUser = async (token: string) => {
   return db.query(sql, [token]);
 };
 
+const getBy = async (email: string) => {
+  const sql = `
+  SELECT 
+    u.email as email, 
+    u.user_id as userId,
+    u.role as role
+  FROM users u
+  WHERE u.is_deleted = 0 AND email = ?
+`;
+
+  const result = await db.query(sql, [email]);
+  return result[0];
+}
+
 export default {
   create,
   getPassword,
   remove,
   loginUser,
   logoutUser,
+  getBy,
 };

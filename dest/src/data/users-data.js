@@ -19,9 +19,9 @@ const create = (user) => __awaiter(void 0, void 0, void 0, function* () {
     INSERT INTO users (
       email, 
       password,
-      role_id
+      role
     )
-    VALUES (?, ?, (SELECT role_id FROM roles WHERE type = ?))
+    VALUES (?, ?, ?)
   `;
     const createdUser = yield pool_js_1.default.query(sql, [
         user.email,
@@ -58,7 +58,7 @@ const loginUser = (email) => __awaiter(void 0, void 0, void 0, function* () {
       u.email as email, 
       u.password as password,
       u.user_id as userId,
-      r.type as role
+      u.role as role
     FROM users u
     LEFT JOIN roles r USING (role_id)
     WHERE u.is_deleted = 0 AND email = ?
@@ -76,10 +76,23 @@ const logoutUser = (token) => __awaiter(void 0, void 0, void 0, function* () {
   `;
     return pool_js_1.default.query(sql, [token]);
 });
+const getBy = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const sql = `
+  SELECT 
+    u.email as email, 
+    u.user_id as userId,
+    u.role as role
+  FROM users u
+  WHERE u.is_deleted = 0 AND email = ?
+`;
+    const result = yield pool_js_1.default.query(sql, [email]);
+    return result[0];
+});
 exports.default = {
     create,
     getPassword,
     remove,
     loginUser,
     logoutUser,
+    getBy,
 };

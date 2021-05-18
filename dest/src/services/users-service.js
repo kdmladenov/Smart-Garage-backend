@@ -22,7 +22,7 @@ const createUser = (usersData) => (user) => __awaiter(void 0, void 0, void 0, fu
             result: null,
         };
     }
-    const existingUser = yield usersData.getBy('email', user.email);
+    const existingUser = yield usersData.getBy(user.email);
     if (existingUser) {
         return {
             error: service_errors_js_1.default.DUPLICATE_RECORD,
@@ -36,7 +36,7 @@ const createUser = (usersData) => (user) => __awaiter(void 0, void 0, void 0, fu
     };
 });
 // delete user
-const deleteUser = usersData => (userId) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUser = (usersData) => (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield usersData.getBy('user_id', userId);
     if (!existingUser) {
         return {

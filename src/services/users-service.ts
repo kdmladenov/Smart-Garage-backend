@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
 import errors from '../common/service-errors.js';
+import UsersData from '../models/UsersData';
 
 // register user
-const createUser = (usersData) => async (user: { email: string, password: string, reenteredPassword: string }) => {
+const createUser = (usersData: UsersData) => async (user: { email: string, password: string, reenteredPassword: string }) => {
   if (user.password !== user.reenteredPassword) {
     return {
       error: errors.BAD_REQUEST,
@@ -10,7 +11,7 @@ const createUser = (usersData) => async (user: { email: string, password: string
     };
   }
 
-  const existingUser = await usersData.getBy('email', user.email);
+  const existingUser = await usersData.getBy(user.email);
 
   if (existingUser) {
     return {
@@ -28,7 +29,7 @@ const createUser = (usersData) => async (user: { email: string, password: string
 };
 
 // delete user
-const deleteUser = usersData => async (userId: number) => {
+const deleteUser = (usersData: UsersData) => async (userId: number) => {
   const existingUser = await usersData.getBy('user_id', userId);
   if (!existingUser) {
     return {

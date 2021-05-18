@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
+import { PoolConfig } from 'mariadb';
 
 const config = dotenv.config().parsed!;
 
-export const DB_CONFIG = {
+export const DB_CONFIG: PoolConfig = {
   host: config.HOST,
-  port: config.DBPORT,
+  port: +config.DBPORT,
   user: config.USER,
   password: config.PASSWORD,
   database: config.DATABASE,

@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const service_errors_js_1 = __importDefault(require("../common/service-errors.js"));
 // login
-const login = usersData => (email, password) => __awaiter(void 0, void 0, void 0, function* () {
+const login = (usersData) => (email, password) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield usersData.loginUser(email);
     if (!user || !(yield bcrypt_1.default.compare(password, user.password))) {
         return {
@@ -29,7 +29,7 @@ const login = usersData => (email, password) => __awaiter(void 0, void 0, void 0
     };
 });
 // logout
-const logout = usersData => (token) => __awaiter(void 0, void 0, void 0, function* () {
+const logout = (usersData) => (token) => __awaiter(void 0, void 0, void 0, function* () {
     const _ = yield usersData.logoutUser(token);
 });
 exports.default = {

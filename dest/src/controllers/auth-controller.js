@@ -42,7 +42,7 @@ authController
     }
 })))
     .delete('/logout', authMiddleware_js_1.default, errorHandler_js_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers.authorization.replace('Bearer ', '');
+    const token = req.headers.authorization.replace('Bearer ', ''); // if there is no token we will never get to this line. Token wil never be undefined
     const _ = yield auth_service_js_1.default.logout(users_data_js_1.default)(token);
     res.status(200).send({
         message: 'You have logged out successfully!',

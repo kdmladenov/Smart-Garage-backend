@@ -15,9 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const error_strings_js_1 = __importDefault(require("../common/error-strings.js"));
 exports.default = (resource, scheme) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = {};
+    const errorsObj = error_strings_js_1.default;
     Object.keys(scheme).forEach(key => {
         if (!scheme[key](req.body[key])) {
-            errors[key] = error_strings_js_1.default[resource][key];
+            errors[key] = errorsObj[resource][key];
         }
     });
     if (Object.keys(errors).length > 0) {

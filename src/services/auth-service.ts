@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
 import errors from '../common/service-errors.js';
+import UsersData from '../models/UsersData';
 
 // login
-const login = usersData => async (email: string, password: string) => {
+const login = (usersData: UsersData) => async (email: string, password: string) => {
   const user = await usersData.loginUser(email);
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -19,7 +20,7 @@ const login = usersData => async (email: string, password: string) => {
 };
 
 // logout
-const logout = usersData => async (token: string) => {
+const logout = (usersData: UsersData) => async (token: string) => {
   const _ = await usersData.logoutUser(token);
 };
 

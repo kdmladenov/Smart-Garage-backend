@@ -8,7 +8,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const config = dotenv_1.default.config().parsed;
 exports.DB_CONFIG = {
     host: config.HOST,
-    port: config.DBPORT,
+    port: +config.DBPORT,
     user: config.USER,
     password: config.PASSWORD,
     database: config.DATABASE,
