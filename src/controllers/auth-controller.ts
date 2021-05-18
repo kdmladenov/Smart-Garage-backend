@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import usersData from '../data/users-data.js';
 import errors from '../common/service-errors.js';
 import usersService from '../services/users-service.js';
@@ -11,8 +11,8 @@ import errorHandler from '../middleware/errorHandler.js';
 const authController = express.Router();
 
 authController
-  .post('/login', validateBody('user', loginUserSchema), errorHandler(async (req, res) => {
-    const { email, password } = req.body;
+  .post('/login', validateBody('user', loginUserSchema), errorHandler(async (req: Request, res: Response) => {
+    const { email, password }: {email: string, password: string}= req.body;
     const { error, result } = await usersService.login(usersData)(email, password);
 
     if (error === errors.INVALID_LOGIN) {
@@ -31,8 +31,8 @@ authController
     }
   }))
 
-  .delete('/logout', authMiddleware, errorHandler(async (req, res) => {
-    const token = req.headers.authorization.replace('Bearer ', '');
+  .delete('/logout', authMiddleware, errorHandler(async (req: Request, res: Response) => {
+    const token = req.headers.authorization && req.headers.authorization.replace('Bearer ', '');
     const _ = await usersService.logout(usersData)(token);
 
     res.status(200).send({

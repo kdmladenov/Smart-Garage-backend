@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import passport from 'passport';
@@ -19,7 +19,7 @@ app.use(passport.initialize());
 app.use('/auth', authController);
 app.use('/users', usersController);
 
-app.use((err, req, res, next) => {
+app.use((err, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send({
     message: err.message,
   });

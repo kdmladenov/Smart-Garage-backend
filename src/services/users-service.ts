@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import errors from '../common/service-errors.js';
 
 // register user
-const createUser = usersData => async user => {
+const createUser = (usersData) => async (user: { email: string, password: string, reenteredPassword: string }) => {
   if (user.password !== user.reenteredPassword) {
     return {
       error: errors.BAD_REQUEST,

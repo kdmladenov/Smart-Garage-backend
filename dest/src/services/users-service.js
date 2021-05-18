@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const service_errors_js_1 = __importDefault(require("../common/service-errors.js"));
 // register user
-const createUser = usersData => (user) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = (usersData) => (user) => __awaiter(void 0, void 0, void 0, function* () {
     if (user.password !== user.reenteredPassword) {
         return {
             error: service_errors_js_1.default.BAD_REQUEST,

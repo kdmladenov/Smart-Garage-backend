@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import usersData from '../data/users-data.js';
 import validateBody from '../middleware/validate-body.js';
 import usersService from '../services/users-service.js';
@@ -15,7 +15,7 @@ const usersController = express.Router();
 usersController
 
   // register
-  .post('/', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody('user', createUserSchema), errorHandler(async (req, res) => {
+  .post('/', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody('user', createUserSchema), errorHandler(async (req: Request, res: Response) => {
     const user = req.body;
 
     const { error, result } = await usersService.createUser(usersData)(user);
@@ -30,7 +30,7 @@ usersController
   }))
 
   // Delete user
-  .delete('/:userId/delete', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), errorHandler(async (req, res) => {
+  .delete('/:userId/delete', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), errorHandler(async (req: Request, res: Response) => {
     const { userId } = req.params;
     const { error, result } = await usersService.deleteUser(usersData)(+userId);
 

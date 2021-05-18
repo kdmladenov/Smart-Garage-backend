@@ -1,6 +1,6 @@
-enum roles {
-  customer = 1,
-  employee = 2,
+const roles = {
+  customer: 'customer',
+  employee: 'employee',
 };
 
 export default roles;
