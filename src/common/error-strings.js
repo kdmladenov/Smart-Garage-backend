@@ -1,5 +1,9 @@
-export var user = {
+export const user = {
     email: '',
     password: '',
 };
-export var service = {};
+export const service = {};
+export default {
+    user,
+    service,
+};

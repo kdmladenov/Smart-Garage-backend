@@ -1,4 +1,6 @@
-export default {
-  customer: 1,
-  employee: 2,
+enum roles {
+  customer = 1,
+  employee = 2,
 };
+
+export default roles;

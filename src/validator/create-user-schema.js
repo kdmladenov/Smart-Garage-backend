@@ -1,6 +1,6 @@
 import { user } from '../common/constants.js';
 export default {
-    email: function (value) { return user.EMAIL_REGEX.test(value); },
-    password: function (value) { return user.PASSWORD_REGEX.test(value); },
-    reenteredPassword: function (value) { return user.PASSWORD_REGEX.test(value); },
+    email: (value) => user.EMAIL_REGEX.test(value),
+    password: (value) => user.PASSWORD_REGEX.test(value),
+    reenteredPassword: (value) => user.PASSWORD_REGEX.test(value),
 };

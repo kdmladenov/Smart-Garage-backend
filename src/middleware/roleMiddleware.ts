@@ -1,4 +1,4 @@
-const roleMiddleware = roleName => (req, res, next) => {
+const roleMiddleware = (roleName: number) => (req, res, next) => {
   if (req.user && req.user.role === roleName) {
     next();
   } else {

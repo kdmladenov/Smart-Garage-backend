@@ -1,4 +1,7 @@
-export const user = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.service = exports.user = void 0;
+exports.user = {
     MIN_FIRSTNAME_LENGTH: 2,
     MAX_FIRSTNAME_LENGTH: 20,
     MIN_LASTNAME_LENGTH: 2,
@@ -11,4 +14,4 @@ export const user = {
     PHONE_REGEX: /^(0[0-9]{9})$/,
     PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
 };
-export const service = {};
+exports.service = {};

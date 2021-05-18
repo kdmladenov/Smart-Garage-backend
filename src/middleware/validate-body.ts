@@ -1,6 +1,6 @@
 import errorStrings from '../common/error-strings.js';
 
-export default (resource, scheme) => async (req, res, next) => {
+export default (resource: string, scheme) => async (req, res, next) => {
   const errors = {};
   Object.keys(scheme).forEach(key => {
     if (!scheme[key](req.body[key])) {

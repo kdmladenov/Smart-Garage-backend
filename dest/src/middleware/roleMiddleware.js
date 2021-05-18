@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const roleMiddleware = (roleName) => (req, res, next) => {
     if (req.user && req.user.role === roleName) {
         next();
@@ -8,4 +10,4 @@ const roleMiddleware = (roleName) => (req, res, next) => {
         });
     }
 };
-export default roleMiddleware;
+exports.default = roleMiddleware;

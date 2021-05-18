@@ -1,7 +1,7 @@
 import db from './pool.js';
 
 // need to add more fields (first name, last name ...)
-const create = async (user) => {
+const create = async (user: {email: string, password:string,role:string}) => {
   const sql = `
     INSERT INTO users (
       email, 
@@ -26,17 +26,17 @@ const create = async (user) => {
   return result;
 };
 
-const getPassword = async (value) => {
+const getPassword = async (email: string) => {
   const sql = `
     SELECT password
     FROM users
     WHERE email = ?
   `;
-  const result = await db.query(sql, [value]);
+  const result = await db.query(sql, [email]);
   return result[0];
 };
 
-const remove = async userId => {
+const remove = async (userId: number) => {
   const sql = `
     UPDATE users SET
       is_deleted = 1,
@@ -46,7 +46,7 @@ const remove = async userId => {
   return db.query(sql, [userId]);
 };
 
-const loginUser = async email => {
+const loginUser = async (email: string) => {
   const sql = `
     SELECT 
       u.email as email, 
@@ -63,7 +63,7 @@ const loginUser = async email => {
 };
 
 // tokens table includes blacklisted tokens only
-const logoutUser = async (token) => {
+const logoutUser = async (token: string) => {
   const sql = `
     INSERT INTO tokens (
       token

@@ -6,3 +6,8 @@ export const user = {
 export const service = {
 
 };
+
+export default {
+  user,
+  service,
+}
