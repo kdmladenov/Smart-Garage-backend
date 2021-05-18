@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-const config = dotenv.config().parsed;
+const config = dotenv.config().parsed!;
 
 export const DB_CONFIG = {
   host: config.HOST,
