@@ -12,6 +12,13 @@ export const user = {
   PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
 };
 
+export const paging = {
+  vehicles: {
+    MAX_PAGE_SIZE: 20,
+    MIN_PAGE_SIZE: 10,
+  },
+};
+
 export const service = {
 
 };

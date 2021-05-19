@@ -9,6 +9,7 @@ export const DB_CONFIG: PoolConfig = {
   user: config.USER,
   password: config.PASSWORD,
   database: config.DATABASE,
+  connectionLimit: +config.LIMIT,
 };
 
 export const {

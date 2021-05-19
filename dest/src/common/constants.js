@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.service = exports.user = void 0;
-exports.user = {
+export var user = {
     MIN_FIRSTNAME_LENGTH: 2,
     MAX_FIRSTNAME_LENGTH: 20,
     MIN_LASTNAME_LENGTH: 2,
@@ -14,4 +11,11 @@ exports.user = {
     PHONE_REGEX: /^(0[0-9]{9})$/,
     PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
 };
-exports.service = {};
+export var paging = {
+    vehicles: {
+        MAX_PAGE_SIZE: 20,
+        MIN_PAGE_SIZE: 10,
+    },
+};
+export var service = {};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uc3RhbnRzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2NvbW1vbi9jb25zdGFudHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFDLElBQU0sSUFBSSxHQUFHO0lBQ2xCLG9CQUFvQixFQUFFLENBQUM7SUFDdkIsb0JBQW9CLEVBQUUsRUFBRTtJQUN4QixtQkFBbUIsRUFBRSxDQUFDO0lBQ3RCLG1CQUFtQixFQUFFLEVBQUU7SUFDdkIsc0JBQXNCLEVBQUUsQ0FBQztJQUN6QixzQkFBc0IsRUFBRSxFQUFFO0lBQzFCLGdCQUFnQixFQUFFLENBQUM7SUFDbkIsZ0JBQWdCLEVBQUUsRUFBRTtJQUNwQixXQUFXLEVBQUUsMERBQTBEO0lBQ3ZFLFdBQVcsRUFBRSxlQUFlO0lBQzVCLGNBQWMsRUFBRSxxREFBcUQsRUFBRSw0Q0FBNEM7Q0FDcEgsQ0FBQztBQUVGLE1BQU0sQ0FBQyxJQUFNLE1BQU0sR0FBRztJQUNwQixRQUFRLEVBQUU7UUFDUixhQUFhLEVBQUUsRUFBRTtRQUNqQixhQUFhLEVBQUUsRUFBRTtLQUNsQjtDQUNGLENBQUM7QUFFRixNQUFNLENBQUMsSUFBTSxPQUFPLEdBQUcsRUFFdEIsQ0FBQyJ9

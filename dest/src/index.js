@@ -1,27 +1,25 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const helmet_1 = __importDefault(require("helmet"));
-const passport_1 = __importDefault(require("passport"));
-const users_controller_js_1 = __importDefault(require("./controllers/users-controller.js"));
-const config_js_1 = require("../config.js");
-const auth_controller_js_1 = __importDefault(require("./controllers/auth-controller.js"));
-const strategy_js_1 = __importDefault(require("./authentication/strategy.js"));
-const app = express_1.default();
-passport_1.default.use(strategy_js_1.default);
-app.use(cors_1.default());
-app.use(helmet_1.default());
-app.use(express_1.default.json());
-app.use(passport_1.default.initialize());
-app.use('/auth', auth_controller_js_1.default);
-app.use('/users', users_controller_js_1.default);
-app.use((err, req, res, next) => {
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import passport from 'passport';
+import usersController from './controllers/users-controller.js';
+import { PORT } from '../config.js';
+import authController from './controllers/auth-controller.js';
+import jwtStrategy from './authentication/strategy.js';
+import vehiclesController from './controllers/vehicles-controller.js';
+var app = express();
+passport.use(jwtStrategy);
+app.use(cors());
+app.use(helmet());
+app.use(express.json());
+app.use(passport.initialize());
+app.use('/auth', authController);
+app.use('/users', usersController);
+app.use('/vehicles', vehiclesController);
+app.use(function (err, req, res, next) {
     res.status(500).send({
         message: err.message,
     });
 });
-app.listen(config_js_1.PORT, () => console.log(`Listening on port ${config_js_1.PORT}...`));
+app.listen(PORT, function () { return console.log("Listening on port " + PORT + "..."); });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxPQUE0QyxNQUFNLFNBQVMsQ0FBQztBQUNuRSxPQUFPLElBQUksTUFBTSxNQUFNLENBQUM7QUFDeEIsT0FBTyxNQUFNLE1BQU0sUUFBUSxDQUFDO0FBQzVCLE9BQU8sUUFBUSxNQUFNLFVBQVUsQ0FBQztBQUNoQyxPQUFPLGVBQWUsTUFBTSxtQ0FBbUMsQ0FBQztBQUNoRSxPQUFPLEVBQUUsSUFBSSxFQUFFLE1BQU0sY0FBYyxDQUFDO0FBQ3BDLE9BQU8sY0FBYyxNQUFNLGtDQUFrQyxDQUFDO0FBQzlELE9BQU8sV0FBVyxNQUFNLDhCQUE4QixDQUFDO0FBRXZELE9BQU8sa0JBQWtCLE1BQU0sc0NBQXNDLENBQUM7QUFFdEUsSUFBTSxHQUFHLEdBQUcsT0FBTyxFQUFFLENBQUM7QUFFdEIsUUFBUSxDQUFDLEdBQUcsQ0FBQyxXQUFXLENBQUMsQ0FBQztBQUUxQixHQUFHLENBQUMsR0FBRyxDQUFDLElBQUksRUFBRSxDQUFDLENBQUM7QUFDaEIsR0FBRyxDQUFDLEdBQUcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFDO0FBQ2xCLEdBQUcsQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLElBQUksRUFBRSxDQUFDLENBQUM7QUFDeEIsR0FBRyxDQUFDLEdBQUcsQ0FBQyxRQUFRLENBQUMsVUFBVSxFQUFFLENBQUMsQ0FBQztBQUUvQixHQUFHLENBQUMsR0FBRyxDQUFDLE9BQU8sRUFBRSxjQUFjLENBQUMsQ0FBQztBQUNqQyxHQUFHLENBQUMsR0FBRyxDQUFDLFFBQVEsRUFBRSxlQUFlLENBQUMsQ0FBQztBQUNuQyxHQUFHLENBQUMsR0FBRyxDQUFDLFdBQVcsRUFBRSxrQkFBa0IsQ0FBQyxDQUFDO0FBRXpDLEdBQUcsQ0FBQyxHQUFHLENBQUMsVUFBQyxHQUFrQixFQUFFLEdBQVksRUFBRSxHQUFhLEVBQUUsSUFBa0I7SUFDMUUsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUM7UUFDbkIsT0FBTyxFQUFFLEdBQUcsQ0FBQyxPQUFPO0tBQ3JCLENBQUMsQ0FBQztBQUNMLENBQUMsQ0FBQyxDQUFDO0FBRUgsR0FBRyxDQUFDLE1BQU0sQ0FBQyxJQUFJLEVBQUUsY0FBTSxPQUFBLE9BQU8sQ0FBQyxHQUFHLENBQUMsdUJBQXFCLElBQUksUUFBSyxDQUFDLEVBQTNDLENBQTJDLENBQUMsQ0FBQyJ9

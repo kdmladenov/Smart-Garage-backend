@@ -1,16 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TOKEN_LIFETIME = exports.PRIVATE_KEY = exports.PORT = exports.DB_CONFIG = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
-const config = dotenv_1.default.config().parsed;
-exports.DB_CONFIG = {
+import dotenv from 'dotenv';
+var config = dotenv.config().parsed;
+export var DB_CONFIG = {
     host: config.HOST,
     port: +config.DBPORT,
     user: config.USER,
     password: config.PASSWORD,
     database: config.DATABASE,
+    connectionLimit: +config.LIMIT,
 };
-exports.PORT = config.PORT, exports.PRIVATE_KEY = config.PRIVATE_KEY, exports.TOKEN_LIFETIME = config.TOKEN_LIFETIME;
+export var PORT = config.PORT, PRIVATE_KEY = config.PRIVATE_KEY, TOKEN_LIFETIME = config.TOKEN_LIFETIME;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmlnLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vY29uZmlnLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sTUFBTSxNQUFNLFFBQVEsQ0FBQztBQUc1QixJQUFNLE1BQU0sR0FBRyxNQUFNLENBQUMsTUFBTSxFQUFFLENBQUMsTUFBTyxDQUFDO0FBRXZDLE1BQU0sQ0FBQyxJQUFNLFNBQVMsR0FBZTtJQUNuQyxJQUFJLEVBQUUsTUFBTSxDQUFDLElBQUk7SUFDakIsSUFBSSxFQUFFLENBQUMsTUFBTSxDQUFDLE1BQU07SUFDcEIsSUFBSSxFQUFFLE1BQU0sQ0FBQyxJQUFJO0lBQ2pCLFFBQVEsRUFBRSxNQUFNLENBQUMsUUFBUTtJQUN6QixRQUFRLEVBQUUsTUFBTSxDQUFDLFFBQVE7SUFDekIsZUFBZSxFQUFFLENBQUMsTUFBTSxDQUFDLEtBQUs7Q0FDL0IsQ0FBQztBQUVGLE1BQU0sQ0FDSixJQUFBLElBQUksR0FHRixNQUFNLEtBSEosRUFDSixXQUFXLEdBRVQsTUFBTSxZQUZHLEVBQ1gsY0FBYyxHQUNaLE1BQU0sZUFETSxDQUNMIn0=
