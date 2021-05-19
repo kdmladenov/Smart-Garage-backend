@@ -13,27 +13,56 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const pool_js_1 = __importDefault(require("./pool.js"));
-// need to add more fields (first name, last name ...)
+const createAddress = (address) => __awaiter(void 0, void 0, void 0, function* () {
+    const { city, country, postalCode, streetAddress } = address;
+    const sql = `
+    INSERT INTO addresses (
+      city,
+      country,
+      postal_code,
+      street_address
+    )
+    VALUES (?, ?, ?, ?)
+  `;
+    return pool_js_1.default.query(sql, [city, country, postalCode, streetAddress]);
+});
 const create = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const { firstName, lastName, companyName, phone, email, password, address, role, } = user;
+    const addressId = (yield createAddress(address)).insertId;
     const sql = `
     INSERT INTO users (
+      first_name,
+      last_name,
+      company_name,
+      phone,
       email, 
       password,
+      address_id,
       role
     )
     VALUES (?, ?, ?)
   `;
     const createdUser = yield pool_js_1.default.query(sql, [
-        user.email,
-        user.password,
-        user.role,
+        firstName,
+        lastName,
+        companyName,
+        phone,
+        email,
+        password,
+        addressId,
+        role,
     ]);
-    const result = {
+    return {
         id: createdUser.insertId,
-        email: user.email,
-        role: user.role,
+        firstName,
+        lastName,
+        companyName,
+        phone,
+        email,
+        addressId,
+        address,
+        role,
     };
-    return result;
 });
 const getPassword = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const sql = `
@@ -55,12 +84,11 @@ const remove = (userId) => __awaiter(void 0, void 0, void 0, function* () {
 const loginUser = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const sql = `
     SELECT 
-      u.email as email, 
-      u.password as password,
-      u.user_id as userId,
-      u.role as role
+      email, 
+      password,
+      user_id as userId,
+      role
     FROM users u
-    LEFT JOIN roles r USING (role_id)
     WHERE u.is_deleted = 0 AND email = ?
   `;
     const result = yield pool_js_1.default.query(sql, [email]);
@@ -76,17 +104,36 @@ const logoutUser = (token) => __awaiter(void 0, void 0, void 0, function* () {
   `;
     return pool_js_1.default.query(sql, [token]);
 });
+const getAddress = (addressId) => __awaiter(void 0, void 0, void 0, function* () {
+    const sql = `
+  SELECT 
+    city,
+    country,
+    postal_code as postalCode,
+    street_address as streetAddress
+  FROM addresses
+  WHERE address_id = ?
+  `;
+    const result = yield pool_js_1.default.query(sql, [addressId]);
+});
 const getBy = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const sql = `
   SELECT 
-    u.email as email, 
-    u.user_id as userId,
-    u.role as role
+    first_name as firstName,
+    last_name as lastName,
+    company_name as companyName,
+    phone,
+    email, 
+    password,
+    address_id as addressId,
+    role
   FROM users u
   WHERE u.is_deleted = 0 AND email = ?
 `;
-    const result = yield pool_js_1.default.query(sql, [email]);
-    return result[0];
+    const user = (yield pool_js_1.default.query(sql, [email]))[0];
+    const addressId = +user.addressId;
+    const address = yield getAddress(addressId);
+    return Object.assign(Object.assign({}, user), { address });
 });
 exports.default = {
     create,

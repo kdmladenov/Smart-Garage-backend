@@ -6,7 +6,7 @@ import usersController from './controllers/users-controller.js';
 import { PORT } from '../config.js';
 import authController from './controllers/auth-controller.js';
 import jwtStrategy from './authentication/strategy.js';
-import HttpException from './middleware/errorMiddleware.js';
+import HttpException from './models/HttpException';
 
 const app = express();
 

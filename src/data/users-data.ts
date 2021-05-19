@@ -1,29 +1,71 @@
+import { Address } from '../models/Address.js';
+import { User } from '../models/User.js';
 import db from './pool.js';
 
-// need to add more fields (first name, last name ...)
-const create = async (user: {email: string, password:string,role:string}) => {
+const createAddress = async (address: Address) => {
+  const { city, country, postalCode, streetAddress } = address;
+  const sql = `
+    INSERT INTO addresses (
+      city,
+      country,
+      postal_code,
+      street_address
+    )
+    VALUES (?, ?, ?, ?)
+  `;
+
+  return db.query(sql, [city, country, postalCode, streetAddress]);
+}
+
+const create = async (user: User) => {
+  const {
+    firstName,
+    lastName,
+    companyName,
+    phone,
+    email, 
+    password,
+    address,
+    role,
+  } = user;
+
+  const addressId = (await createAddress(address)).insertId;
   const sql = `
     INSERT INTO users (
+      first_name,
+      last_name,
+      company_name,
+      phone,
       email, 
       password,
+      address_id,
       role
     )
     VALUES (?, ?, ?)
   `;
 
   const createdUser = await db.query(sql, [
-    user.email,
-    user.password,
-    user.role,
+    firstName,
+    lastName,
+    companyName,
+    phone,
+    email, 
+    password,
+    addressId,
+    role,
   ]);
 
-  const result = {
+  return {
     id: createdUser.insertId,
-    email: user.email,
-    role: user.role,
+    firstName,
+    lastName,
+    companyName,
+    phone,
+    email,
+    addressId,
+    address,
+    role,
   };
-
-  return result;
 };
 
 const getPassword = async (email: string) => {
@@ -49,12 +91,11 @@ const remove = async (userId: number) => {
 const loginUser = async (email: string) => {
   const sql = `
     SELECT 
-      u.email as email, 
-      u.password as password,
-      u.user_id as userId,
-      u.role as role
+      email, 
+      password,
+      user_id as userId,
+      role
     FROM users u
-    LEFT JOIN roles r USING (role_id)
     WHERE u.is_deleted = 0 AND email = ?
   `;
 
@@ -73,18 +114,42 @@ const logoutUser = async (token: string) => {
   return db.query(sql, [token]);
 };
 
+const getAddress = async (addressId: number) => {
+  const sql = `
+  SELECT 
+    city,
+    country,
+    postal_code as postalCode,
+    street_address as streetAddress
+  FROM addresses
+  WHERE address_id = ?
+  `
+  const result = await db.query(sql, [addressId])
+};
+
 const getBy = async (email: string) => {
   const sql = `
   SELECT 
-    u.email as email, 
-    u.user_id as userId,
-    u.role as role
+    first_name as firstName,
+    last_name as lastName,
+    company_name as companyName,
+    phone,
+    email, 
+    password,
+    address_id as addressId,
+    role
   FROM users u
   WHERE u.is_deleted = 0 AND email = ?
 `;
 
-  const result = await db.query(sql, [email]);
-  return result[0];
+  const user = (await db.query(sql, [email]))[0];
+  const addressId = +user.addressId;
+  const address = await getAddress(addressId);
+
+  return {
+    ...user,
+    address,
+  }  
 }
 
 export default {
