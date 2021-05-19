@@ -1,51 +1,51 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import bcrypt from 'bcrypt';
 import errors from '../common/service-errors.js';
-
 // register user
-const createUser = usersData => async user => {
-  if (user.password !== user.reenteredPassword) {
+const createUser = usersData => (user) => __awaiter(void 0, void 0, void 0, function* () {
+    if (user.password !== user.reenteredPassword) {
+        return {
+            error: errors.BAD_REQUEST,
+            result: null,
+        };
+    }
+    const existingUser = yield usersData.getBy('email', user.email);
+    if (existingUser) {
+        return {
+            error: errors.DUPLICATE_RECORD,
+            result: null,
+        };
+    }
+    const password = yield bcrypt.hash(user.password, 10);
     return {
-      error: errors.BAD_REQUEST,
-      result: null,
+        error: null,
+        result: yield usersData.create(Object.assign(Object.assign({}, user), { password })),
     };
-  }
-
-  const existingUser = await usersData.getBy('email', user.email);
-
-  if (existingUser) {
-    return {
-      error: errors.DUPLICATE_RECORD,
-      result: null,
-    };
-  }
-
-  const password = await bcrypt.hash(user.password, 10);
-
-  return {
-    error: null,
-    result: await usersData.create({ ...user, password }),
-  };
-};
-
+});
 // delete user
-const deleteUser = usersData => async (userId) => {
-  const existingUser = await usersData.getBy('user_id', userId);
-  if (!existingUser) {
+const deleteUser = usersData => (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingUser = yield usersData.getBy('user_id', userId);
+    if (!existingUser) {
+        return {
+            error: errors.RECORD_NOT_FOUND,
+            result: null,
+        };
+    }
+    const _ = yield usersData.remove(userId);
     return {
-      error: errors.RECORD_NOT_FOUND,
-      result: null,
+        error: null,
+        result: existingUser,
     };
-  }
-
-  const _ = await usersData.remove(userId);
-
-  return {
-    error: null,
-    result: existingUser,
-  };
-};
-
+});
 export default {
-  createUser,
-  deleteUser,
+    createUser,
+    deleteUser,
 };

@@ -1,8 +1,9 @@
 export const user = {
-  email: '',
-  password: '',
+    email: '',
+    password: '',
 };
-
-export const service = {
-
+export const service = {};
+export default {
+    user,
+    service,
 };
