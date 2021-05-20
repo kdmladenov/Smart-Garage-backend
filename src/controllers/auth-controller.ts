@@ -35,7 +35,7 @@ authController
   .delete('/logout', authMiddleware, errorHandler(async (req: Request, res: Response) => {
     const token = req.headers.authorization!.replace('Bearer ', ''); // if there is no token we will never get to this line. Token wil never be undefined
 
-    
+
     const _ = await authService.logout(usersData)(token);
 
     res.status(200).send({

@@ -7,6 +7,7 @@ import { PORT } from '../config.js';
 import authController from './controllers/auth-controller.js';
 import jwtStrategy from './authentication/strategy.js';
 import HttpException from './models/HttpException';
+import vehiclesController from './controllers/vehicles-controller.js';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(passport.initialize());
 
 app.use('/auth', authController);
 app.use('/users', usersController);
+app.use('/vehicles', vehiclesController);
 
 app.use((err: HttpException, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send({

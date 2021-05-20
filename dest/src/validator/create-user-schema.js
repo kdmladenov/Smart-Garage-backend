@@ -1,8 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const constants_js_1 = require("../common/constants.js");
-exports.default = {
-    email: (value) => constants_js_1.user.EMAIL_REGEX.test(value),
-    password: (value) => constants_js_1.user.PASSWORD_REGEX.test(value),
-    reenteredPassword: (value) => constants_js_1.user.PASSWORD_REGEX.test(value),
+import { user } from '../common/constants.js';
+export default {
+    email: function (value) { return user.EMAIL_REGEX.test(value); },
+    password: function (value) { return user.PASSWORD_REGEX.test(value); },
+    reenteredPassword: function (value) { return user.PASSWORD_REGEX.test(value); },
 };
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3JlYXRlLXVzZXItc2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3ZhbGlkYXRvci9jcmVhdGUtdXNlci1zY2hlbWEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLElBQUksRUFBRSxNQUFNLHdCQUF3QixDQUFDO0FBRTlDLGVBQWU7SUFDYixLQUFLLEVBQUUsVUFBQyxLQUFhLElBQWMsT0FBQSxJQUFJLENBQUMsV0FBVyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsRUFBNUIsQ0FBNEI7SUFDL0QsUUFBUSxFQUFFLFVBQUMsS0FBYSxJQUFjLE9BQUEsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLEVBQS9CLENBQStCO0lBQ3JFLGlCQUFpQixFQUFFLFVBQUMsS0FBYSxJQUFjLE9BQUEsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLEVBQS9CLENBQStCO0NBQy9FLENBQUMifQ==
