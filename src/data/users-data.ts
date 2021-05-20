@@ -1,9 +1,13 @@
-import { Address } from '../models/Address.js';
-import { User } from '../models/User.js';
-import db from './pool.js';
+import { Address } from "../models/Address.js";
+import { User } from "../models/User.js";
+import db from "./pool.js";
+import rolesEnum from "../common/roles.enum.js";
 
 const createAddress = async (address: Address) => {
-  const { city, country, postalCode, streetAddress } = address;
+  const {
+    city, country, postalCode, streetAddress,
+  } = address;
+
   const sql = `
     INSERT INTO addresses (
       city,
@@ -14,8 +18,16 @@ const createAddress = async (address: Address) => {
     VALUES (?, ?, ?, ?)
   `;
 
-  return db.query(sql, [city, country, postalCode, streetAddress]);
-}
+  const result = await db.query(sql, [
+    city,
+    country,
+    postalCode,
+    streetAddress || null,
+  ]);
+
+  const addressId = result.insertId;
+  return addressId;
+};
 
 const create = async (user: User) => {
   const {
@@ -23,13 +35,12 @@ const create = async (user: User) => {
     lastName,
     companyName,
     phone,
-    email, 
+    email,
     password,
-    address,
+    addressId,
     role,
   } = user;
 
-  const addressId = (await createAddress(address)).insertId;
   const sql = `
     INSERT INTO users (
       first_name,
@@ -38,10 +49,10 @@ const create = async (user: User) => {
       phone,
       email, 
       password,
-      address_id,
+      addresses_id,
       role
     )
-    VALUES (?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const createdUser = await db.query(sql, [
@@ -49,7 +60,7 @@ const create = async (user: User) => {
     lastName,
     companyName,
     phone,
-    email, 
+    email,
     password,
     addressId,
     role,
@@ -63,7 +74,6 @@ const create = async (user: User) => {
     phone,
     email,
     addressId,
-    address,
     role,
   };
 };
@@ -81,7 +91,7 @@ const getPassword = async (email: string) => {
 const remove = async (userId: number) => {
   const sql = `
     UPDATE users SET
-      is_deleted = 1,
+      is_deleted = 1
     WHERE user_id = ?
   `;
 
@@ -120,37 +130,62 @@ const getAddress = async (addressId: number) => {
     city,
     country,
     postal_code as postalCode,
-    street_address as streetAddress
+    street_address as streetAddress,
+    address_id as addressId
   FROM addresses
   WHERE address_id = ?
-  `
-  const result = await db.query(sql, [addressId])
+  `;
+  const result = await db.query(sql, [addressId]);
+  return result[0];
 };
 
-const getBy = async (email: string) => {
+const getByEmailPhone = async (column: string, value: string | number) => {
   const sql = `
   SELECT 
     first_name as firstName,
     last_name as lastName,
-    company_name as companyName,
     phone,
-    email, 
-    password,
-    address_id as addressId,
-    role
-  FROM users u
-  WHERE u.is_deleted = 0 AND email = ?
+    email
+  FROM users
+  WHERE is_deleted = 0 AND ${column} = ?
 `;
 
-  const user = (await db.query(sql, [email]))[0];
-  const addressId = +user.addressId;
-  const address = await getAddress(addressId);
+  const user = (await db.query(sql, [value]))[0];
+  return user;
+};
+const getBy = async (
+  column: string,
+  value: string | number,
+  isProfileOwner: boolean,
+  role: string,
+) => {
+  const sql = `
+  SELECT 
+    first_name as firstName,
+    last_name as lastName,
+    phone,
+    email,
+    a.city,
+    a.country,
+    a.postal_code as postalCode,
+    a.street_address as street
+    ${role === rolesEnum.employee || isProfileOwner ? `,
+    role` : ""}
+  FROM users u
+  LEFT JOIN addresses a USING (addresses_id)
+  WHERE is_deleted = 0 AND ${column} = ?
+`;
 
-  return {
-    ...user,
-    address,
-  }  
-}
+  const user = (await db.query(sql, [value]))[0];
+  return user;
+  // const addressId = user && +user.addressId;
+  // const address = (await getAddress(addressId)) || null;
+
+  // return {
+  //   ...user,
+  //   address,
+  // };
+};
 
 export default {
   create,
@@ -159,4 +194,6 @@ export default {
   loginUser,
   logoutUser,
   getBy,
+  createAddress,
+  getByEmailPhone,
 };

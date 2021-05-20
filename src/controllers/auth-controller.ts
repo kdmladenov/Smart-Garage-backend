@@ -13,7 +13,7 @@ const authController = express.Router();
 
 authController
   .post('/login', validateBody('user', loginUserSchema), errorHandler(async (req: Request, res: Response) => {
-    const { email, password }: {email: string, password: string}= req.body;
+    const { email, password }: {email: string, password: string} = req.body;
     const { error, result } = await authService.login(usersData)(email, password);
 
     if (error === errors.INVALID_LOGIN) {
@@ -35,7 +35,6 @@ authController
   .delete('/logout', authMiddleware, errorHandler(async (req: Request, res: Response) => {
     const token = req.headers.authorization!.replace('Bearer ', ''); // if there is no token we will never get to this line. Token wil never be undefined
 
-    
     const _ = await authService.logout(usersData)(token);
 
     res.status(200).send({

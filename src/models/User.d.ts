@@ -5,9 +5,9 @@ export interface User {
   lastName?: string;
   companyName?: string;
   phone: string;
-  email: string; 
+  email: string;
   password: string;
   address: Address;
-  addressId?: number;
+  addressId: number;
   role: string;
 }

@@ -1,12 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_js_1 = require("../../config.js");
-const createToken = (payload) => {
-    const token = jsonwebtoken_1.default.sign(payload, config_js_1.PRIVATE_KEY);
+import jwt from 'jsonwebtoken';
+import { PRIVATE_KEY /* , TOKEN_LIFETIME */ } from '../../config.js';
+var createToken = function (payload) {
+    var token = jwt.sign(payload, PRIVATE_KEY);
     return token;
 };
-exports.default = createToken;
+export default createToken;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3JlYXRlLXRva2VuLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2F1dGhlbnRpY2F0aW9uL2NyZWF0ZS10b2tlbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEdBQUcsTUFBTSxjQUFjLENBQUM7QUFDL0IsT0FBTyxFQUFFLFdBQVcsQ0FBQSxzQkFBc0IsRUFBRSxNQUFNLGlCQUFpQixDQUFDO0FBRXBFLElBQU0sV0FBVyxHQUFHLFVBQUMsT0FBc0Q7SUFDekUsSUFBTSxLQUFLLEdBQUcsR0FBRyxDQUFDLElBQUksQ0FDcEIsT0FBTyxFQUNQLFdBQVcsQ0FFWixDQUFDO0lBRUYsT0FBTyxLQUFLLENBQUM7QUFDZixDQUFDLENBQUM7QUFFRixlQUFlLFdBQVcsQ0FBQyJ9
