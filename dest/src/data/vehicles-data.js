@@ -62,17 +62,18 @@ var getManufacturerBy = function (column, value) { return __awaiter(void 0, void
 var createManufacturer = function (manufacturer) { return __awaiter(void 0, void 0, void 0, function () {
     var sql;
     return __generator(this, function (_a) {
-        sql = "\n    INSERT INTO manufacturers (\n      manufacturer_name,\n    )\n    VALUES (?);\n  ";
+        sql = "\n    INSERT INTO manufacturers (\n      manufacturer_name\n    )\n    VALUES (?);\n  ";
         return [2 /*return*/, db.query(sql, [manufacturer])];
     });
 }); };
-var getModelBy = function (column, value) { return __awaiter(void 0, void 0, void 0, function () {
+var getModelBy = function (column, value, manufacturer) { return __awaiter(void 0, void 0, void 0, function () {
     var sql, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                sql = "\n    SELECT\n      mod.model_id as id,\n      mod.model_name as name,\n      man.manufacturer as manufacturer,\n      cs.car_segment as carSegment\n    FROM models as mod\n    LEFT JOIN manufacturers as man USING(manufacturer_id)\n    LEFT JOIN car_segments as cs USING(car_segment_id)\n    WHERE " + column + " = ?;\n  ";
-                return [4 /*yield*/, db.query(sql, [value])];
+                console.log(column, value, manufacturer);
+                sql = "\n    SELECT\n      m.model_id as id,\n      m.model_name as model,\n      mf.manufacturer_name as manufacturer,\n      cs.car_segment as carSegment\n    FROM models as m\n    LEFT JOIN manufacturers as mf USING(manufacturer_id)\n    LEFT JOIN car_segments as cs USING(car_segment_id)\n    WHERE " + column + " = ? AND manufacturer_name = ?;\n  ";
+                return [4 /*yield*/, db.query(sql, [value, manufacturer])];
             case 1:
                 result = _a.sent();
                 return [2 /*return*/, result[0]];
@@ -82,7 +83,7 @@ var getModelBy = function (column, value) { return __awaiter(void 0, void 0, voi
 var createModel = function (modelName, manufacturer, carSegment) { return __awaiter(void 0, void 0, void 0, function () {
     var sql;
     return __generator(this, function (_a) {
-        sql = "\n    INSERT INTO models\n      model_name,\n      manufacturer_id,\n      car_segment_id\n    VALUES (?, (SELECT manufacturer_id FROM manufacturers WHERE manufacturer_name = ?), (SELECT car_segment_id FROM car_segments WHERE car_segment_name = ?));\n  ";
+        sql = "\n    INSERT INTO models (\n      model_name,\n      manufacturer_id,\n      car_segment_id\n    )\n    VALUES (?, (SELECT manufacturer_id FROM manufacturers WHERE manufacturer_name = ?), (SELECT car_segment_id FROM car_segments WHERE car_segment = ?));\n  ";
         return [2 /*return*/, db.query(sql, [modelName, manufacturer, carSegment])];
     });
 }); };
@@ -105,7 +106,8 @@ var create = function (vehicle) { return __awaiter(void 0, void 0, void 0, funct
         switch (_a.label) {
             case 0:
                 vin = vehicle.vin, licensePlate = vehicle.licensePlate, userId = vehicle.userId, modelId = vehicle.modelId, manufacturedYear = vehicle.manufacturedYear, engineType = vehicle.engineType, transmission = vehicle.transmission;
-                sql = "\n    INSERT INTO vehicles \n      vin,\n      license_plate,\n      user_id,\n      model_id,\n      manufactured_year,\n      engine_type,\n      transmission\n    VALUES (?, ?, ?, ?, ?, ?, ?);\n  ";
+                console.log(vehicle);
+                sql = "\n    INSERT INTO vehicles (\n      vin,\n      license_plate,\n      user_id,\n      model_id,\n      manufactured_year,\n      engine_type,\n      transmission\n    )\n    VALUES (?, ?, ?, ?, ?, ?, ?);\n  ";
                 return [4 /*yield*/, db.query(sql, [vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission])];
             case 1:
                 createdVehicle = _a.sent();
@@ -115,19 +117,19 @@ var create = function (vehicle) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 var update = function (vehicle) { return __awaiter(void 0, void 0, void 0, function () {
-    var vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission, sql, _;
+    var vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission, vehicleId, sql, _;
     return __generator(this, function (_a) {
-        vin = vehicle.vin, licensePlate = vehicle.licensePlate, userId = vehicle.userId, modelId = vehicle.modelId, manufacturedYear = vehicle.manufacturedYear, engineType = vehicle.engineType, transmission = vehicle.transmission;
+        vin = vehicle.vin, licensePlate = vehicle.licensePlate, userId = vehicle.userId, modelId = vehicle.modelId, manufacturedYear = vehicle.manufacturedYear, engineType = vehicle.engineType, transmission = vehicle.transmission, vehicleId = vehicle.vehicleId;
         sql = "\n    UPDATE vehicles SET\n      vin = ?,\n      license_plate = ?,\n      user_id = ?,\n      model_id = ?,\n      manufactured_year = ?,\n      engine_type = ?,\n      transmission = ?\n    WHERE vehicle_id = ?\n  ";
-        _ = db.query(sql, [vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission]);
+        _ = db.query(sql, [vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission, vehicleId]);
         return [2 /*return*/, vehicle];
     });
 }); };
-var getAll = function (page, pagesize, owner) { return __awaiter(void 0, void 0, void 0, function () {
+var getAll = function (page, pagesize, email, fullName) { return __awaiter(void 0, void 0, void 0, function () {
     var offset, sql;
     return __generator(this, function (_a) {
         offset = page ? (page - 1) * pagesize : 0;
-        sql = "\n  SELECT\n    v.vehicle_id as vehicleId,\n    v.vin,\n    v.license_plate as licensePlate,\n    v.model_id as modelId,\n    v.manufactured_year as manufacturedYear,\n    v.engine_type as engineType,\n    v.transmission,\n    v.user_id as userId,\n    u.email as email\n  FROM vehicles as v\n  LEFT JOIN users as u USING(user_id)\n  WHERE is_deleted = 0 AND u.email LIKE(%" + owner + "%)\n  LIMIT ? OFFSET ?;\n  ";
+        sql = "\n  SELECT\n    v.vehicle_id as vehicleId,\n    v.vin,\n    v.license_plate as licensePlate,\n    v.model_id as modelId,\n    v.manufactured_year as manufacturedYear,\n    v.engine_type as engineType,\n    v.transmission,\n    v.user_id as userId,\n    u.email as email,\n    u.full_name as fullName\n  FROM vehicles as v\n  LEFT JOIN (SELECT \n              CONCAT(first_name, ' ', last_name) as full_name,\n              email,\n              user_id,\n              is_deleted\n            FROM users) as u USING(user_id)\n  WHERE u.is_deleted = 0 " + (email && "AND u.email LIKE('%" + email + "%')") + " " + (fullName && "AND u.full_name like('%" + fullName + "%')") + "\n  LIMIT ? OFFSET ?;\n  ";
         return [2 /*return*/, db.query(sql, [pagesize, offset])];
     });
 }); };
@@ -141,4 +143,4 @@ export default {
     update: update,
     getAll: getAll,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidmVoaWNsZXMtZGF0YS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9kYXRhL3ZlaGljbGVzLWRhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFDQSxPQUFPLEVBQUUsTUFBTSxXQUFXLENBQUM7QUFFM0IsSUFBTSxpQkFBaUIsR0FBRyxVQUFPLE1BQWMsRUFBRSxLQUFzQjs7Ozs7Z0JBQy9ELEdBQUcsR0FBRyxvSEFLRixNQUFNLGNBQ2YsQ0FBQztnQkFFYSxxQkFBTSxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLEtBQUssQ0FBQyxDQUFDLEVBQUE7O2dCQUFyQyxNQUFNLEdBQUcsU0FBNEI7Z0JBQzNDLHNCQUFPLE1BQU0sQ0FBQyxDQUFDLENBQUMsRUFBQzs7O0tBQ2xCLENBQUM7QUFFRixJQUFNLGtCQUFrQixHQUFHLFVBQU8sWUFBb0I7OztRQUM5QyxHQUFHLEdBQUcseUZBS1gsQ0FBQztRQUVGLHNCQUFPLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUMsWUFBWSxDQUFDLENBQUMsRUFBQzs7S0FDdEMsQ0FBQztBQUVGLElBQU0sVUFBVSxHQUFHLFVBQU8sTUFBYyxFQUFFLEtBQXNCOzs7OztnQkFDeEQsR0FBRyxHQUFHLCtTQVNGLE1BQU0sY0FDZixDQUFDO2dCQUVhLHFCQUFNLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBQTs7Z0JBQXJDLE1BQU0sR0FBRyxTQUE0QjtnQkFDM0Msc0JBQU8sTUFBTSxDQUFDLENBQUMsQ0FBQyxFQUFDOzs7S0FDbEIsQ0FBQztBQUVGLElBQU0sV0FBVyxHQUFHLFVBQU8sU0FBaUIsRUFBRSxZQUFvQixFQUFFLFVBQWtCOzs7UUFDOUUsR0FBRyxHQUFHLCtQQU1YLENBQUM7UUFFRixzQkFBTyxFQUFFLENBQUMs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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidmVoaWNsZXMtZGF0YS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9kYXRhL3ZlaGljbGVzLWRhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFDQSxPQUFPLEVBQUUsTUFBTSxXQUFXLENBQUM7QUFFM0IsSUFBTSxpQkFBaUIsR0FBRyxVQUFPLE1BQWMsRUFBRSxLQUFzQjs7Ozs7Z0JBQy9ELEdBQUcsR0FBRyxvSEFLRixNQUFNLGNBQ2YsQ0FBQztnQkFFYSxxQkFBTSxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLEtBQUssQ0FBQyxDQUFDLEVBQUE7O2dCQUFyQyxNQUFNLEdBQUcsU0FBNEI7Z0JBQzNDLHNCQUFPLE1BQU0sQ0FBQyxDQUFDLENBQUMsRUFBQzs7O0tBQ2xCLENBQUM7QUFFRixJQUFNLGtCQUFrQixHQUFHLFVBQU8sWUFBb0I7OztRQUM5QyxHQUFHLEdBQUcsd0ZBS1gsQ0FBQztRQUVGLHNCQUFPLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUMsWUFBWSxDQUFDLENBQUMsRUFBQzs7S0FDdEMsQ0FBQztBQUVGLElBQU0sVUFBVSxHQUFHLFVBQU8sTUFBYyxFQUFFLEtBQXNCLEVBQUUsWUFBb0I7Ozs7O2dCQUNwRixPQUFPLENBQUMsR0FBRyxDQUFDLE1BQU0sRUFBRSxLQUFLLEVBQUUsWUFBWSxDQUFDLENBQUM7Z0JBQ25DLEdBQUcsR0FBRyw2U0FTRixNQUFNLHdDQUNmLENBQUM7Z0JBRWEscUJBQU0sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsQ0FBQyxLQUFLLEVBQUUsWUFBWSxDQUFDLENBQUMsRUFBQTs7Z0JBQW5ELE1BQU0sR0FBRyxTQUEwQztnQkFDekQsc0JBQU8sTUFBTSxDQUFDLENBQUMsQ0FBQyxFQUFDOzs7S0FDbEIsQ0FBQztBQUVGLElBQU0sV0FBVyxHQUFH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

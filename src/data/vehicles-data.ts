@@ -17,7 +17,7 @@ const getManufacturerBy = async (column: string, value: string | number) => {
 const createManufacturer = async (manufacturer: string) => {
   const sql = `
     INSERT INTO manufacturers (
-      manufacturer_name,
+      manufacturer_name
     )
     VALUES (?);
   `;
@@ -25,30 +25,32 @@ const createManufacturer = async (manufacturer: string) => {
   return db.query(sql, [manufacturer]);
 };
 
-const getModelBy = async (column: string, value: string | number) => {
+const getModelBy = async (column: string, value: string | number, manufacturer: string) => {
+  console.log(column, value, manufacturer);
   const sql = `
     SELECT
-      mod.model_id as id,
-      mod.model_name as name,
-      man.manufacturer as manufacturer,
+      m.model_id as id,
+      m.model_name as model,
+      mf.manufacturer_name as manufacturer,
       cs.car_segment as carSegment
-    FROM models as mod
-    LEFT JOIN manufacturers as man USING(manufacturer_id)
+    FROM models as m
+    LEFT JOIN manufacturers as mf USING(manufacturer_id)
     LEFT JOIN car_segments as cs USING(car_segment_id)
-    WHERE ${column} = ?;
+    WHERE ${column} = ? AND manufacturer_name = ?;
   `;
 
-  const result = await db.query(sql, [value]);
+  const result = await db.query(sql, [value, manufacturer]);
   return result[0];
 };
 
 const createModel = async (modelName: string, manufacturer: string, carSegment: string) => {
   const sql = `
-    INSERT INTO models
+    INSERT INTO models (
       model_name,
       manufacturer_id,
       car_segment_id
-    VALUES (?, (SELECT manufacturer_id FROM manufacturers WHERE manufacturer_name = ?), (SELECT car_segment_id FROM car_segments WHERE car_segment_name = ?));
+    )
+    VALUES (?, (SELECT manufacturer_id FROM manufacturers WHERE manufacturer_name = ?), (SELECT car_segment_id FROM car_segments WHERE car_segment = ?));
   `;
 
   return db.query(sql, [modelName, manufacturer, carSegment]);
@@ -84,8 +86,10 @@ const create = async (vehicle: Vehicle) => {
     transmission,
   } = vehicle;
 
+  console.log(vehicle);
+
   const sql = `
-    INSERT INTO vehicles 
+    INSERT INTO vehicles (
       vin,
       license_plate,
       user_id,
@@ -93,6 +97,7 @@ const create = async (vehicle: Vehicle) => {
       manufactured_year,
       engine_type,
       transmission
+    )
     VALUES (?, ?, ?, ?, ?, ?, ?);
   `;
 
@@ -111,6 +116,7 @@ const update = async (vehicle: Vehicle) => {
     manufacturedYear,
     engineType,
     transmission,
+    vehicleId,
   } = vehicle;
 
   const sql = `
@@ -125,12 +131,12 @@ const update = async (vehicle: Vehicle) => {
     WHERE vehicle_id = ?
   `;
 
-  const _ = db.query(sql, [vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission]);
+  const _ = db.query(sql, [vin, licensePlate, userId, modelId, manufacturedYear, engineType, transmission, vehicleId]);
 
   return vehicle;
 };
 
-const getAll = async (page: number, pagesize: number, owner: string) => {
+const getAll = async (page: number, pagesize: number, email: string, fullName: string) => {
   const offset = page ? (page - 1) * pagesize : 0;
 
   const sql = `
@@ -143,10 +149,16 @@ const getAll = async (page: number, pagesize: number, owner: string) => {
     v.engine_type as engineType,
     v.transmission,
     v.user_id as userId,
-    u.email as email
+    u.email as email,
+    u.full_name as fullName
   FROM vehicles as v
-  LEFT JOIN users as u USING(user_id)
-  WHERE is_deleted = 0 AND u.email LIKE(%${owner}%)
+  LEFT JOIN (SELECT 
+              CONCAT(first_name, ' ', last_name) as full_name,
+              email,
+              user_id,
+              is_deleted
+            FROM users) as u USING(user_id)
+  WHERE u.is_deleted = 0 ${email && `AND u.email LIKE('%${email}%')`} ${fullName && `AND u.full_name like('%${fullName}%')`}
   LIMIT ? OFFSET ?;
   `;
 

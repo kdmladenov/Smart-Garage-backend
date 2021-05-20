@@ -59,14 +59,21 @@ vehiclesController
   }))
 
   .get('/', authMiddleware, loggedUserGuard, errorHandler(async (req: Request, res: Response) => {
-    let { pagesize = paging.vehicles.MIN_PAGE_SIZE, page, owner } = req.query;
+    let {
+      pagesize = paging.vehicles.MIN_PAGE_SIZE,
+      page,
+      email,
+      fullName,
+    } = req.query;
 
-    if (pagesize > paging.vehicles.MAX_PAGE_SIZE) pagesize = paging.vehicles.MAX_PAGE_SIZE;
     if (pagesize < paging.vehicles.MIN_PAGE_SIZE) pagesize = paging.vehicles.MIN_PAGE_SIZE;
+    if (pagesize > paging.vehicles.MAX_PAGE_SIZE) pagesize = paging.vehicles.MAX_PAGE_SIZE;
     page = page || '1';
-    owner = typeof owner === 'string' ? owner : '';
+    email = typeof email === 'string' ? email : '';
+    fullName = typeof fullName === 'string' ? fullName : '';
+    fullName = fullName && fullName.replace('_', ' ');
 
-    const { result, error } = await vehiclesService.getAllVehicles(vehiclesData)(+page, +pagesize, owner);
+    const { result, error } = await vehiclesService.getAllVehicles(vehiclesData)(+page, +pagesize, email, fullName);
 
     res.status(201).send(result);
   }));

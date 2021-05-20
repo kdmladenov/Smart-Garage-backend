@@ -39,7 +39,7 @@ const createVehicle = (vehiclesData: VehiclesData) => async (createVehicleData: 
     const newManufacturer = await vehiclesData.createManufacturer(manufacturer);
   }
 
-  const existingModel = await vehiclesData.getModelBy('model_name', modelName);
+  const existingModel = await vehiclesData.getModelBy('model_name', modelName, manufacturer);
   if (!existingModel) {
     const newModel = await vehiclesData.createModel(modelName, manufacturer, carSegment);
     vehicle.modelId = +newModel.createId;
@@ -73,6 +73,7 @@ const updateVehicle = (vehiclesData: VehiclesData) => async (updateVehicleData: 
     manufacturedYear,
     engineType,
     transmission,
+    vehicleId,
     modelId: 0,
   };
 
@@ -110,10 +111,10 @@ const updateVehicle = (vehiclesData: VehiclesData) => async (updateVehicleData: 
     const newManufacturer = await vehiclesData.createManufacturer(manufacturer);
   }
 
-  const existingModel = await vehiclesData.getModelBy('model_name', modelName);
+  const existingModel = await vehiclesData.getModelBy('model_name', modelName, manufacturer);
   if (!existingModel) {
     const newModel = await vehiclesData.createModel(modelName, manufacturer, carSegment);
-    vehicle.modelId = +newModel.createId;
+    vehicle.modelId = +newModel.insertId;
   } else {
     vehicle.modelId = +existingModel.id;
   }
@@ -140,8 +141,8 @@ const getVehicle = (vehiclesData: VehiclesData) => async (vehicleId: number) => 
   };
 };
 
-const getAllVehicles = (vehiclesData: VehiclesData) => async (page: number, pagesize: number, owner: string) => {
-  const vehicles = await vehiclesData.getAll(page, pagesize, owner);
+const getAllVehicles = (vehiclesData: VehiclesData) => async (page: number, pagesize: number, email: string, fullName: string) => {
+  const vehicles = await vehiclesData.getAll(page, pagesize, email, fullName);
 
   return {
     error: null,

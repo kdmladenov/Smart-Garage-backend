@@ -28,6 +28,7 @@
       "quotes": "off",
       "consistent-return": "off", // require return statements to either always or never specify values
       "import/extensions": "off",
+      "import/named": "off",
       "require-jsdoc": 0,
       "object-curly-spacing": [
           "error",

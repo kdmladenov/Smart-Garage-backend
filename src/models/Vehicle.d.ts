@@ -6,4 +6,5 @@ export interface Vehicle {
   engineType: string;
   transmission: string;
   modelId?: number;
+  vehicleId?: number;
 }
