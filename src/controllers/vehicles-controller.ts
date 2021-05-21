@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import express, { Request, Response } from 'express';
 import { paging } from '../common/constants.js';
 import authMiddleware from '../authentication/authMiddleware.js';
@@ -40,7 +39,7 @@ vehiclesController
         message: `Vehicle with vin ${vehicle.vin} is not registered.`,
       });
     } else {
-      res.status(201).send(result);
+      res.status(200).send(result);
     }
   }))
 
@@ -54,7 +53,7 @@ vehiclesController
         message: `Vehicle with id ${vehicleId} is not found.`,
       });
     } else {
-      res.status(201).send(result);
+      res.status(200).send(result);
     }
   }))
 
@@ -73,9 +72,9 @@ vehiclesController
     fullName = typeof fullName === 'string' ? fullName : '';
     fullName = fullName && fullName.replace('_', ' ');
 
-    const { result, error } = await vehiclesService.getAllVehicles(vehiclesData)(+page, +pagesize, email, fullName);
+    const { result } = await vehiclesService.getAllVehicles(vehiclesData)(+page, +pagesize, email, fullName);
 
-    res.status(201).send(result);
+    res.status(200).send(result);
   }));
 
 export default vehiclesController;

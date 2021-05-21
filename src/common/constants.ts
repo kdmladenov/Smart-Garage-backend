@@ -30,3 +30,9 @@ export const vehicle = {
 export const service = {
 
 };
+
+export const visit = {
+  NOTES_MIN_LENGTH: 10,
+  NOTES_MAX_LENGTH: 255,
+  
+}

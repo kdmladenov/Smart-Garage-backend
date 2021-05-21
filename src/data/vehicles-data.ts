@@ -159,7 +159,7 @@ const getAll = async (page: number, pagesize: number, email: string, fullName: s
               is_deleted
             FROM users) as u USING(user_id)
   WHERE u.is_deleted = 0 ${email && `AND u.email LIKE('%${email}%')`} ${fullName && `AND u.full_name like('%${fullName}%')`}
-  LIMIT ? OFFSET ?;
+  LIMIT ? OFFSET ?;         
   `;
 
   return db.query(sql, [pagesize, offset]);

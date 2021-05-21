@@ -1,3 +1,5 @@
+import { visit as visitErrors } from './constants.js';
+
 export const user = {
   email: '',
   password: '',
@@ -19,8 +21,16 @@ export const vehicle = {
   carSegment: 'Expected a string',
 };
 
+export const visit = {
+  notes: `Expected a string in range ${visitErrors.NOTES_MIN_LENGTH} and ${visitErrors.NOTES_MAX_LENGTH} characters`,
+  vehicleId: 'Expected a number.',
+  usedParts: 'Expected an array of objects with values of type number and greater than zero.',
+  performedServices: 'Expected an array of objects with values of type number and greater than zero.',
+};
+
 export default {
   user,
   service,
   vehicle,
+  visit,
 };
