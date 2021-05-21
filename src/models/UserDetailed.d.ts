@@ -4,6 +4,7 @@ interface UserDetailed {
   companyName?: string;
   phone: string;
   email: string;
+  reenteredEmail: string;
   password: string;
   reenteredPassword: string;
   city: string;

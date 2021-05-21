@@ -6,6 +6,6 @@ export const DB_CONFIG = {
   user: config.USER,
   password: config.PASSWORD,
   database: config.DATABASE,
-  connectionLimit: 1,
+  connectionLimit: +config.LIMIT,
 };
 export const { PORT, PRIVATE_KEY, TOKEN_LIFETIME } = config;

@@ -34,21 +34,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import express from 'express';
-import usersData from '../data/users-data.js';
-import validateBody from '../middleware/validate-body.js';
-import usersService from '../services/users-service.js';
-import createUserSchema from '../validator/create-user-schema.js';
-import authMiddleware from '../authentication/authMiddleware.js';
-import roleMiddleware from '../middleware/roleMiddleware.js';
-import rolesEnum from '../common/roles.enum.js';
-import errors from '../common/service-errors.js';
-import loggedUserGuard from '../middleware/loggedUserGuard.js';
-import errorHandler from '../middleware/errorHandler.js';
+import express from "express";
+import usersData from "../data/users-data.js";
+import validateBody from "../middleware/validate-body.js";
+import usersService from "../services/users-service.js";
+import createUserSchema from "../validator/create-user-schema.js";
+import authMiddleware from "../authentication/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
+import rolesEnum from "../common/roles.enum.js";
+import errors from "../common/service-errors.js";
+import loggedUserGuard from "../middleware/loggedUserGuard.js";
+import errorHandler from "../middleware/errorHandler.js";
+import updateUserSchema from "../validator/update-user-schema.js";
 var usersController = express.Router();
 usersController
     // register
-    .post('/', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody('user', createUserSchema), errorHandler(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    .post("/", authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody("user", createUserSchema), errorHandler(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, _a, error, result;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -59,7 +60,7 @@ usersController
                 _a = _b.sent(), error = _a.error, result = _a.result;
                 if (error === errors.BAD_REQUEST) {
                     res.status(400).send({
-                        message: 'The request was invalid. Passwords do not match.',
+                        message: "The request was invalid. Passwords do not match.",
                     });
                 }
                 if (error === errors.DUPLICATE_RECORD) {
@@ -74,8 +75,8 @@ usersController
         }
     });
 }); }))
-    // Delete user errorHandler(
-    .delete("/:userId", authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    // Delete user
+    .delete("/:userId", authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), errorHandler(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, _a, error, result;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -95,18 +96,42 @@ usersController
                 return [2 /*return*/];
         }
     });
+}); }))
+    .get("/", authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), 
+// errorHandler(
+function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, _b, name, _c, email, _d, phone, _e, model, _f, make, _g, visitRangeLow, _h, visitRangeHigh, _j, sort, _k, order, result;
+    return __generator(this, function (_l) {
+        switch (_l.label) {
+            case 0:
+                _a = req.query, _b = _a.name, name = _b === void 0 ? "" : _b, _c = _a.email, email = _c === void 0 ? "" : _c, _d = _a.phone, phone = _d === void 0 ? "" : _d, _e = _a.model, model = _e === void 0 ? "" : _e, _f = _a.make, make = _f === void 0 ? "" : _f, _g = _a.visitRangeLow, visitRangeLow = _g === void 0 ? "" : _g, _h = _a.visitRangeHigh, visitRangeHigh = _h === void 0 ? "" : _h, _j = _a.sort, sort = _j === void 0 ? "name" : _j, _k = _a.order, order = _k === void 0 ? "ASC" : _k;
+                email = typeof email === "string" ? email : "";
+                name = typeof name === "string" ? name : "";
+                phone = typeof phone === "string" ? phone : "";
+                model = typeof model === "string" ? model : "";
+                make = typeof make === "string" ? make : "";
+                visitRangeLow = typeof visitRangeLow === "string" ? visitRangeLow : "";
+                visitRangeHigh = typeof visitRangeHigh === "string" ? visitRangeHigh : "";
+                sort = typeof sort === "string" ? sort : "";
+                order = typeof order === "string" ? order : "";
+                return [4 /*yield*/, usersService.getAllUsers(usersData)(name, email, phone, model, make, visitRangeLow, visitRangeHigh, sort, order)];
+            case 1:
+                result = _l.sent();
+                res.status(200).send(result);
+                return [2 /*return*/];
+        }
+    });
 }); })
     // )
     // get a single user
-    .get('/:userId', authMiddleware, loggedUserGuard, errorHandler(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, role, isProfileOwner, _a, error, result;
+    .get("/:userId", authMiddleware, loggedUserGuard, errorHandler(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, role, _a, error, result;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 userId = req.params.userId;
                 role = req.user.role;
-                isProfileOwner = +userId === +req.user.userId;
-                return [4 /*yield*/, usersService.getUser(usersData)(+userId, isProfileOwner, role)];
+                return [4 /*yield*/, usersService.getUser(usersData)(+userId, role)];
             case 1:
                 _a = _b.sent(), error = _a.error, result = _a.result;
                 if (error === errors.RECORD_NOT_FOUND) {
@@ -120,6 +145,38 @@ usersController
                 return [2 /*return*/];
         }
     });
+}); }))
+    .put("/:userId", authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody("user", updateUserSchema), errorHandler(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, update, _a, error, result;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                id = req.params.userId;
+                update = req.body;
+                return [4 /*yield*/, usersService.update(usersData)(update, +id)];
+            case 1:
+                _a = _b.sent(), error = _a.error, result = _a.result;
+                if (error === errors.BAD_REQUEST) {
+                    res.status(400).send({
+                        message: "The request was invalid. Emails are required or do not match.",
+                    });
+                }
+                else if (error === errors.RECORD_NOT_FOUND) {
+                    res.status(404).send({
+                        message: "User " + id + " is not found.",
+                    });
+                }
+                else if (error === errors.DUPLICATE_RECORD) {
+                    res.status(409).send({
+                        message: "User with same email already exists.",
+                    });
+                }
+                else {
+                    res.status(200).send(result);
+                }
+                return [2 /*return*/];
+        }
+    });
 }); }));
 export default usersController;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlcnMtY29udHJvbGxlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9jb250cm9sbGVycy91c2Vycy1jb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLE9BQU8sT0FBOEIsTUFBTSxTQUFTLENBQUM7QUFDckQsT0FBTyxTQUFTLE1BQU0sdUJBQXVCLENBQUM7QUFDOUMsT0FBTyxZQUFZLE1BQU0sZ0NBQWdDLENBQUM7QUFDMUQsT0FBTyxZQUFZLE1BQU0sOEJBQThCLENBQUM7QUFDeEQsT0FBTyxnQkFBZ0IsTUFBTSxvQ0FBb0MsQ0FBQztBQUNsRSxPQUFPLGNBQWMsTUFBTSxxQ0FBcUMsQ0FBQztBQUNqRSxPQUFPLGNBQWMsTUFBTSxpQ0FBaUMsQ0FBQztBQUM3RCxPQUFPLFNBQVMsTUFBTSx5QkFBeUIsQ0FBQztBQUNoRCxPQUFPLE1BQU0sTUFBTSw2QkFBNkIsQ0FBQztBQUNqRCxPQUFPLGVBQWUsTUFBTSxrQ0FBa0MsQ0FBQztBQUMvRCxPQUFPLFlBQVksTUFBTSwrQkFBK0IsQ0FBQztBQUV6RCxJQUFNLGVBQWUsR0FBRyxPQUFPLENBQUMsTUFBTSxFQUFFLENBQUM7QUFFekMsZUFBZTtJQUViLFdBQVc7S0FDVixJQUFJLENBQUMsR0FBRyxFQUFFLGNBQWMsRUFBRSxlQUFlLEVBQUUsY0FBYyxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsRUFBRSxZQUFZLENBQUMsTUFBTSxFQUFFLGdCQUFnQixDQUFDLEVBQUUsWUFBWSxDQUFDLFVBQU8sR0FBWSxFQUFFLEdBQWE7Ozs7O2dCQUMvSixJQUFJLEdBQUcsR0FBRyxDQUFDLElBQUksQ0FBQztnQkFFSSxxQkFBTSxZQUFZLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxDQUFDLElBQUksQ0FBQyxFQUFBOztnQkFBbEUsS0FBb0IsU0FBOEMsRUFBaEUsS0FBSyxXQUFBLEVBQUUsTUFB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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlcnMtY29udHJvbGxlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9jb250cm9sbGVycy91c2Vycy1jb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLE9BQU8sT0FBOEIsTUFBTSxTQUFTLENBQUM7QUFDckQsT0FBTyxTQUFTLE1BQU0sdUJBQXVCLENBQUM7QUFDOUMsT0FBTyxZQUFZLE1BQU0sZ0NBQWdDLENBQUM7QUFDMUQsT0FBTyxZQUFZLE1BQU0sOEJBQThCLENBQUM7QUFDeEQsT0FBTyxnQkFBZ0IsTUFBTSxvQ0FBb0MsQ0FBQztBQUNsRSxPQUFPLGNBQWMsTUFBTSxxQ0FBcUMsQ0FBQztBQUNqRSxPQUFPLGNBQWMsTUFBTSxpQ0FBaUMsQ0FBQztBQUM3RCxPQUFPLFNBQVMsTUFBTSx5QkFBeUIsQ0FBQztBQUNoRCxPQUFPLE1BQU0sTUFBTSw2QkFBNkIsQ0FBQztBQUNqRCxPQUFPLGVBQWUsTUFBTSxrQ0FBa0MsQ0FBQztBQUMvRCxPQUFPLFlBQVksTUFBTSwrQkFBK0IsQ0FBQztBQUN6RCxPQUFPLGdCQUFnQixNQUFNLG9DQUFvQyxDQUFDO0FBRWxFLElBQU0sZUFBZSxHQUFHLE9BQU8sQ0FBQyxNQUFNLEVBQUUsQ0FBQztBQUV6QyxlQUFlO0lBRWIsV0FBVztLQUNWLElBQUksQ0FDSCxHQUFHLEVBQ0gsY0FBYyxFQUNkLGVBQWUsRUFDZixjQUFjLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxFQUNsQyxZQUFZLENBQUMsTUFBTSxFQUFFLGdCQUFnQixDQUFDLEVBQ3RDLFlBQVksQ0FBQyxVQUFPLEdBQVksRUFBRSxHQUFhOzs7OztnQkFDdkMsSUFBSSxHQUFHLEdBQUcsQ0FBQyxJQUFJLENBQUM7Z0JBRUkscUJBQU0sWUFBWSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsQ0FBQyxJQUFJLENBQUMsRUFBQTs7Z0JBQWxF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
