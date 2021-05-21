@@ -13,26 +13,22 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   } = createVisitData;
 
   const existingServices = await Promise.all(performedServices.map(async service => {
-    // console.log(service);
     const existingService = await servicesData.getServiceBy(service.name, service.carSegmentId);
     if (!existingService) {
       const createdService = await servicesData.createService(service.name, service.carSegment, service.price);
       return { ...service, serviceId: createdService.insertId };
     }
-    return service;
+    return { service, serviceId: existingService.serviceId };
   }));
 
   const existingParts = await Promise.all(usedParts.map(async part => {
-    // console.log(part);
     const existingPart = await partsData.getPartBy(part.name, part.carSegmentId);
     if (!existingPart) {
       const createdPart = await partsData.createPart(part.name, part.carSegment, part.price);
       return { ...part, partId: createdPart.insertId };
     }
-    return part;
+    return { part, partId: existingPart.partId };
   }));
-
-  console.log(existingParts, existingServices);
 
   const visit = await visitsData.registerVisit(notes, vehicleId);
   const services = await visitsData.registerPerformedServices(existingServices, visit.visitId);
@@ -54,11 +50,8 @@ const getVisit = (visitsData: VisitsData) => async (visitId: number) => {
     };
   }
 
-  console.log(existingVisit);
-
   existingVisit.performedServices = await visitsData.getPerformedServicesByVisitId(visitId);
   existingVisit.usedParts = await visitsData.getUsedPartsByVisitId(visitId);
-  console.log(existingVisit);
 
   return {
     error: null,
