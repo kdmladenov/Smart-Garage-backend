@@ -10,6 +10,7 @@ import errors from "../common/service-errors.js";
 import loggedUserGuard from "../middleware/loggedUserGuard.js";
 import errorHandler from "../middleware/errorHandler.js";
 import updateUserSchema from "../validator/update-user-schema.js";
+import updatePasswordSchema from "../validator/update-password-schema.js";
 
 const usersController = express.Router();
 
@@ -39,7 +40,7 @@ usersController
       } else {
         res.status(201).send(result);
       }
-    })
+    }),
   )
 
   // Delete user
@@ -51,7 +52,7 @@ usersController
     errorHandler(async (req: Request, res: Response) => {
       const { userId } = req.params;
       const { error, result } = await usersService.deleteUser(usersData)(
-        +userId
+        +userId,
       );
 
       if (error === errors.RECORD_NOT_FOUND) {
@@ -61,15 +62,15 @@ usersController
       } else {
         res.status(200).send(result);
       }
-    })
+    }),
   )
+  // Get All users
   .get(
     "/",
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
-    // errorHandler(
-    async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       // const { role } = req.user!;
 
       let {
@@ -106,13 +107,15 @@ usersController
         order,
       );
       res.status(200).send(result);
-    })
+    }),
+  )
   // )
-  // get a single user
+  // Get a single user
   .get(
     "/:userId",
     authMiddleware,
     loggedUserGuard,
+    roleMiddleware(rolesEnum.employee),
     errorHandler(async (req: Request, res: Response) => {
       const { userId } = req.params;
       const { role } = req.user!;
@@ -128,8 +131,9 @@ usersController
       } else {
         res.status(200).send(result);
       }
-    })
+    }),
   )
+  // Update a single user
   .put(
     "/:userId",
     authMiddleware,
@@ -161,7 +165,37 @@ usersController
       } else {
         res.status(200).send(result);
       }
-    })
+    }),
+  )
+  // Change password
+  .patch(
+    "/:userId/change-password",
+    authMiddleware,
+    loggedUserGuard,
+    validateBody("user", updatePasswordSchema),
+    errorHandler(async (req: Request, res: Response) => {
+      const { role } = req.user!;
+      const id = role === rolesEnum.employee ? req.params.userId : req.user!.userId;
+      const passwordData = req.body;
+
+      const { error, result } = await usersService.changePassword(usersData)(
+        passwordData,
+        +id,
+        role,
+      );
+
+      if (error === errors.BAD_REQUEST) {
+        res.status(400).send({
+          message: "The request was invalid. Passwords do not match.",
+        });
+      } else if (error === errors.RECORD_NOT_FOUND) {
+        res.status(404).send({
+          message: `User ${id} is not found.`,
+        });
+      } else {
+        res.status(200).send(result);
+      }
+    }),
   );
 
 export default usersController;

@@ -264,17 +264,7 @@ const getAll = async (
     ? order
     : "asc";
   const sortedColumn = ["fullName", "visitStartDate"].includes(sort) ? sort : "fullName";
-console.log(
-name,
-email,
-phone,
-model,
-make,
-visitRangeLow,
-visitRangeHigh,
-sort,
-order,
-);
+
   const sql = `
     SELECT 
     u.user_id as userId,
@@ -322,7 +312,25 @@ order,
     visitRangeHigh || null,
   ]);
 };
+const getPasswordBy = async (column: string, value:string) => {
+  const sql = `
+    SELECT password
+    FROM users
+    WHERE ${column} = ?
+  `;
+  const result = await db.query(sql, [value]);
+  return result[0];
+};
 
+const updatePassword = async (userId:number, password:string) => {
+  const sql = `
+  UPDATE users SET  
+    password = ?
+  WHERE user_id = ?
+  `;
+
+  return db.query(sql, [password, userId]);
+};
 export default {
   create,
   getPassword,
@@ -335,4 +343,6 @@ export default {
   updateData,
   updateAddress,
   getAll,
+  getPasswordBy,
+  updatePassword,
 };

@@ -1,3 +1,5 @@
+import rolesEnum from './roles.enum.js';
+
 export const user = {
   MIN_FIRST_NAME_LENGTH: 2,
   MAX_FIRST_NAME_LENGTH: 20,
@@ -14,11 +16,12 @@ export const user = {
   MAX_EMAIL_LENGTH: 50,
   MIN_STREET_LENGTH: 4,
   MAX_STREET_LENGTH: 50,
+  MIN_PASSWORD_LENGTH: 8,
+  MAX_PASSWORD_LENGTH: 20,
   EMAIL_REGEX: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
   PHONE_REGEX: /^(08[0-9]{8})$/,
   PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
-  reenteredPassword: `Expected valid password containing letters, numbers and at least 1 uppercase`,
-  ROLES: ['customer', 'employee'],
+  ROLES: [rolesEnum.customer, rolesEnum.employee],
 };
 export const service = {
 

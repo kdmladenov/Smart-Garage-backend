@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import errors from '../common/service-errors.js';
 import UsersData from '../models/UsersData';
-import UserDetailed from '../models/UserDetailed';
+import UserDetailed from '../models/UserDetailed.js';
+import rolesEnum from '../common/roles.enum.js';
 
 // register user
 const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
@@ -102,20 +103,6 @@ const update = (usersData: UsersData) => async (userUpdate: UserDetailed, userId
     }
   }
 
-  // const {
-  //   city, country, postalCode, streetAddress,
-  // } = userUpdate;
-
-  // const updatedAddress = {
-  //   ...Object.keys({
-  //     city,
-  //     country,
-  //     postalCode,
-  //     streetAddress,
-  //   }).filter(i => i),
-  // };
-  // updatedAddress &&
-
   const updatedUser = { ...existingUser, ...userUpdate, userId };
   const _ = await usersData.updateData(updatedUser);
 
@@ -150,6 +137,33 @@ const getAllUsers = (usersData: UsersData) => async (
   console.log(result[0], "tt");
   return result;
 };
+// change password
+const changePassword = (usersData: UsersData) => async (passwordData:{[key: string]: string}, userId: number, role: string) => {
+  const existingUser = await usersData.getBy('user_id', userId);
+  if (!existingUser) {
+    return {
+      error: errors.RECORD_NOT_FOUND,
+      result: null,
+    };
+  }
+
+  const { password: savedPassword } = await usersData.getPasswordBy('user_id', userId);
+  const { password, reenteredPassword, currentPassword } = passwordData;
+
+  if (password !== reenteredPassword || (!await bcrypt.compare(currentPassword, savedPassword) && role !== rolesEnum.employee)) {
+    return {
+      error: errors.BAD_REQUEST,
+      result: null,
+    };
+  }
+
+  const updated = await bcrypt.hash(password, 10);
+  const _ = await usersData.updatePassword(userId, updated);
+  return {
+    error: null,
+    result: { message: 'The password was successfully changed' },
+  };
+};
 
 export default {
   createUser,
@@ -157,4 +171,5 @@ export default {
   getUser,
   update,
   getAllUsers,
+  changePassword,
 };

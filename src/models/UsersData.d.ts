@@ -9,6 +9,8 @@ interface UsersData {
   getByEmailPhone: Function;
   updateData: Function;
   getAll: Function;
+  getPasswordBy: Function;
+  updatePassword: Function;
 }
 
 export default UsersData;
