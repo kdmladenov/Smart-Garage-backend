@@ -17,6 +17,14 @@ export const paging = {
     MAX_PAGE_SIZE: 20,
     MIN_PAGE_SIZE: 10,
   },
+  services: {
+    MAX_PAGE_SIZE: 20,
+    MIN_PAGE_SIZE: 10,
+  },
+  spareParts: {
+    MAX_PAGE_SIZE: 20,
+    MIN_PAGE_SIZE: 10,
+  },
 };
 
 export const vehicle = {
@@ -28,11 +36,14 @@ export const vehicle = {
 };
 
 export const service = {
-
+  SERVICE_NAME_MIN_LENGTH: 2,
+  SERVICE_NAME_MAX_LENGTH: 100,
+  SERVICE_PRICE_MIN_VALUE: 0.1,
+  SERVICE_PRICE_MAX_VALUE: 100000,
+  CAR_SEGMENT_ID_MIN_VALUE: 0,
 };
 
 export const visit = {
   NOTES_MIN_LENGTH: 10,
   NOTES_MAX_LENGTH: 255,
-  
-}
+};

@@ -40,25 +40,77 @@ var getServiceBy = function (name, carSegmentId) { return __awaiter(void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                sql = "\n    SELECT\n      service_id,\n      name,\n      price,\n      car_segment_id\n    FROM services\n    WHERE name = ? AND car_segment_id = ? AND is_deleted = 0;\n  ";
+                sql = "\n  SELECT\n  service_id,\n  name,\n  price,\n  car_segment_id\n  FROM services\n  WHERE name = ? AND car_segment_id = ? AND is_deleted = 0;\n  ";
                 return [4 /*yield*/, db.query(sql, [name, carSegmentId])];
             case 1: return [2 /*return*/, (_a.sent())[0]];
         }
     });
 }); };
-var createService = function (name, carSegmentId, price) { return __awaiter(void 0, void 0, void 0, function () {
-    var sql;
+var getAllServices = function (page, pageSize, priceLow, priceHigh, serviceName, carSegment) { return __awaiter(void 0, void 0, void 0, function () {
+    var offset, sql;
+    return __generator(this, function (_a) {
+        offset = page ? (page - 1) * pageSize : 0;
+        sql = "\n    SELECT\n    s.service_id as serviceId,\n    s.name as serviceName,\n    s.price as servicePrice,\n    s.car_segment_id as carSegmentId,\n    cs.car_segment as carSegment\n    FROM services as s\n    LEFT JOIN car_segments as cs USING(car_segment_id)\n    WHERE is_deleted = 0\n    " + (serviceName && "AND s.name LIKE '%" + serviceName + "%'") + "\n    " + (carSegment && "AND cs.car_segment LIKE '%" + carSegment + "%'") + "\n    " + (priceLow && priceHigh && "AND price BETWEEN ? and ?") + "\n    LIMIT ? OFFSET ?;\n    ";
+        return [2 /*return*/, db.query(sql, [priceLow, priceHigh, +pageSize, +offset])];
+    });
+}); };
+var getBy = function (column, value) { return __awaiter(void 0, void 0, void 0, function () {
+    var sql, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                sql = "\n    INSERT INTO services (\n      name,\n      price,\n      car_segment_id\n    )\n    VALUES (?, ?, ?);\n  ";
-                return [4 /*yield*/, db.query(sql, [name, price, carSegmentId])];
-            case 1: return [2 /*return*/, (_a.sent())[0]];
+                sql = "\n    SELECT\n    s.service_id as serviceId,\n    s.name,\n    s.price,\n    s.car_segment_id as carSegmentId,\n    cs.car_segment as carSegment\n    FROM services as s\n    LEFT JOIN car_segments as cs USING(car_segment_id)\n    WHERE is_deleted = 0 AND " + column + " = ?\n    ;";
+                return [4 /*yield*/, db.query(sql, [+value])];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, result[0]];
         }
+    });
+}); };
+var createService = function (name, carSegmentId, price) { return __awaiter(void 0, void 0, void 0, function () {
+    var sql, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                sql = "\n      INSERT INTO services (\n        name,\n        car_segment_id,\n        price\n      )\n      VALUES (?, ?, ?);\n    ";
+                return [4 /*yield*/, db.query(sql, [name, +carSegmentId, +price])];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, getBy('service_id', result.insertId)];
+        }
+    });
+}); };
+var update = function (updated, serviceId) { return __awaiter(void 0, void 0, void 0, function () {
+    var sql, _;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                sql = "\n        UPDATE services\n        SET\n          name = ?,\n          price = ?,\n          car_segment_id = ?\n        WHERE service_id = ?\n    ";
+                return [4 /*yield*/, db.query(sql, [
+                        updated.name,
+                        updated.price,
+                        updated.carSegmentId,
+                        serviceId,
+                    ])];
+            case 1:
+                _ = _a.sent();
+                return [2 /*return*/, getBy("service_id", +serviceId)];
+        }
+    });
+}); };
+var remove = function (serviceId) { return __awaiter(void 0, void 0, void 0, function () {
+    var sql;
+    return __generator(this, function (_a) {
+        sql = "\n        UPDATE services \n        SET is_deleted = true\n        WHERE service_id = ?\n    ";
+        return [2 /*return*/, db.query(sql, [+serviceId])];
     });
 }); };
 export default {
     getServiceBy: getServiceBy,
     createService: createService,
+    getAllServices: getAllServices,
+    update: update,
+    remove: remove,
+    getBy: getBy,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VydmljZXMtZGF0YS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9kYXRhL3NlcnZpY2VzLWRhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxFQUFFLE1BQU0sV0FBVyxDQUFDO0FBRTNCLElBQU0sWUFBWSxHQUFHLFVBQU8sSUFBWSxFQUFFLFlBQW9COzs7OztnQkFDdEQsR0FBRyxHQUFHLHdLQVFYLENBQUM7Z0JBRU0scUJBQU0sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsQ0FBQyxJQUFJLEVBQUUsWUFBWSxDQUFDLENBQUMsRUFBQTtvQkFBakQsc0JBQU8sQ0FBQyxTQUF5QyxDQUFDLENBQUMsQ0FBQyxDQUFDLEVBQUM7OztLQUN2RCxDQUFDO0FBRUYsSUFBTSxhQUFhLEdBQUcsVUFBTyxJQUFZLEVBQUUsWUFBb0IsRUFBRSxLQUFhOzs7OztnQkFDdEUsR0FBRyxHQUFHLGlIQU9YLENBQUM7Z0JBRU0scUJBQU0sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsQ0FBQyxJQUFJLEVBQUUsS0FBSyxFQUFFLFlBQVksQ0FBQyxDQUFDLEVBQUE7b0JBQXhELHNCQUFPLENBQUMsU0FBZ0QsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFDOzs7S0FDOUQsQ0FBQztBQUVGLGVBQWU7SUFDYixZQUFZLGNBQUE7SUFDWixhQUFhLGVBQUE7Q0FDZCxDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VydmljZXMtZGF0YS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9kYXRhL3NlcnZpY2VzLWRhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxFQUFFLE1BQU0sV0FBVyxDQUFDO0FBRzNCLElBQU0sWUFBWSxHQUFHLFVBQU8sSUFBWSxFQUFFLFlBQW9COzs7OztnQkFDdEQsR0FBRyxHQUFHLGtKQVFYLENBQUM7Z0JBRU0scUJBQU0sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsQ0FBQyxJQUFJLEVBQUUsWUFBWSxDQUFDLENBQUMsRUFBQTtvQkFBakQsc0JBQU8sQ0FBQyxTQUF5QyxDQUFDLENBQUMsQ0FBQyxDQUFDLEVBQUM7OztLQUN2RCxDQUFDO0FBRUYsSUFBTSxjQUFjLEdBQUcsVUFDckIsSUFBWSxFQUNaLFFBQWdCLEVBQ2hCLFFBQWdCLEVBQ2hCLFNBQWlCLEVBQ2pCLFdBQW9CLEVBQ3BCLFVBQW1COzs7UUFFYixNQUFNLEdBQUcsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksR0FBRyxDQUFDLENBQUMsR0FBRyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUMxQyxHQUFHLEdBQUcscVNBVVIsV0FBVyxJQUFJLHVCQUFxQixXQUFXLE9BQUksZ0JBQ25ELFVBQVUsSUFBSSwrQkFBNkIsVUFBVSxPQUFJLGdCQUN6RCxRQUFRLElBQUksU0FBUyxJQUFJLDJCQUEyQixtQ0FFckQsQ0FBQztRQUVKLHNCQUFPLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUMsUUFBUSxFQUFFLFNBQVMsRUFBRSxDQUFDLFFBQVEsRUFBRSxDQUFDLE1BQU0sQ0FBQyxDQUFDLEVBQUM7O0tBQ2pFLENBQUM7QUFFRixJQUFNLEtBQUssR0FBRyxVQUFPLE1BQWMsRUFBRSxLQUFzQjs7Ozs7Z0JBQ25ELEdBQUcsR0FBRyxvUUFTaUIsTUFBTSxnQkFDL0IsQ0FBQztnQkFFVSxxQkFBTSxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBQTs7Z0JBQXRDLE1BQU0sR0FBRyxTQUE2QjtnQkFDNUMsc0JBQU8sTUFBTSxDQUFDLENBQUMsQ0FBQyxFQUFDOzs7S0FDbEIsQ0FBQztBQUVGLElBQU0sYUFBYSxHQUFHLFVBQ3BCLElBQVksRUFDWixZQUFvQixFQUNwQixLQUFhOzs7OztnQkFFUCxHQUFHLEdBQUcsK0hBT1QsQ0FBQztnQkFHVyxxQkFBTSxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLElBQUksRUFBRSxDQUFDLFlBQVksRUFBRSxDQUFDLEtBQUssQ0FBQyxDQUFDLEVBQUE7O2dCQUEzRCxNQUFNLEdBQUcsU0FBa0Q7Z0JBQ2pFLHNCQUFPLEtBQUssQ0FBQyxZQUFZLEVBQUUsTUFBTSxDQUFDLFFBQVEsQ0FBQyxFQUFDOzs7S0FDN0MsQ0FBQztBQUVGLElBQU0sTUFBTSxHQUFHLFVBQU8sT0FBMkIsRUFBRSxTQUFpQjs7Ozs7Z0JBQzVELEdBQUcsR0FBRyxxSkFPVCxDQUFDO2dCQUVNLHFCQUFNLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFO3dCQUM1QixPQUFPLENBQUMsSUFBSTt3QkFDWixPQUFPLENBQUMsS0FBSzt3QkFDYixPQUFPLENBQUMsWUFBWTt3QkFDcEIsU0FBUztxQkFDVixDQUFDLEVBQUE7O2dCQUxJLENBQUMsR0FBRyxTQUtSO2dCQUVGLHNCQUFPLEtBQUssQ0FBQyxZQUFZLEVBQUUsQ0FBQyxTQUFTLENBQUMsRUFBQzs7O0tBQ3hDLENBQUM7QUFFRixJQUFNLE1BQU0sR0FBRyxVQUFPLFNBQWlCOzs7UUFDL0IsR0FBRyxHQUFHLCtGQUlULENBQUM7UUFFSixzQkFBTyxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLENBQUMsU0FBUyxDQUFDLENBQUMsRUFBQzs7S0FDcEMsQ0FBQztBQUVGLGVBQWU7SUFDYixZQUFZLGNBQUE7SUFDWixhQUFhLGVBQUE7SUFDYixjQUFjLGdCQUFBO0lBQ2QsTUFBTSxRQUFBO0lBQ04sTUFBTSxRQUFBO0lBQ04sS0FBSyxPQUFBO0NBQ04sQ0FBQyJ9
