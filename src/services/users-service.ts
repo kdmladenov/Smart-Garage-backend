@@ -1,8 +1,12 @@
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 import errors from '../common/service-errors.js';
 import UsersData from '../models/UsersData';
 import UserDetailed from '../models/UserDetailed.js';
 import rolesEnum from '../common/roles.enum.js';
+import { DB_CONFIG, PRIVATE_KEY } from "../../config.js";
+import { forgotPassword } from '../common/constants.js';
 
 // register user
 const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
@@ -165,6 +169,97 @@ const changePassword = (usersData: UsersData) => async (passwordData:{[key: stri
   };
 };
 
+// change password
+const forgottenPassword = (usersData: UsersData) => async (
+  email: string,
+) => {
+  const existingUser = await usersData.getBy("email", email);
+  if (!existingUser) {
+    return {
+      error: errors.RECORD_NOT_FOUND,
+      result: null,
+    };
+  }
+  const { password: savedPassword } = await usersData.getPasswordBy(
+    "user_id", existingUser.userId,
+  );
+  const newPrivateKey = PRIVATE_KEY + savedPassword;
+  const payload = {
+    email: existingUser.email,
+    id: existingUser.userId,
+  };
+
+  const token = jwt.sign(payload, newPrivateKey, {
+    expiresIn: forgotPassword.tokenExpiration,
+  });
+  const link = `http://${DB_CONFIG.host}:${forgotPassword.frontEndPort}/reset-password/${existingUser.userId}/${token}`;
+
+  // Sending mail with reset link
+  const transporter = nodemailer.createTransport({
+    service: forgotPassword.emailService,
+    auth: {
+      user: forgotPassword.emailUser,
+      pass: forgotPassword.emailPassword,
+    },
+  });
+
+  const options = {
+    from: forgotPassword.emailUser,
+    to: `${existingUser.email}`,
+    subject: "Password reset link.",
+    text: `Dear ${existingUser.email},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
+${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`,
+  };
+
+  transporter.sendMail(options, (err, info) => {
+    if (err) {
+      return;
+    }
+    console.log(`Sent: + ${info.response}`);
+  });
+
+  return {
+    error: null,
+    result: { message: `The password reset link has been send to ${email}` },
+  };
+};
+
+// change password
+const resetPassword = (usersData: UsersData) => async (
+  password: string,
+  reenteredPassword: string,
+  userId: number,
+  token: string,
+) => {
+  const existingUser = await usersData.getBy("user_id", userId);
+  if (!existingUser) {
+    return {
+      error: errors.RECORD_NOT_FOUND,
+      result: null,
+    };
+  }
+
+  const { password: savedPassword } = await usersData.getPasswordBy(
+    "user_id",
+    userId,
+  );
+  const newPrivateKey = PRIVATE_KEY + savedPassword;
+  const payload = jwt.verify(token, newPrivateKey);
+
+  if (password !== reenteredPassword || !payload) {
+    return {
+      error: errors.BAD_REQUEST,
+      result: null,
+    };
+  }
+
+  const updated = await bcrypt.hash(password, 10);
+  const _ = await usersData.updatePassword(userId, updated);
+  return {
+    error: null,
+    result: { message: "The password was successfully reset" },
+  };
+};
 export default {
   createUser,
   deleteUser,
@@ -172,4 +267,6 @@ export default {
   update,
   getAllUsers,
   changePassword,
+  forgottenPassword,
+  resetPassword,
 };

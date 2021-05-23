@@ -163,6 +163,7 @@ const getBy = async (
   SELECT 
     first_name as firstName,
     last_name as lastName,
+    user_id as userId,
     phone,
     email,
     address_id as addressId,

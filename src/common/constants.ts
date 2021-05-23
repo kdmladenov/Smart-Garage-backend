@@ -26,3 +26,10 @@ export const user = {
 export const service = {
 
 };
+export const forgotPassword = {
+  tokenExpiration: "15m",
+  emailService: "hotmail",
+  emailUser: "smartgaragekd@outlook.com",
+  emailPassword: "Sekretenklu4",
+  frontEndPort: 3000,
+};
