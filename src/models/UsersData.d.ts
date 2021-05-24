@@ -5,12 +5,12 @@ interface UsersData {
   loginUser: Function;
   logoutUser: Function;
   getBy: Function;
-};
+  createAddress: Function;
+  getByEmailPhone: Function;
+  updateData: Function;
+  getAll: Function;
+  getPasswordBy: Function;
+  updatePassword: Function;
+}
 
 export default UsersData;
-
-// type UsersData2 = {
-
-// }
-
-// interface vs types !!!

@@ -1,17 +1,17 @@
-import { Address } from "./Address";
-
-export interface User {
-  userId?: number;
+interface UserDetailed {
   firstName?: string;
   lastName?: string;
   companyName?: string;
   phone: string;
   email: string;
+  reenteredEmail: string;
   password: string;
+  reenteredPassword: string;
   city: string;
   country: string;
   postalCode: number;
   streetAddress?: string;
-  addressId: number;
   role: string;
 }
+
+export default UserDetailed;
