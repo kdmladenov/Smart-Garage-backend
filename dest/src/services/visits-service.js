@@ -53,37 +53,37 @@ var createVisit = function (visitsData, servicesData, partsData) { return functi
         switch (_a.label) {
             case 0:
                 notes = createVisitData.notes, vehicleId = createVisitData.vehicleId, performedServices = createVisitData.performedServices, usedParts = createVisitData.usedParts;
-                return [4 /*yield*/, Promise.all(performedServices.map(function (service) { return __awaiter(void 0, void 0, void 0, function () {
+                return [4 /*yield*/, Promise.all(performedServices.map(function (s) { return __awaiter(void 0, void 0, void 0, function () {
                         var existingService, createdService;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, servicesData.getServiceBy(service.name, service.carSegmentId)];
+                                case 0: return [4 /*yield*/, servicesData.getServiceBy(s.name, s.carSegmentId)];
                                 case 1:
                                     existingService = _a.sent();
                                     if (!!existingService) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, servicesData.createService(service.name, service.carSegment, service.price)];
+                                    return [4 /*yield*/, servicesData.createService(s.name, s.carSegment, s.price)];
                                 case 2:
                                     createdService = _a.sent();
-                                    return [2 /*return*/, __assign(__assign({}, service), { serviceId: createdService.insertId })];
-                                case 3: return [2 /*return*/, { service: service, serviceId: existingService.serviceId }];
+                                    return [2 /*return*/, __assign(__assign({}, s), { serviceId: createdService.insertId })];
+                                case 3: return [2 /*return*/, __assign(__assign({}, s), { serviceId: existingService.serviceId })];
                             }
                         });
                     }); }))];
             case 1:
                 existingServices = _a.sent();
-                return [4 /*yield*/, Promise.all(usedParts.map(function (part) { return __awaiter(void 0, void 0, void 0, function () {
+                return [4 /*yield*/, Promise.all(usedParts.map(function (p) { return __awaiter(void 0, void 0, void 0, function () {
                         var existingPart, createdPart;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, partsData.getPartBy(part.name, part.carSegmentId)];
+                                case 0: return [4 /*yield*/, partsData.getPartBy(p.name, p.carSegmentId)];
                                 case 1:
                                     existingPart = _a.sent();
                                     if (!!existingPart) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, partsData.createPart(part.name, part.carSegment, part.price)];
+                                    return [4 /*yield*/, partsData.createPart(p.name, p.carSegment, p.price)];
                                 case 2:
                                     createdPart = _a.sent();
-                                    return [2 /*return*/, __assign(__assign({}, part), { partId: createdPart.insertId })];
-                                case 3: return [2 /*return*/, { part: part, partId: existingPart.partId }];
+                                    return [2 /*return*/, __assign(__assign({}, p), { partId: createdPart.insertId })];
+                                case 3: return [2 /*return*/, __assign(__assign({}, p), { partId: existingPart.partId })];
                             }
                         });
                     }); }))];
@@ -105,7 +105,7 @@ var createVisit = function (visitsData, servicesData, partsData) { return functi
         }
     });
 }); }; };
-var getVisit = function (visitsData) { return function (visitId) { return __awaiter(void 0, void 0, void 0, function () {
+var getVisit = function (visitsData) { return function (visitId, userId, role) { return __awaiter(void 0, void 0, void 0, function () {
     var existingVisit, _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -115,6 +115,12 @@ var getVisit = function (visitsData) { return function (visitId) { return __awai
                 if (!existingVisit) {
                     return [2 /*return*/, {
                             error: errors.RECORD_NOT_FOUND,
+                            result: null,
+                        }];
+                }
+                if (existingVisit.userId !== userId && role !== rolesEnum.employee) {
+                    return [2 /*return*/, {
+                            error: errors.OPERATION_NOT_PERMITTED,
                             result: null,
                         }];
                 }
@@ -165,9 +171,105 @@ var getAllVisits = function (visitsData, vehiclesData) { return function (role, 
         }
     });
 }); }; };
+var updateVisit = function (visitsData, servicesData, partsData) { return function (visitId, updateVisitData) { return __awaiter(void 0, void 0, void 0, function () {
+    var existingVisit, notes, performedServices, usedParts, visitEnd, status, existingServices, existingParts, updatedVisit;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, visitsData.getVisitBy('visit_id', visitId)];
+            case 1:
+                existingVisit = _a.sent();
+                if (!existingVisit) {
+                    return [2 /*return*/, {
+                            error: errors.RECORD_NOT_FOUND,
+                            result: null,
+                        }];
+                }
+                notes = updateVisitData.notes, performedServices = updateVisitData.performedServices, usedParts = updateVisitData.usedParts, visitEnd = updateVisitData.visitEnd, status = updateVisitData.status;
+                return [4 /*yield*/, Promise.all(performedServices.map(function (s) { return __awaiter(void 0, void 0, void 0, function () {
+                        var existingService, createdService;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, servicesData.getServiceBy(s.name, s.carSegmentId)];
+                                case 1:
+                                    existingService = _a.sent();
+                                    if (!!existingService) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, servicesData.createService(s.name, s.carSegmentId, s.price)];
+                                case 2:
+                                    createdService = _a.sent();
+                                    return [2 /*return*/, __assign(__assign({}, s), { serviceId: createdService.insertId })];
+                                case 3: return [2 /*return*/, __assign(__assign({}, s), { serviceId: existingService.serviceId })];
+                            }
+                        });
+                    }); }))];
+            case 2:
+                existingServices = _a.sent();
+                return [4 /*yield*/, Promise.all(usedParts.map(function (p) { return __awaiter(void 0, void 0, void 0, function () {
+                        var existingPart, createdPart;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, partsData.getPartBy(p.name, p.carSegmentId)];
+                                case 1:
+                                    existingPart = _a.sent();
+                                    console.log(existingPart);
+                                    if (!!existingPart) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, partsData.createPart(p.name, p.carSegmentId, p.price)];
+                                case 2:
+                                    createdPart = _a.sent();
+                                    return [2 /*return*/, __assign(__assign({}, p), { partId: createdPart.insertId })];
+                                case 3: return [2 /*return*/, __assign(__assign({}, p), { partId: existingPart.partId })];
+                            }
+                        });
+                    }); }))];
+            case 3:
+                existingParts = _a.sent();
+                return [4 /*yield*/, visitsData.updateVisit(visitId, notes, visitEnd, status)];
+            case 4:
+                updatedVisit = _a.sent();
+                existingServices.forEach(function (s) { return __awaiter(void 0, void 0, void 0, function () {
+                    var registeredServices, updatedService, newPerformedService;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, visitsData.getPerformedServicesByVisitId(visitId, s.serviceId)];
+                            case 1:
+                                registeredServices = _a.sent();
+                                if (registeredServices.length > 0) {
+                                    updatedService = visitsData.updatePerformedService(visitId, s.serviceId, s.serviceQty, s.price);
+                                }
+                                else {
+                                    newPerformedService = visitsData.registerPerformedServices([s]);
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                existingParts.forEach(function (p) { return __awaiter(void 0, void 0, void 0, function () {
+                    var registeredParts, updateParts, newUsedPart;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, visitsData.getUsedPartsByVisitId(visitId, p.partId)];
+                            case 1:
+                                registeredParts = _a.sent();
+                                if (registeredParts.length > 0) {
+                                    updateParts = visitsData.updateUsedPart(visitId, p.partId, p.partQty, p.price);
+                                }
+                                else {
+                                    newUsedPart = visitsData.registerUsedParts([p]);
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/, {
+                        error: null,
+                        result: updateVisitData,
+                    }];
+        }
+    });
+}); }; };
 export default {
     createVisit: createVisit,
     getVisit: getVisit,
     getAllVisits: getAllVisits,
+    updateVisit: updateVisit,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidmlzaXRzLXNlcnZpY2UuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvc2VydmljZXMvdmlzaXRzLXNlcnZpY2UudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxPQUFPLE1BQU0sTUFBTSw2QkFBNkIsQ0FBQztBQUlqRCxPQUFPLFNBQVMsTUFBTSx5QkFBeUIsQ0FBQztBQUVoRCxJQUFNLFdBQVcsR0FBRyxVQUFDLFVBQXNCLEVBQUUsWUFBMEIsRUFBRSxTQUFvQixJQUFLLE9BQUEsVUFBTyxlQUFnQzs7Ozs7Z0JBRXJJLEtBQUssR0FJSCxlQUFlLE1BSlosRUFDTCxTQUFTLEdBR1AsZUFBZSxVQUhSLEVBQ1QsaUJBQWlCLEdBRWYsZUFBZSxrQkFGQSxFQUNqQixTQUFTLEdBQ1AsZUFBZSxVQURSLENBQ1M7Z0JBRUsscUJBQU0sT0FBTyxDQUFDLEdBQUcsQ0FBQyxpQkFBaUIsQ0FBQyxHQUFHLENBQUMsVUFBTSxPQUFPOzs7O3dDQUNwRCxxQkFBTSxZQUFZLENBQUMsWUFBWSxDQUFDLE9BQU8sQ0FBQyxJQUFJLEVBQUUsT0FBTyxDQUFDLFlBQVksQ0FBQyxFQUFBOztvQ0FBckYsZUFBZSxHQUFHLFNBQW1FO3lDQUN2RixDQUFDLGVBQWUsRUFBaEIsd0JBQWdCO29DQUNLLHFCQUFNLFlBQVksQ0FBQyxhQUFhLENBQUMsT0FBTyxDQUFDLElBQUksRUFBRSxPQUFPLENBQUMsVUFBVSxFQUFFLE9BQU8sQ0FBQyxLQUFLLENBQUMsRUFBQTs7b0NBQWxHLGNBQWMsR0FBRyxTQUFpRjtvQ0FDeEcsNENBQVksT0FBTyxLQUFFLFNBQVMsRUFBRSxjQUFjLENBQUMsUUFBUSxLQUFHO3dDQUU1RCxzQkFBTyxFQUFFLE9BQU8sU0FBQSxFQUFFLFNBQVMsRUFBRSxlQUFlLENBQUMsU0FBUyxFQUFFLEVBQUM7Ozt5QkFDMUQsQ0FBQyxDQUFDLEVBQUE7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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidmlzaXRzLXNlcnZpY2UuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvc2VydmljZXMvdmlzaXRzLXNlcnZpY2UudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxPQUFPLE1BQU0sTUFBTSw2QkFBNkIsQ0FBQztBQUlqRCxPQUFPLFNBQVMsTUFBTSx5QkFBeUIsQ0FBQztBQUdoRCxJQUFNLFdBQVcsR0FBRyxVQUFDLFVBQXNCLEVBQUUsWUFBMEIsRUFBRSxTQUFvQixJQUFLLE9BQUEsVUFBTyxlQUFnQzs7Ozs7Z0JBRXJJLEtBQUssR0FJSCxlQUFlLE1BSlosRUFDTCxTQUFTLEdBR1AsZUFBZSxVQUhSLEVBQ1QsaUJBQWlCLEdBRWYsZUFBZSxrQkFGQSxFQUNqQixTQUFTLEdBQ1AsZUFBZSxVQURSLENBQ1M7Z0JBRUsscUJBQU0sT0FBTyxDQUFDLEdBQUcsQ0FBQyxpQkFBaUIsQ0FBQyxHQUFHLENBQUMsVUFBTSxDQUFDOzs7O3dDQUM5QyxxQkFBTSxZQUFZLENBQUMsWUFBWSxDQUFDLENBQUMsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxDQUFDLFlBQVksQ0FBQyxFQUFBOztvQ0FBekUsZUFBZSxHQUFHLFNBQXVEO3lDQUMzRSxDQUFDLGVBQWUsRUFBaEIsd0JBQWdCO29DQUNLLHFCQUFNLFlBQVksQ0FBQyxhQUFhLENBQUMsQ0FBQyxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsVUFBVSxFQUFFLENBQUMsQ0FBQyxLQUFLLENBQUMsRUFBQTs7b0NBQWhGLGNBQWMsR0FBRyxTQUErRDtvQ0FDdEYsNENBQVksQ0FBQyxLQUFFLFNBQVMsRUFBRSxjQUFjLENBQUMsUUFBUSxLQUFHO3dDQUV0RCw0Q0FBWSxDQUFDLEtBQUUsU0FBUyxFQUFFLGVBQWUsQ0FBQyxTQUFTLEtBQUc7Ozt5QkFDdkQsQ0FBQyxDQUFDLEVBQUE7O2dCQVBHLGdCQUFnQixH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

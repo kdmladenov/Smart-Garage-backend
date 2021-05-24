@@ -5,6 +5,7 @@ import { ServicesData } from '../models/ServicesData';
 import { PartsData } from '../models/PartsData';
 import { VehiclesData } from '../models/VehiclesData';
 import rolesEnum from '../common/roles.enum.js';
+import { UpdateVisitData } from '../models/UpdateVisitData';
 
 const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsData: PartsData) => async (createVisitData: CreateVisitData) => {
   const {
@@ -14,22 +15,22 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     usedParts,
   } = createVisitData;
 
-  const existingServices = await Promise.all(performedServices.map(async service => {
-    const existingService = await servicesData.getServiceBy(service.name, service.carSegmentId);
+  const existingServices = await Promise.all(performedServices.map(async s => {
+    const existingService = await servicesData.getServiceBy(s.name, s.carSegmentId);
     if (!existingService) {
-      const createdService = await servicesData.createService(service.name, service.carSegment, service.price);
-      return { ...service, serviceId: createdService.insertId };
+      const createdService = await servicesData.createService(s.name, s.carSegment, s.price);
+      return { ...s, serviceId: createdService.insertId };
     }
-    return { service, serviceId: existingService.serviceId };
+    return { ...s, serviceId: existingService.serviceId };
   }));
 
-  const existingParts = await Promise.all(usedParts.map(async part => {
-    const existingPart = await partsData.getPartBy(part.name, part.carSegmentId);
+  const existingParts = await Promise.all(usedParts.map(async p => {
+    const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
     if (!existingPart) {
-      const createdPart = await partsData.createPart(part.name, part.carSegment, part.price);
-      return { ...part, partId: createdPart.insertId };
+      const createdPart = await partsData.createPart(p.name, p.carSegment, p.price);
+      return { ...p, partId: createdPart.insertId };
     }
-    return { part, partId: existingPart.partId };
+    return { ...p, partId: existingPart.partId };
   }));
 
   const visit = await visitsData.registerVisit(notes, vehicleId);
@@ -42,12 +43,19 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   };
 };
 
-const getVisit = (visitsData: VisitsData) => async (visitId: number) => {
+const getVisit = (visitsData: VisitsData) => async (visitId: number, userId: number, role: string) => {
   const existingVisit = await visitsData.getVisitBy('visit_id', visitId);
 
   if (!existingVisit) {
     return {
       error: errors.RECORD_NOT_FOUND,
+      result: null,
+    };
+  }
+
+  if (existingVisit.userId !== userId && role !== rolesEnum.employee) {
+    return {
+      error: errors.OPERATION_NOT_PERMITTED,
       result: null,
     };
   }
@@ -87,8 +95,72 @@ const getAllVisits = (visitsData: VisitsData, vehiclesData: VehiclesData) => asy
   };
 };
 
+const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsData: PartsData) => async (visitId: number, updateVisitData: UpdateVisitData) => {
+  const existingVisit = await visitsData.getVisitBy('visit_id', visitId);
+
+  if (!existingVisit) {
+    return {
+      error: errors.RECORD_NOT_FOUND,
+      result: null,
+    };
+  }
+
+  const {
+    notes,
+    performedServices,
+    usedParts,
+    visitEnd,
+    status,
+  } = updateVisitData;
+
+  const existingServices = await Promise.all(performedServices.map(async s => {
+    const existingService = await servicesData.getServiceBy(s.name, s.carSegmentId);
+    if (!existingService) {
+      const createdService = await servicesData.createService(s.name, s.carSegmentId, s.price);
+      return { ...s, serviceId: createdService.insertId };
+    }
+    return { ...s, serviceId: existingService.serviceId };
+  }));
+
+  const existingParts = await Promise.all(usedParts.map(async p => {
+    const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
+    console.log(existingPart);
+    if (!existingPart) {
+      const createdPart = await partsData.createPart(p.name, p.carSegmentId, p.price);
+      return { ...p, partId: createdPart.insertId };
+    }
+    return { ...p, partId: existingPart.partId };
+  }));
+
+  const updatedVisit = await visitsData.updateVisit(visitId, notes, visitEnd, status);
+
+  existingServices.forEach(async s => {
+    const registeredServices = await visitsData.getPerformedServicesByVisitId(visitId, s.serviceId);
+    if (registeredServices.length > 0) {
+      const updatedService = visitsData.updatePerformedService(visitId, s.serviceId, s.serviceQty, s.price);
+    } else {
+      const newPerformedService = visitsData.registerPerformedServices([s]);
+    }
+  });
+
+  existingParts.forEach(async p => {
+    const registeredParts = await visitsData.getUsedPartsByVisitId(visitId, p.partId);
+    if (registeredParts.length > 0) {
+      const updateParts = visitsData.updateUsedPart(visitId, p.partId, p.partQty, p.price);
+    } else {
+      const newUsedPart = visitsData.registerUsedParts([p]);
+    }
+  });
+
+  return {
+    error: null,
+    result: updateVisitData,
+  };
+};
+
 export default {
   createVisit,
   getVisit,
   getAllVisits,
+  updateVisit,
 };

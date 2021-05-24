@@ -6,6 +6,7 @@ import roleMiddleware from '../middleware/roleMiddleware.js';
 import rolesEnum from '../common/roles.enum.js';
 import validateBody from '../middleware/validate-body.js';
 import createVisitSchema from '../validator/create-visit-schema.js';
+import updateVisitSchema from '../validator/update-visit-schema.js';
 import errorHandler from '../middleware/errorHandler.js';
 import visitsService from '../services/visits-service.js';
 import visitsData from '../data/visits-data.js';
@@ -39,12 +40,19 @@ visitsController
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
       const { visitId } = req.params;
+      const { userId, role } = req.user!;
 
-      const { result, error } = await visitsService.getVisit(visitsData)(+visitId);
+      const { result, error } = await visitsService.getVisit(visitsData)(+visitId, +userId, role);
 
       if (error === errors.RECORD_NOT_FOUND) {
         return res.status(404).send({
           message: `Visit with id ${visitId} is not found.`,
+        });
+      }
+
+      if (error === errors.OPERATION_NOT_PERMITTED) {
+        return res.status(403).send({
+          message: `This resource is forbidden!`,
         });
       }
 
@@ -53,21 +61,21 @@ visitsController
   )
 
   .get(
-    '/:userId',
+    '/',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
       const { userId: loggedUserId, role } = req.user!;
-      const { userId } = req.params;
-      const { vehicleId } = req.query;
+      const { vehicleId, userId } = req.query;
       let { visitRangeLow, visitRangeHigh, visitStatus } = req.query;
 
       visitRangeLow = typeof visitRangeLow === 'string' ? visitRangeLow : '';
       visitRangeHigh = typeof visitRangeHigh === 'string' ? visitRangeHigh : '';
+      const validatedUserId = userId ? +userId : 0;
       const validatedVehicleId = vehicleId ? +vehicleId : 0;
       visitStatus = (typeof visitStatus === 'string' && Object.keys(visitStatusEnum).includes(visitStatus)) ? visitStatus : '';
 
-      const { result, error } = await visitsService.getAllVisits(visitsData, vehiclesData)(role, +loggedUserId, +userId, validatedVehicleId, visitRangeLow, visitRangeHigh, visitStatus);
+      const { result, error } = await visitsService.getAllVisits(visitsData, vehiclesData)(role, +loggedUserId, +validatedUserId, validatedVehicleId, visitRangeLow, visitRangeHigh, visitStatus);
 
       if (error === errors.OPERATION_NOT_PERMITTED) {
         return res.status(403).send({
@@ -83,6 +91,27 @@ visitsController
 
       return res.status(200).send(result);
     }),
-  );
+  )
 
+  .put(
+    '/:visitId',
+    authMiddleware,
+    loggedUserGuard,
+    roleMiddleware(rolesEnum.employee),
+    validateBody('visit', updateVisitSchema),
+    errorHandler(async (req: Request, res: Response) => {
+      const { visitId } = req.params;
+      const updateData = req.body;
+
+      const { result, error } = await visitsService.updateVisit(visitsData, servicesData, partsData)(+visitId, updateData);
+
+      if (error === errors.RECORD_NOT_FOUND) {
+        return res.status(404).send({
+          message: `Visit with id ${visitId} is not found.`,
+        });
+      }
+
+      return res.status(200).send(result);
+    }),
+  );
 export default visitsController;

@@ -6,4 +6,7 @@ export interface VisitsData {
   getPerformedServicesByVisitId: Function;
   getUsedPartsByVisitId: Function;
   getAllVisitsBy: Function;
+  updateVisit: Function;
+  updatePerformedService: Function;
+  updateUsedPart: Function;
 }

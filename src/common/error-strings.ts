@@ -38,6 +38,9 @@ export const visit = {
   vehicleId: 'Expected a number.',
   usedParts: 'Expected an array of objects with values of type number and greater than zero.',
   performedServices: 'Expected an array of objects with values of type number and greater than zero.',
+  status: 'Expected one of "not started", "in progress", "ready"',
+  visitStart: 'Expected valid date',
+  visitEnd: 'Expected valid date',
 };
 
 export default {

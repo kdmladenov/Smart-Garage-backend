@@ -4,10 +4,10 @@ import { UpdatePartsData } from "../models/UpdatePartsData";
 const getPartBy = async (name: string, carSegmentId: number) => {
   const sql = `
     SELECT
-      part_id,
+      part_id as partId,
       name,
       price,
-      car_segment_id
+      car_segment_id as carSegmentId
     FROM parts
     WHERE name = ? AND car_segment_id = ? AND is_deleted = 0;
   `;

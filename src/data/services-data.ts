@@ -4,10 +4,10 @@ import { UpdateServicesData } from "../models/UpdateServicesData";
 const getServiceBy = async (name: string, carSegmentId: number) => {
   const sql = `
   SELECT
-  service_id,
+  service_id as serviceId,
   name,
   price,
-  car_segment_id
+  car_segment_id as carSegmentId
   FROM services
   WHERE name = ? AND car_segment_id = ? AND is_deleted = 0;
   `;

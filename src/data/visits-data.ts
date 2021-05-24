@@ -87,7 +87,7 @@ const getVisitBy = async (column: string, value: string | number) => {
   return (await db.query(sql, [value]))[0];
 };
 
-const getPerformedServicesByVisitId = async (visitId: number) => {
+const getPerformedServicesByVisitId = async (visitId: number, serviceId?: number) => {
   const sql = `
     SELECT
       ps.visit_id as visitId,
@@ -97,14 +97,14 @@ const getPerformedServicesByVisitId = async (visitId: number) => {
       s.name
     FROM performed_services as ps
     LEFT JOIN services as s USING(service_id)
-    WHERE ps.service_qty !=0 AND visit_id = ?;
-    
+    WHERE ps.service_qty !=0 AND visit_id = ?
+    ${serviceId ? `AND service_id = ?` : ''}    
   `;
 
-  return db.query(sql, [visitId]);
+  return db.query(sql, [visitId, serviceId]);
 };
 
-const getUsedPartsByVisitId = async (visitId: number) => {
+const getUsedPartsByVisitId = async (visitId: number, partId?: number) => {
   const sql = `
   SELECT
     up.visit_id as visitId,
@@ -114,10 +114,11 @@ const getUsedPartsByVisitId = async (visitId: number) => {
     p.name
   FROM used_parts as up
   LEFT JOIN parts as p USING(part_id)
-  WHERE up.part_qty !=0 AND visit_id = ?;
+  WHERE up.part_qty !=0 AND visit_id = ?
+  ${partId ? `AND part_id = ?` : ''}
 `;
 
-  return db.query(sql, [visitId]);
+  return db.query(sql, [visitId, partId]);
 };
 
 const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: string, visitRangeHigh: string, visitStatus: string) => {
@@ -156,11 +157,45 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   LEFT JOIN addresses as a USING(address_id)
   WHERE user_id = ?
   ${vehicleId ? `AND vehicle_id = ${vehicleId}` : ''}
-  ${visitStatus && `AND vis.status = ${visitStatus}`}
+  ${visitStatus && `AND vis.status LIKE '%${visitStatus}%'`}
   ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ""}
   `;
 
   return db.query(sql, [userId, visitRangeLow, visitRangeHigh]);
+};
+
+const updateVisit = async (visitId: number, notes: string, visitEnd: string, status: string) => {
+  const sql = `
+    UPDATE visits SET
+      notes = ?,
+      visit_end = ?,
+      status = ?
+    WHERE visit_id = ?
+  `;
+
+  return db.query(sql, [notes, visitEnd, status, visitId]);
+};
+
+const updatePerformedService = (visitId: number, serviceId: number, serviceQty: number, price: number) => {
+  const sql = `
+    UPDATE performed_services SET 
+      service_qty = ?,
+      price = ?
+    WHERE visit_id = ? AND service_id = ?;
+  `;
+
+  return db.query(sql, [serviceQty, price, visitId, serviceId]);
+};
+
+const updateUsedPart = (visitId: number, partId: number, partQty: number, price: number) => {
+  const sql = `
+    UPDATE used_parts SET 
+      part_qty = ?,
+      price = ?
+    WHERE visit_id = ? AND part_id = ?;
+  `;
+
+  return db.query(sql, [partQty, price, visitId, partId]);
 };
 
 export default {
@@ -171,4 +206,7 @@ export default {
   getPerformedServicesByVisitId,
   getUsedPartsByVisitId,
   getAllVisitsBy,
+  updateVisit,
+  updatePerformedService,
+  updateUsedPart,
 };
