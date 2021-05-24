@@ -124,7 +124,6 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
 
   const existingParts = await Promise.all(usedParts.map(async p => {
     const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
-    console.log(existingPart);
     if (!existingPart) {
       const createdPart = await partsData.createPart(p.name, p.carSegmentId, p.price);
       return { ...p, partId: createdPart.insertId };
