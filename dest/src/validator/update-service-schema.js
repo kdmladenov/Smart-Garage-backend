@@ -1,0 +1,9 @@
+import { service } from "../common/constants.js";
+export default {
+    name: function (value) { return typeof value === "undefined" || (typeof value === "string" && value.length > service.SERVICE_NAME_MIN_LENGTH
+        && value.length < service.SERVICE_NAME_MAX_LENGTH); },
+    price: function (value) { return typeof value === "undefined" || (typeof +value === "number"
+        && value > service.SERVICE_PRICE_MIN_VALUE && value < service.SERVICE_PRICE_MAX_VALUE); },
+    carSegmentId: function (value) { return typeof value === "undefined" || (typeof +value === "number" && value > service.CAR_SEGMENT_ID_MIN_VALUE); },
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXBkYXRlLXNlcnZpY2Utc2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3ZhbGlkYXRvci91cGRhdGUtc2VydmljZS1zY2hlbWEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLE9BQU8sRUFBRSxNQUFNLHdCQUF3QixDQUFDO0FBRWpELGVBQWU7SUFDYixJQUFJLEVBQUUsVUFBQyxLQUFhLElBQUssT0FBQSxPQUFPLEtBQUssS0FBSyxXQUFXLElBQUksQ0FBQyxPQUFPLEtBQUssS0FBSyxRQUFRLElBQUksS0FBSyxDQUFDLE1BQU0sR0FBRyxPQUFPLENBQUMsdUJBQXVCO1dBQ2xJLEtBQUssQ0FBQyxNQUFNLEdBQUcsT0FBTyxDQUFDLHVCQUF1QixDQUFDLEVBRHpCLENBQ3lCO0lBQ2xELEtBQUssRUFBRSxVQUFDLEtBQWEsSUFBSyxPQUFBLE9BQU8sS0FBSyxLQUFLLFdBQVcsSUFBSSxDQUFDLE9BQU8sQ0FBQyxLQUFLLEtBQUssUUFBUTtXQUNsRixLQUFLLEdBQUcsT0FBTyxDQUFDLHVCQUF1QixJQUFJLEtBQUssR0FBRyxPQUFPLENBQUMsdUJBQXVCLENBQUMsRUFENUQsQ0FDNEQ7SUFDdEYsWUFBWSxFQUFFLFVBQUMsS0FBYSxJQUFLLE9BQUEsT0FBTyxLQUFLLEtBQUssV0FBVyxJQUFJLENBQUMsT0FBTyxDQUFDLEtBQUssS0FBSyxRQUFRLElBQUksS0FBSyxHQUFHLE9BQU8sQ0FBQyx3QkFBd0IsQ0FBQyxFQUF4RyxDQUF3RztDQUMxSSxDQUFDIn0=
