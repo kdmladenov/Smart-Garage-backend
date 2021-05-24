@@ -221,11 +221,9 @@ usersController
     }),
   )
   // Reset password
-  .post(
-    "/reset-password/:userId/:token",
+  .post("/reset-password/:userId/:token",
     validateBody("user", resetPasswordSchema),
-    // errorHandler(
-    async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const {
         password,
         reenteredPassword,
@@ -250,8 +248,6 @@ usersController
       } else {
         res.status(200).send(result);
       }
-    },
-  );
-// );
+    }));
 
 export default usersController;

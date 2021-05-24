@@ -11,6 +11,7 @@ interface UsersData {
   getAll: Function;
   getPasswordBy: Function;
   updatePassword: Function;
+  updateAddress: Function;
 }
 
 export default UsersData;
