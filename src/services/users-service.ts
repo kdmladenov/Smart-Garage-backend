@@ -207,7 +207,7 @@ const forgottenPassword = (usersData: UsersData) => async (
     from: forgotPassword.emailUser,
     to: `${existingUser.email}`,
     subject: "Password reset link.",
-    text: `Dear ${existingUser.email},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
+    text: `Dear ${existingUser.firstName},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
 ${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`,
   };
 
@@ -255,6 +255,30 @@ const resetPassword = (usersData: UsersData) => async (
 
   const updated = await bcrypt.hash(password, 10);
   const _ = await usersData.updatePassword(userId, updated);
+
+  // Sending confirmation mail for the reset password
+  const transporter = nodemailer.createTransport({
+    service: forgotPassword.emailService,
+    auth: {
+      user: forgotPassword.emailUser,
+      pass: forgotPassword.emailPassword,
+    },
+  });
+
+  const options = {
+    from: forgotPassword.emailUser,
+    to: `${existingUser.email}`,
+    subject: "Your password has been reset.",
+    text: `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`,
+  };
+
+  transporter.sendMail(options, (err, info) => {
+    if (err) {
+      return;
+    }
+    console.log(`Sent: + ${info.response}`);
+  });
+
   return {
     error: null,
     result: { message: "The password was successfully reset" },

@@ -33,7 +33,7 @@ export const paging = {
     MAX_PAGE_SIZE: 20,
     MIN_PAGE_SIZE: 10,
   },
-  spareParts: {
+  parts: {
     MAX_PAGE_SIZE: 20,
     MIN_PAGE_SIZE: 10,
   },
@@ -59,10 +59,19 @@ export const visit = {
   NOTES_MIN_LENGTH: 10,
   NOTES_MAX_LENGTH: 255,
 };
+
 export const forgotPassword = {
   tokenExpiration: "15m",
   emailService: "hotmail",
   emailUser: "smartgaragekd@outlook.com",
   emailPassword: "Sekretenklu4",
   frontEndPort: 3000,
+};
+
+export const part = {
+  PART_NAME_MIN_LENGTH: 2,
+  PART_NAME_MAX_LENGTH: 100,
+  PART_PRICE_MIN_VALUE: 0.1,
+  PART_PRICE_MAX_VALUE: 100000,
+  CAR_SEGMENT_ID_MIN_VALUE: 0,
 };
