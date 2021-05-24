@@ -9,6 +9,7 @@ import jwtStrategy from './authentication/strategy.js';
 import HttpException from './models/HttpException';
 import vehiclesController from './controllers/vehicles-controller.js';
 import visitsController from './controllers/visits-controller.js';
+import partsController from './controllers/parts-controller.js';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/auth', authController);
 app.use('/users', usersController);
 app.use('/vehicles', vehiclesController);
 app.use('/visits', visitsController);
+app.use("/parts", partsController);
 
 app.use((err: HttpException, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send({
