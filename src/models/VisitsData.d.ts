@@ -5,4 +5,5 @@ export interface VisitsData {
   getVisitBy: Function;
   getPerformedServicesByVisitId: Function;
   getUsedPartsByVisitId: Function;
+  getAllVisitsBy: Function;
 }

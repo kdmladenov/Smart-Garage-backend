@@ -3,6 +3,8 @@ import { VisitsData } from '../models/VisitsData';
 import errors from '../common/service-errors.js';
 import { ServicesData } from '../models/ServicesData';
 import { PartsData } from '../models/PartsData';
+import { VehiclesData } from '../models/VehiclesData';
+import rolesEnum from '../common/roles.enum.js';
 
 const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsData: PartsData) => async (createVisitData: CreateVisitData) => {
   const {
@@ -59,7 +61,34 @@ const getVisit = (visitsData: VisitsData) => async (visitId: number) => {
   };
 };
 
+const getAllVisits = (visitsData: VisitsData, vehiclesData: VehiclesData) => async (role: string, loggedUserId: number, userId: number, vehicleId: number, visitRangeLow: string, visitRangeHigh: string, visitStatus: string) => {
+  if (userId !== loggedUserId && role !== rolesEnum.employee) {
+    return {
+      error: errors.OPERATION_NOT_PERMITTED,
+      result: null,
+    };
+  }
+
+  if (vehicleId) {
+    const existingVehicle = await vehiclesData.getVehicleBy('vehicle_id', vehicleId);
+    if (!existingVehicle) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        result: null,
+      };
+    }
+  }
+
+  const visits = await visitsData.getAllVisitsBy(userId, vehicleId, visitRangeLow, visitRangeHigh, visitStatus);
+
+  return {
+    error: null,
+    result: visits,
+  };
+};
+
 export default {
   createVisit,
   getVisit,
+  getAllVisits,
 };

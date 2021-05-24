@@ -120,6 +120,49 @@ const getUsedPartsByVisitId = async (visitId: number) => {
   return db.query(sql, [visitId]);
 };
 
+const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: string, visitRangeHigh: string, visitStatus: string) => {
+  const sql = `
+  SELECT
+    vis.notes,
+    vis.visit_start as visitStart,
+    vis.visit_end as visitEnd,
+    vis.status,
+    vis.vehicle_id as vehicleId,
+    veh.vin,
+    veh.license_plate as licensePlate,
+    veh.manufactured_year as manufacturedYear,
+    veh.engine_type as engineType,
+    veh.transmission,
+    veh.model_id as modelId,
+    m.model_name as modelName,
+    m.manufacturer_id as manufacturerId,
+    man.manufacturer_name as manufacturerName,
+    m.car_segment_id as carSegment,
+    veh.user_id as userId,
+    u.first_name as firstName,
+    u.last_name as lastName,
+    u.company_name as companyName,
+    u.phone,
+    u.email,
+    u.address_id as addressId,
+    a.country,
+    a.city,
+    a.street_address as streetAddress
+  FROM visits as vis
+  LEFT JOIN vehicles as veh USING(vehicle_id)
+  LEFT JOIN models as m USING(model_id)
+  LEFT JOIN manufacturers as man USING(manufacturer_id)
+  LEFT JOIN users as u USING(user_id)
+  LEFT JOIN addresses as a USING(address_id)
+  WHERE user_id = ?
+  ${vehicleId ? `AND vehicle_id = ${vehicleId}` : ''}
+  ${visitStatus && `AND vis.status = ${visitStatus}`}
+  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ""}
+  `;
+
+  return db.query(sql, [userId, visitRangeLow, visitRangeHigh]);
+};
+
 export default {
   registerVisit,
   registerPerformedServices,
@@ -127,4 +170,5 @@ export default {
   getVisitBy,
   getPerformedServicesByVisitId,
   getUsedPartsByVisitId,
+  getAllVisitsBy,
 };
