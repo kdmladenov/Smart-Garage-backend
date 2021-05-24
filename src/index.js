@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use('/auth', authController);
 app.use('/users', usersController);
+app.use("/parts", partsController);
 app.use((err, req, res, next) => {
     res.status(500).send({
         message: err.message,
