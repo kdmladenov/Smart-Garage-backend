@@ -22,13 +22,14 @@ partsController
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("part", createPartSchema),
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const { name, price, carSegmentId } = req.body;
 
-      const { error, part } = await partsServices.createPart(
-        partsData,
-      )(name, price, carSegmentId);
+      const { error, part } = await partsServices.createPart(partsData)(
+        name,
+        price,
+        carSegmentId,
+      );
 
       if (error === errors.DUPLICATE_RECORD) {
         res.status(409).send({
@@ -37,15 +38,14 @@ partsController
       } else {
         res.status(201).send(part);
       }
-    })
-  // )
-  // get all parts - search, sort, paging
+    }),
+  )
+  // get all parts - search, paging
   .get(
     "/",
     authMiddleware,
     loggedUserGuard,
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       let {
         pageSize = paging.parts.MIN_PAGE_SIZE,
         page = 1,
@@ -62,13 +62,8 @@ partsController
       pageSize = typeof pageSize === "number" ? pageSize : +pageSize;
       partName = typeof partName === "string" ? partName : "";
       carSegment = typeof carSegment === "string" ? carSegment : "";
-      priceLow =  typeof priceLow === "number"
-          ? priceLow
-          : +priceLow || PART.PART_PRICE_MIN_VALUE;
-      priceHigh =
-        typeof priceHigh === "number"
-          ? priceHigh
-          : +priceHigh || PART.PART_PRICE_MAX_VALUE;
+      priceLow = typeof priceLow === "number" ? priceLow : +priceLow || PART.PART_PRICE_MIN_VALUE;
+      priceHigh = typeof priceHigh === "number" ? priceHigh : +priceHigh || PART.PART_PRICE_MAX_VALUE;
 
       const part = await partsServices.getAllParts(partsData)(
         +page,
@@ -80,21 +75,20 @@ partsController
       );
 
       res.status(200).send(part);
-    })
-  // )
+    }),
+  )
 
   // get by id
   .get(
     "/:partId",
     authMiddleware,
     loggedUserGuard,
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const { partId } = req.params;
 
-      const { error, part } = await partsServices.getPartById(
-        partsData,
-      )(+partId);
+      const { error, part } = await partsServices.getPartById(partsData)(
+        +partId,
+      );
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -103,9 +97,8 @@ partsController
       } else {
         res.status(200).send(part);
       }
-    })
-  // )
-
+    }),
+  )
   // update
   .put(
     "/:partId",
@@ -113,14 +106,14 @@ partsController
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("part", updatePartSchema),
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const { partId } = req.params;
       const updatedPartData = req.body;
 
-      const { error, part } = await partsServices.updatePart(
-        partsData,
-      )(updatedPartData, +partId);
+      const { error, part } = await partsServices.updatePart(partsData)(
+        updatedPartData,
+        +partId,
+      );
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
           message: "The part is not found.",
@@ -128,21 +121,20 @@ partsController
       } else {
         res.status(200).send(part);
       }
-    })
-  // )
+    }),
+  )
   // delete part
   .delete(
     "/:partId",
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const { partId } = req.params;
 
-      const { error, part } = await partsServices.deletePart(
-        partsData,
-      )(+partId);
+      const { error, part } = await partsServices.deletePart(partsData)(
+        +partId,
+      );
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -151,7 +143,7 @@ partsController
       } else {
         res.status(200).send(part);
       }
-    });
-  // );
+    }),
+  );
 
 export default partsController;

@@ -46,44 +46,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import errors from "../common/service-errors.js";
-var createPart = function (partsData) {
-    return function (name, price, carSegmentId) { return __awaiter(void 0, void 0, void 0, function () {
-        var existingPart, part;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, partsData.getPartBy(name, carSegmentId)];
-                case 1:
-                    existingPart = _a.sent();
-                    if (existingPart) {
-                        return [2 /*return*/, {
-                                error: errors.DUPLICATE_RECORD,
-                                part: null,
-                            }];
-                    }
-                    return [4 /*yield*/, partsData.createPart(name, +carSegmentId, +price)];
-                case 2:
-                    part = _a.sent();
+var createPart = function (partsData) { return function (name, price, carSegmentId) { return __awaiter(void 0, void 0, void 0, function () {
+    var existingPart, part;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, partsData.getPartBy(name, carSegmentId)];
+            case 1:
+                existingPart = _a.sent();
+                if (existingPart) {
                     return [2 /*return*/, {
-                            error: null,
-                            part: part,
+                            error: errors.DUPLICATE_RECORD,
+                            part: null,
                         }];
-            }
-        });
-    }); };
-};
-var getAllParts = function (partsData) {
-    return function (page, pageSize, priceLow, priceHigh, partName, carSegment) { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, partsData.getAllParts(page, pageSize, priceLow, priceHigh, partName, carSegment)];
-                case 1:
-                    result = _a.sent();
-                    return [2 /*return*/, result];
-            }
-        });
-    }); };
-};
+                }
+                return [4 /*yield*/, partsData.createPart(name, +carSegmentId, +price)];
+            case 2:
+                part = _a.sent();
+                return [2 /*return*/, {
+                        error: null,
+                        part: part,
+                    }];
+        }
+    });
+}); }; };
+var getAllParts = function (partsData) { return function (page, pageSize, priceLow, priceHigh, partName, carSegment) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, partsData.getAllParts(page, pageSize, priceLow, priceHigh, partName, carSegment)];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, result];
+        }
+    });
+}); }; };
 var getPartById = function (partsData) { return function (partId) { return __awaiter(void 0, void 0, void 0, function () {
     var part;
     return __generator(this, function (_a) {
@@ -104,32 +100,30 @@ var getPartById = function (partsData) { return function (partId) { return __awa
         }
     });
 }); }; };
-var updatePart = function (partsData) {
-    return function (updatedPartData, partId) { return __awaiter(void 0, void 0, void 0, function () {
-        var existingPart, updated, part;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, partsData.getBy("part_id", +partId)];
-                case 1:
-                    existingPart = _a.sent();
-                    if (!existingPart) {
-                        return [2 /*return*/, {
-                                error: errors.RECORD_NOT_FOUND,
-                                part: null,
-                            }];
-                    }
-                    updated = __assign(__assign({}, existingPart), updatedPartData);
-                    return [4 /*yield*/, partsData.update(updated, +partId)];
-                case 2:
-                    part = _a.sent();
+var updatePart = function (partsData) { return function (updatedPartData, partId) { return __awaiter(void 0, void 0, void 0, function () {
+    var existingPart, updated, part;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, partsData.getBy("part_id", +partId)];
+            case 1:
+                existingPart = _a.sent();
+                if (!existingPart) {
                     return [2 /*return*/, {
-                            error: null,
-                            part: part,
+                            error: errors.RECORD_NOT_FOUND,
+                            part: null,
                         }];
-            }
-        });
-    }); };
-};
+                }
+                updated = __assign(__assign({}, existingPart), updatedPartData);
+                return [4 /*yield*/, partsData.update(updated, +partId)];
+            case 2:
+                part = _a.sent();
+                return [2 /*return*/, {
+                        error: null,
+                        part: part,
+                    }];
+        }
+    });
+}); }; };
 var deletePart = function (partsData) { return function (partId) { return __awaiter(void 0, void 0, void 0, function () {
     var partToDelete, _;
     return __generator(this, function (_a) {
@@ -160,4 +154,4 @@ export default {
     updatePart: updatePart,
     deletePart: deletePart,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFydHMtc2VydmljZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9zZXJ2aWNlcy9wYXJ0cy1zZXJ2aWNlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxNQUFNLE1BQU0sNkJBQTZCLENBQUM7QUFJakQsSUFBTSxVQUFVLEdBQ2QsVUFBQyxTQUFvQjtJQUNyQixPQUFBLFVBQU8sSUFBWSxFQUFFLEtBQWEsRUFBRSxZQUFvQjs7Ozt3QkFDakMscUJBQU0sU0FBUyxDQUFDLFNBQVMsQ0FBQyxJQUFJLEVBQUUsWUFBWSxDQUFDLEVBQUE7O29CQUE1RCxZQUFZLEdBQUcsU0FBNkM7b0JBQ2xFLElBQUksWUFBWSxFQUFFO3dCQUNoQixzQkFBTztnQ0FDTCxLQUFLLEVBQUUsTUFBTSxDQUFDLGdCQUFnQjtnQ0FDOUIsSUFBSSxFQUFFLElBQUk7NkJBQ1gsRUFBQztxQkFDSDtvQkFDWSxxQkFBTSxTQUFTLENBQUMsVUFBVSxDQUNyQyxJQUFJLEVBQ0osQ0FBQyxZQUFZLEVBQ2IsQ0FBQyxLQUFLLENBQ1AsRUFBQTs7b0JBSkssSUFBSSxHQUFHLFNBSVo7b0JBRUQsc0JBQU87NEJBQ0wsS0FBSyxFQUFFLElBQUk7NEJBQ1gsSUFBSSxNQUFBO3lCQUNMLEVBQUM7OztTQUNIO0FBbEJELENBa0JDLENBQUM7QUFFSixJQUFNLFdBQVcsR0FDZixVQUFDLFNBQW9CO0lBQ3JCLE9BQUEsVUFDRSxJQUFhLEVBQ2IsUUFBaUIsRUFDakIsUUFBaUIsRUFDakIsU0FBa0IsRUFDbEIsUUFBaUIsRUFDakIsVUFBbUI7Ozs7d0JBRUoscUJBQU0sU0FBUyxDQUFDLFdBQVcsQ0FDeEMsSUFBSSxFQUNKLFFBQVEsRUFDUixRQUFRLEVBQ1IsU0FBUyxFQUNULFFBQVEsRUFDUixVQUFVLENBQ1gsRUFBQTs7b0JBUEssTUFBTSxHQUFHLFNBT2Q7b0JBRUQsc0JBQU8sTUFBTSxFQUFDOzs7U0FDZjtBQWxCRCxDQWtCQyxDQUFDO0FBRUosSUFBTSxXQUFXLEdBQ2YsVUFBQyxTQUFvQixJQUFLLE9BQUEsVUFBTyxNQUFjOzs7O29CQUNoQyxxQkFBTSxTQUFTLENBQUMsS0FBSyxDQUFDLFNBQVMsRUFBRSxNQUFNLENBQUMsRUFBQTs7Z0JBQS9DLElBQUksR0FBRyxTQUF3QztnQkFFckQsSUFBSSxDQUFDLElBQUksRUFBRTtvQkFDVCxzQkFBTzs0QkFDTCxLQUFLLEVBQUUsTUFBTSxDQUFDLGdCQUFnQjs0QkFDOUIsSUFBSSxFQUFFLElBQUk7eUJBQ1gsRUFBQztpQkFDSDtnQkFFRCxzQkFBTzt3QkFDTCxLQUFLLEVBQUUsSUFBSTt3QkFDWCxJQUFJLE1BQUE7cUJBQ0wsRUFBQzs7O0tBQ0gsRUFkeUIsQ0FjekIsQ0FBQztBQUVKLElBQU0sVUFBVSxHQUNkLFVBQUMsU0FBb0I7SUFDckIsT0FBQSxVQUFPLGVBQWdDLEVBQUUsTUFBYzs7Ozt3QkFDaEMscUJBQU0sU0FBUyxDQUFDLEtBQUssQ0FBQyxTQUFTLEVBQUUsQ0FBQyxNQUFNLENBQUMsRUFBQTs7b0JBQXhELFlBQVksR0FBRyxTQUF5QztvQkFFOUQsSUFBSSxDQUFDLFlBQVksRUFBRTt3QkFDakIsc0JBQU87Z0NBQ0wsS0FBSyxFQUFFLE1BQU0sQ0FBQyxnQkFBZ0I7Z0NBQzlCLElBQUksRUFBRSxJQUFJOzZCQUNYLEVBQUM7cUJBQ0g7b0JBQ0ssT0FBTyx5QkFBUSxZQUFZLEdBQUssZUFBZSxDQUFFLENBQUM7b0JBQzNDLHFCQUFNLFNBQVMsQ0FBQyxNQUFNLENBQUMsT0FBTyxFQUFFLENBQUMsTUFBTSxDQUFDLEVBQUE7O29CQUEvQyxJQUFJLEdBQUcsU0FBd0M7b0JBQ3JELHNCQUFPOzRCQUNMLEtBQUssRUFBRSxJQUFJOzRCQUNYLElBQUksTUFBQTt5QkFDTCxFQUFDOzs7U0FDSDtBQWZELENBZUMsQ0FBQztBQUVKLElBQU0sVUFBVSxHQUNkLFVBQUMsU0FBb0IsSUFBSyxPQUFBLFVBQU8sTUFBYzs7OztvQkFDeEIscUJBQU0sU0FBUyxDQUFDLEtBQUssQ0FBQyxTQUFTLEVBQUUsQ0FBQyxNQUFNLENBQUMsRUFBQTs7Z0JBQXhELFlBQVksR0FBRyxTQUF5QztnQkFFOUQsSUFBSSxDQUFDLFlBQVksRUFBRTtvQkFDakIsc0JBQU87NEJBQ0wsS0FBSyxFQUFFLE1BQU0sQ0FBQyxnQkFBZ0I7NEJBQzlCLElBQUksRUFBRSxJQUFJO3lCQUNYLEVBQUM7aUJBQ0g7Z0JBRVMscUJBQU0sU0FBUyxDQUFDLE1BQU0sQ0FBQyxDQUFDLE1BQU0sQ0FBQyxFQUFBOztnQkFBbkMsQ0FBQyxHQUFHLFNBQStCO2dCQUV6QyxzQkFBTzt3QkFDTCxLQUFLLEVBQUUsSUFBSTt3QkFDWCxJQUFJLHdCQUFPLFlBQVksS0FBRSxTQUFTLEVBQUUsQ0FBQyxHQUFFO3FCQUN4QyxFQUFDOzs7S0FDSCxFQWhCeUIsQ0FnQnpCLENBQUM7QUFFSixlQUFlO0lBQ2IsVUFBVSxZQUFBO0lBQ1YsV0FBVyxhQUFBO0lBQ1gsV0FBVyxhQUFBO0lBQ1gsVUFBVSxZQUFBO0lBQ1YsVUFBVSxZQUFBO0NBQ1gsQ0FBQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFydHMtc2VydmljZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9zZXJ2aWNlcy9wYXJ0cy1zZXJ2aWNlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxNQUFNLE1BQU0sNkJBQTZCLENBQUM7QUFJakQsSUFBTSxVQUFVLEdBQUcsVUFBQyxTQUFvQixJQUFLLE9BQUEsVUFBTyxJQUFZLEVBQUUsS0FBYSxFQUFFLFlBQW9COzs7O29CQUM5RSxxQkFBTSxTQUFTLENBQUMsU0FBUyxDQUFDLElBQUksRUFBRSxZQUFZLENBQUMsRUFBQTs7Z0JBQTVELFlBQVksR0FBRyxTQUE2QztnQkFDbEUsSUFBSSxZQUFZLEVBQUU7b0JBQ2hCLHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsZ0JBQWdCOzRCQUM5QixJQUFJLEVBQUUsSUFBSTt5QkFDWCxFQUFDO2lCQUNIO2dCQUNZLHFCQUFNLFNBQVMsQ0FBQyxVQUFVLENBQUMsSUFBSSxFQUFFLENBQUMsWUFBWSxFQUFFLENBQUMsS0FBSyxDQUFDLEVBQUE7O2dCQUE5RCxJQUFJLEdBQUcsU0FBdUQ7Z0JBRXBFLHNCQUFPO3dCQUNMLEtBQUssRUFBRSxJQUFJO3dCQUNYLElBQUksTUFBQTtxQkFDTCxFQUFDOzs7S0FDSCxFQWQ0QyxDQWM1QyxDQUFDO0FBRUYsSUFBTSxXQUFXLEdBQUcsVUFBQyxTQUFvQixJQUFLLE9BQUEsVUFDNUMsSUFBYSxFQUNiLFFBQWlCLEVBQ2pCLFFBQWlCLEVBQ2pCLFNBQWtCLEVBQ2xCLFFBQWlCLEVBQ2pCLFVBQW1COzs7O29CQUVKLHFCQUFNLFNBQVMsQ0FBQyxXQUFXLENBQ3hDLElBQUksRUFDSixRQUFRLEVBQ1IsUUFBUSxFQUNSLFNBQVMsRUFDVCxRQUFRLEVBQ1IsVUFBVSxDQUNYLEVBQUE7O2dCQVBLLE1BQU0sR0FBRyxTQU9kO2dCQUVELHNCQUFPLE1BQU0sRUFBQzs7O0tBQ2YsRUFsQjZDLENBa0I3QyxDQUFDO0FBRUYsSUFBTSxXQUFXLEdBQUcsVUFBQyxTQUFvQixJQUFLLE9BQUEsVUFBTyxNQUFjOzs7O29CQUNwRCxxQkFBTSxTQUFTLENBQUMsS0FBSyxDQUFDLFNBQVMsRUFBRSxNQUFNLENBQUMsRUFBQTs7Z0JBQS9DLElBQUksR0FBRyxTQUF3QztnQkFFckQsSUFBSSxDQUFDLElBQUksRUFBRTtvQkFDVCxzQkFBTzs0QkFDTCxLQUFLLEVBQUUsTUFBTSxDQUFDLGdCQUFnQjs0QkFDOUIsSUFBSSxFQUFFLElBQUk7eUJBQ1gsRUFBQztpQkFDSDtnQkFFRCxzQkFBTzt3QkFDTCxLQUFLLEVBQUUsSUFBSTt3QkFDWCxJQUFJLE1BQUE7cUJBQ0wsRUFBQzs7O0tBQ0gsRUFkNkMsQ0FjN0MsQ0FBQztBQUVGLElBQU0sVUFBVSxHQUFHLFVBQUMsU0FBb0IsSUFBSyxPQUFBLFVBQU8sZUFBZ0MsRUFBRSxNQUFjOzs7O29CQUM3RSxxQkFBTSxTQUFTLENBQUMsS0FBSyxDQUFDLFNBQVMsRUFBRSxDQUFDLE1BQU0sQ0FBQyxFQUFBOztnQkFBeEQsWUFBWSxHQUFHLFNBQXlDO2dCQUU5RCxJQUFJLENBQUMsWUFBWSxFQUFFO29CQUNqQixzQkFBTzs0QkFDTCxLQUFLLEVBQUUsTUFBTSxDQUFDLGdCQUFnQjs0QkFDOUIsSUFBSSxFQUFFLElBQUk7eUJBQ1gsRUFBQztpQkFDSDtnQkFDSyxPQUFPLHlCQUFRLFlBQVksR0FBSyxlQUFlLENBQUUsQ0FBQztnQkFDM0MscUJBQU0sU0FBUyxDQUFDLE1BQU0sQ0FBQyxPQUFPLEVBQUUsQ0FBQyxNQUFNLENBQUMsRUFBQTs7Z0JBQS9DLElBQUksR0FBRyxTQUF3QztnQkFDckQsc0JBQU87d0JBQ0wsS0FBSyxFQUFFLElBQUk7d0JBQ1gsSUFBSSxNQUFBO3FCQUNMLEVBQUM7OztLQUNILEVBZjRDLENBZTVDLENBQUM7QUFFRixJQUFNLFVBQVUsR0FBRyxVQUFDLFNBQW9CLElBQUssT0FBQSxVQUFPLE1BQWM7Ozs7b0JBQzNDLHFCQUFNLFNBQVMsQ0FBQyxLQUFLLENBQUMsU0FBUyxFQUFFLENBQUMsTUFBTSxDQUFDLEVBQUE7O2dCQUF4RCxZQUFZLEdBQUcsU0FBeUM7Z0JBRTlELElBQUksQ0FBQyxZQUFZLEVBQUU7b0JBQ2pCLHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsZ0JBQWdCOzRCQUM5QixJQUFJLEVBQUUsSUFBSTt5QkFDWCxFQUFDO2lCQUNIO2dCQUVTLHFCQUFNLFNBQVMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxNQUFNLENBQUMsRUFBQTs7Z0JBQW5DLENBQUMsR0FBRyxTQUErQjtnQkFFekMsc0JBQU87d0JBQ0wsS0FBSyxFQUFFLElBQUk7d0JBQ1gsSUFBSSx3QkFBTyxZQUFZLEtBQUUsU0FBUyxFQUFFLENBQUMsR0FBRTtxQkFDeEMsRUFBQzs7O0tBQ0gsRUFoQjRDLENBZ0I1QyxDQUFDO0FBRUYsZUFBZTtJQUNiLFVBQVUsWUFBQTtJQUNWLFdBQVcsYUFBQTtJQUNYLFdBQVcsYUFBQTtJQUNYLFVBQVUsWUFBQTtJQUNWLFVBQVUsWUFBQTtDQUNYLENBQUMifQ==
