@@ -1,4 +1,4 @@
-import { visit as visitErrors } from './constants.js';
+import { visit as visitErrors, service as serviceConstants } from './constants.js';
 
 export const user = {
   email: '',
@@ -6,7 +6,9 @@ export const user = {
 };
 
 export const service = {
-
+  name: `Expected a string with length in the range [${serviceConstants.SERVICE_NAME_MIN_LENGTH}:${serviceConstants.SERVICE_NAME_MAX_LENGTH}]`,
+  price: `Expected a number with value in the range [${serviceConstants.SERVICE_PRICE_MIN_VALUE}:${serviceConstants.SERVICE_PRICE_MAX_VALUE}]`,
+  carSegmentId: 'Expected a positive number',
 };
 
 export const vehicle = {
