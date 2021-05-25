@@ -76,4 +76,4 @@ export const part = {
   CAR_SEGMENT_ID_MIN_VALUE: 0,
 };
 
-export const sqlRegex = /^([0-9]{4}-[0-1][0-9]-[0-3][0-9])$/;
+export const sqlDateRegex = /^([0-9]{4}-[0-1][0-9]-[0-3][0-9])$/;

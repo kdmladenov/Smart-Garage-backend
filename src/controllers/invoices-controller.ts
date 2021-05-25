@@ -9,7 +9,7 @@ import visitsData from '../data/visits-data.js';
 import errors from '../common/service-errors.js';
 import invoicesData from '../data/invoices-data.js';
 import usersData from '../data/users-data.js';
-import { sqlRegex } from '../common/constants.js';
+import { sqlDateRegex } from '../common/constants.js';
 
 const invoicesController = express.Router();
 
@@ -23,8 +23,8 @@ invoicesController
       const { visitId, userId } = req.query;
       let { dateRangeLow, dateRangeHigh } = req.query;
 
-      dateRangeLow = (typeof dateRangeLow === 'string' && sqlRegex.test(dateRangeLow)) ? dateRangeLow : '';
-      dateRangeHigh = (typeof dateRangeHigh === 'string' && sqlRegex.test(dateRangeHigh)) ? dateRangeHigh : '';
+      dateRangeLow = (typeof dateRangeLow === 'string' && sqlDateRegex.test(dateRangeLow)) ? dateRangeLow : '';
+      dateRangeHigh = (typeof dateRangeHigh === 'string' && sqlDateRegex.test(dateRangeHigh)) ? dateRangeHigh : '';
       const validatedUserId = userId ? +userId : 0;
       const validatedVisitId = visitId ? +visitId : 0;
 
