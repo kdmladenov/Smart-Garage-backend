@@ -15,6 +15,7 @@ import servicesData from '../data/services-data.js';
 import partsData from '../data/parts-data.js';
 import vehiclesData from '../data/vehicles-data.js';
 import visitStatusEnum from '../common/visit-status.enum.js';
+import { sqlRegex } from '../common/constants.js';
 
 const visitsController = express.Router();
 
@@ -69,8 +70,8 @@ visitsController
       const { vehicleId, userId } = req.query;
       let { visitRangeLow, visitRangeHigh, visitStatus } = req.query;
 
-      visitRangeLow = typeof visitRangeLow === 'string' ? visitRangeLow : '';
-      visitRangeHigh = typeof visitRangeHigh === 'string' ? visitRangeHigh : '';
+      visitRangeLow = (typeof visitRangeLow === 'string' && sqlRegex.test(visitRangeLow)) ? visitRangeLow : '';
+      visitRangeHigh = (typeof visitRangeHigh === 'string' && sqlRegex.test(visitRangeHigh)) ? visitRangeHigh : '';
       const validatedUserId = userId ? +userId : 0;
       const validatedVehicleId = vehicleId ? +vehicleId : 0;
       visitStatus = (typeof visitStatus === 'string' && Object.keys(visitStatusEnum).includes(visitStatus)) ? visitStatus : '';

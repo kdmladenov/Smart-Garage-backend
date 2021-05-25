@@ -158,10 +158,10 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   WHERE user_id = ?
   ${vehicleId ? `AND vehicle_id = ${vehicleId}` : ''}
   ${visitStatus && `AND vis.status LIKE '%${visitStatus}%'`}
-  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ""}
+  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ""}
   `;
 
-  return db.query(sql, [userId, visitRangeLow, visitRangeHigh]);
+  return db.query(sql, [userId]);
 };
 
 const updateVisit = async (visitId: number, notes: string, visitEnd: string, status: string) => {
