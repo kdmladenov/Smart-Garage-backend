@@ -1,5 +1,5 @@
 import UsersData from '../models/UsersData';
-import errors from '../common/service-errors';
+import errors from '../common/service-errors.js';
 import { InvoiceData } from '../models/InvoicesData';
 import { VisitsData } from '../models/VisitsData';
 import rolesEnum from '../common/roles.enum.js';
@@ -42,8 +42,6 @@ const getAllInvoices = (invoicesData: InvoiceData, usersData: UsersData, visitsD
     };
   }
 
-  const invoices = invoicesData.getBy(userId, visitId, dateRangeLow, dateRangeHigh);
-
   if (userId) {
     const existingUser = await usersData.getBy('user_id', userId);
     if (!existingUser) {
@@ -62,6 +60,8 @@ const getAllInvoices = (invoicesData: InvoiceData, usersData: UsersData, visitsD
       };
     }
   }
+
+  const invoices = await invoicesData.getAll(userId, visitId, dateRangeLow, dateRangeHigh);
 
   return {
     error: null,

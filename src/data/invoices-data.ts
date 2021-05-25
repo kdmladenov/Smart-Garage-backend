@@ -26,18 +26,19 @@ const getAll = async (userId: number, visitId: number, dateRangeLow: string, dat
     FROM invoices as i
     LEFT JOIN visits as vi USING (visit_id)
     LEFT JOIN vehicles as ve USING (vehicle_id)
-    ${visitId ? `AND visit_id = ${visitId}` : ''}
-    ${userId ? `AND user_id = ?` : ''}
-    ${dateRangeLow && dateRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ""}
+    WHERE i.invoice_id != 0
+    ${visitId ? ` AND visit_id = ${visitId}` : ''}
+    ${userId ? ` AND user_id = ${userId}` : ''}
+    ${dateRangeLow && dateRangeHigh ? ` AND vi.visit_start BETWEEN "${dateRangeLow}" AND "${dateRangeHigh}"` : ""}
   `;
 
-  return db.query(sql, [userId, dateRangeLow, dateRangeHigh]);
+  return db.query(sql, []);
 };
 
 const create = async (visitId: number) => {
   const sql = `
     INSERT INTO invoices (
-      visitId
+      visit_id
     )
     VALUES (?);
   `;
