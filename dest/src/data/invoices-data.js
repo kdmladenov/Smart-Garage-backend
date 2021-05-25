@@ -46,6 +46,13 @@ var getBy = function (column, value) { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
+var getAll = function (userId, visitId, dateRangeLow, dateRangeHigh) { return __awaiter(void 0, void 0, void 0, function () {
+    var sql;
+    return __generator(this, function (_a) {
+        sql = "\n    SELECT\n      i.invoice_id as invoiceId,\n      i.visit_id as visitId,\n      i.date,\n      i.due_date as dueDate,\n      vi.vehicle_id as vehicleId,\n      ve.user_id as userId\n    FROM invoices as i\n    LEFT JOIN visits as vi USING (visit_id)\n    LEFT JOIN vehicles as ve USING (vehicle_id)\n    " + (visitId ? "AND visit_id = " + visitId : '') + "\n    " + (userId ? "AND user_id = ?" : '') + "\n    " + (dateRangeLow && dateRangeHigh ? "AND vis.visit_start BETWEEN ? AND ?" : "") + "\n  ";
+        return [2 /*return*/, db.query(sql, [userId, dateRangeLow, dateRangeHigh])];
+    });
+}); };
 var create = function (visitId) { return __awaiter(void 0, void 0, void 0, function () {
     var sql, result;
     return __generator(this, function (_a) {
@@ -59,16 +66,9 @@ var create = function (visitId) { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); };
-var getAll = function (userId, visitId, dateRangeLow, dateRangeHigh) { return __awaiter(void 0, void 0, void 0, function () {
-    var sql;
-    return __generator(this, function (_a) {
-        sql = "\n    SELECT\n      i.invoice_id as invoiceId,\n      i.visit_id as visitId,\n      i.date,\n      i.due_date as dueDate,\n      vi.vehicle_id as vehicleId,\n      ve.user_id as userId\n    FROM invoices as i\n    LEFT JOIN visits as vi USING (visit_id)\n    LEFT JOIN vehicles as ve USING (vehicle_id)\n    " + (visitId ? "AND visit_id = " + visitId : '') + "\n    " + (userId ? "AND user_id = ?" : '') + "\n    " + (dateRangeLow && dateRangeHigh ? "AND vis.visit_start BETWEEN ? AND ?" : "") + "\n  ";
-        return [2 /*return*/, db.query(sql, [userId, dateRangeLow, dateRangeHigh])];
-    });
-}); };
 export default {
     getBy: getBy,
-    create: create,
     getAll: getAll,
+    create: create,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW52b2ljZXMtZGF0YS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9kYXRhL2ludm9pY2VzLWRhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxFQUFFLE1BQU0sV0FBVyxDQUFDO0FBRTNCLElBQU0sS0FBSyxHQUFHLFVBQU8sTUFBYyxFQUFFLEtBQWE7Ozs7O2dCQUMxQyxHQUFHLEdBQUcsb0pBT0YsTUFBTSxjQUNmLENBQUM7Z0JBRU0scUJBQU0sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFBO29CQUFwQyxzQkFBTyxDQUFDLFNBQTRCLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBQzs7O0tBQzFDLENBQUM7QUFFRixJQUFNLE1BQU0sR0FBRyxVQUFPLE9BQWU7Ozs7O2dCQUM3QixHQUFHLEdBQUcseUVBS1gsQ0FBQztnQkFFYSxxQkFBTSxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLE9BQU8sQ0FBQyxDQUFDLEVBQUE7O2dCQUF2QyxNQUFNLEdBQUcsU0FBOEI7Z0JBRTdDLHNCQUFPLEtBQUssQ0FBQyxZQUFZLEVBQUUsTUFBTSxDQUFDLFFBQVEsQ0FBQyxFQUFDOzs7S0FDN0MsQ0FBQztBQUVGLElBQU0sTUFBTSxHQUFHLFVBQU8sTUFBYyxFQUFFLE9BQWUsRUFBRSxZQUFvQixFQUFFLGFBQXFCOzs7UUFDMUYsR0FBRyxHQUFHLDBUQVdSLE9BQU8sQ0FBQyxDQUFDLENBQUMsb0JBQWtCLE9BQVMsQ0FBQyxDQUFDLENBQUMsRUFBRSxnQkFDMUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxpQkFBaUIsQ0FBQyxDQUFDLENBQUMsRUFBRSxnQkFDL0IsWUFBWSxJQUFJLGFBQWEsQ0FBQyxDQUFDLENBQUMscUNBQXFDLENBQUMsQ0FBQyxDQUFDLEVBQUUsVUFDN0UsQ0FBQztRQUVGLHNCQUFPLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUMsTUFBTSxFQUFFLFlBQVksRUFBRSxhQUFhLENBQUMsQ0FBQyxFQUFDOztLQUM3RCxDQUFDO0FBRUYsZUFBZTtJQUNiLEtBQUssT0FBQTtJQUNMLE1BQU0sUUFBQTtJQUNOLE1BQU0sUUFBQTtDQUNQLENBQUMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW52b2ljZXMtZGF0YS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9kYXRhL2ludm9pY2VzLWRhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxFQUFFLE1BQU0sV0FBVyxDQUFDO0FBRTNCLElBQU0sS0FBSyxHQUFHLFVBQU8sTUFBYyxFQUFFLEtBQWE7Ozs7O2dCQUMxQyxHQUFHLEdBQUcsb0pBT0YsTUFBTSxjQUNmLENBQUM7Z0JBRU0scUJBQU0sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFBO29CQUFwQyxzQkFBTyxDQUFDLFNBQTRCLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBQzs7O0tBQzFDLENBQUM7QUFFRixJQUFNLE1BQU0sR0FBRyxVQUFPLE1BQWMsRUFBRSxPQUFlLEVBQUUsWUFBb0IsRUFBRSxhQUFxQjs7O1FBQzFGLEdBQUcsR0FBRywwVEFXUixPQUFPLENBQUMsQ0FBQyxDQUFDLG9CQUFrQixPQUFTLENBQUMsQ0FBQyxDQUFDLEVBQUUsZ0JBQzFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsaUJBQWlCLENBQUMsQ0FBQyxDQUFDLEVBQUUsZ0JBQy9CLFlBQVksSUFBSSxhQUFhLENBQUMsQ0FBQyxDQUFDLHFDQUFxQyxDQUFDLENBQUMsQ0FBQyxFQUFFLFVBQzdFLENBQUM7UUFFRixzQkFBTyxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDLE1BQU0sRUFBRSxZQUFZLEVBQUUsYUFBYSxDQUFDLENBQUMsRUFBQzs7S0FDN0QsQ0FBQztBQUVGLElBQU0sTUFBTSxHQUFHLFVBQU8sT0FBZTs7Ozs7Z0JBQzdCLEdBQUcsR0FBRyx5RUFLWCxDQUFDO2dCQUVhLHFCQUFNLEVBQUUsQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUMsT0FBTyxDQUFDLENBQUMsRUFBQTs7Z0JBQXZDLE1BQU0sR0FBRyxTQUE4QjtnQkFFN0Msc0JBQU8sS0FBSyxDQUFDLFlBQVksRUFBRSxNQUFNLENBQUMsUUFBUSxDQUFDLEVBQUM7OztLQUM3QyxDQUFDO0FBRUYsZUFBZTtJQUNiLEtBQUssT0FBQTtJQUNMLE1BQU0sUUFBQTtJQUNOLE1BQU0sUUFBQTtDQUNQLENBQUMifQ==

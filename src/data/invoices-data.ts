@@ -14,19 +14,6 @@ const getBy = async (column: string, value: number) => {
   return (await db.query(sql, [value]))[0];
 };
 
-const create = async (visitId: number) => {
-  const sql = `
-    INSERT INTO invoices (
-      visitId
-    )
-    VALUES (?);
-  `;
-
-  const result = await db.query(sql, [visitId]);
-
-  return getBy('invoice_id', result.insertId);
-};
-
 const getAll = async (userId: number, visitId: number, dateRangeLow: string, dateRangeHigh: string) => {
   const sql = `
     SELECT
@@ -47,8 +34,21 @@ const getAll = async (userId: number, visitId: number, dateRangeLow: string, dat
   return db.query(sql, [userId, dateRangeLow, dateRangeHigh]);
 };
 
+const create = async (visitId: number) => {
+  const sql = `
+    INSERT INTO invoices (
+      visitId
+    )
+    VALUES (?);
+  `;
+
+  const result = await db.query(sql, [visitId]);
+
+  return getBy('invoice_id', result.insertId);
+};
+
 export default {
   getBy,
-  create,
   getAll,
+  create,
 };

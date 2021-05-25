@@ -12,6 +12,7 @@ import invoicesService from '../services/invoices-services.js';
 import visitsData from '../data/visits-data.js';
 import errors from '../common/service-errors.js';
 import invoicesData from '../data/invoices-data.js';
+import usersData from '../data/users-data.js';
 import partsData from '../data/parts-data.js';
 import vehiclesData from '../data/vehicles-data.js';
 import visitStatusEnum from '../common/visit-status.enum.js';
@@ -33,7 +34,14 @@ invoicesController
       const validatedUserId = userId ? +userId : 0;
       const validatedVisitId = visitId ? +visitId : 0;
 
-      const { result, error } = await invoicesService.getAllInvoices(invoicesData)(validatedUserId, validatedVisitId, dateRangeLow, dateRangeHigh);
+      const { result, error } = await invoicesService.getAllInvoices(invoicesData, usersData, visitsData)(
+        validatedUserId,
+        validatedVisitId,
+        dateRangeLow,
+        dateRangeHigh,
+        +loggedUserId,
+        role,
+      );
 
       if (error === errors.RECORD_NOT_FOUND) {
         return res.status(404).send({
@@ -48,6 +56,46 @@ invoicesController
       }
 
       return res.status(200).send(result);
+    }),
+  )
+
+  .get(
+    '/:invoiceId',
+    authMiddleware,
+    loggedUserGuard,
+    errorHandler(async (req: Request, res: Response) => {
+      const { invoiceId } = req.params;
+      const { userId: loggedUserId, role } = req.user!;
+
+      const { error, result } = await invoicesService.getById(invoicesData)(+invoiceId, +loggedUserId, role);
+
+      if (error === errors.RECORD_NOT_FOUND) {
+        return {
+          message: `User or Visit were not found.`,
+        };
+      }
+
+      res.status(200).send(result);
+    }),
+  )
+
+  .post(
+    '/',
+    authMiddleware,
+    loggedUserGuard,
+    roleMiddleware(rolesEnum.employee),
+    errorHandler(async (req: Request, res: Response) => {
+      const { visitId } = req.body;
+
+      const { error, result } = await invoicesService.createInvoice(invoicesData)(visitId);
+
+      if (error === errors.DUPLICATE_RECORD) {
+        res.status(400).send({
+          message: 'Invoice for this visit already exists.',
+        });
+      }
+
+      res.status(201).send(result);
     }),
   );
 export default invoicesController;

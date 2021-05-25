@@ -34,8 +34,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import errors from "../common/service-errors";
-var getById = function (invoicesData) { return function (invoiceId) { return __awaiter(void 0, void 0, void 0, function () {
+import errors from '../common/service-errors';
+import rolesEnum from '../common/roles.enum.js';
+var getById = function (invoicesData) { return function (invoiceId, loggedUserId, role) { return __awaiter(void 0, void 0, void 0, function () {
     var existingInvoice;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -48,6 +49,12 @@ var getById = function (invoicesData) { return function (invoiceId) { return __a
                             result: null,
                         }];
                 }
+                if (existingInvoice.userId !== loggedUserId && role !== rolesEnum.employee) {
+                    return [2 /*return*/, {
+                            error: errors.OPERATION_NOT_PERMITTED,
+                            result: null,
+                        }];
+                }
                 return [2 /*return*/, {
                         error: null,
                         result: existingInvoice,
@@ -55,14 +62,46 @@ var getById = function (invoicesData) { return function (invoiceId) { return __a
         }
     });
 }); }; };
-var getAllInvoices = function (invoicesData) { return function (userId, visitId, dateRangeLow, dateRangeHigh) { return __awaiter(void 0, void 0, void 0, function () {
-    var invoices;
+var getAllInvoices = function (invoicesData, usersData, visitsData) { return function (userId, visitId, dateRangeLow, dateRangeHigh, loggedUserId, role) { return __awaiter(void 0, void 0, void 0, function () {
+    var invoices, existingUser, existingVisit;
     return __generator(this, function (_a) {
-        invoices = invoicesData.getBy(userId, visitId, dateRangeLow, dateRangeHigh);
-        return [2 /*return*/, {
-                error: null,
-                result: invoices,
-            }];
+        switch (_a.label) {
+            case 0:
+                if (userId !== loggedUserId && role !== rolesEnum.employee) {
+                    return [2 /*return*/, {
+                            error: errors.OPERATION_NOT_PERMITTED,
+                            result: null,
+                        }];
+                }
+                invoices = invoicesData.getBy(userId, visitId, dateRangeLow, dateRangeHigh);
+                if (!userId) return [3 /*break*/, 2];
+                return [4 /*yield*/, usersData.getBy('user_id', userId)];
+            case 1:
+                existingUser = _a.sent();
+                if (!existingUser) {
+                    return [2 /*return*/, {
+                            error: errors.RECORD_NOT_FOUND,
+                            result: null,
+                        }];
+                }
+                _a.label = 2;
+            case 2:
+                if (!visitId) return [3 /*break*/, 4];
+                return [4 /*yield*/, visitsData.getVisitBy('visit_id', visitId)];
+            case 3:
+                existingVisit = _a.sent();
+                if (!existingVisit) {
+                    return [2 /*return*/, {
+                            error: errors.RECORD_NOT_FOUND,
+                            result: null,
+                        }];
+                }
+                _a.label = 4;
+            case 4: return [2 /*return*/, {
+                    error: null,
+                    result: invoices,
+                }];
+        }
     });
 }); }; };
 var createInvoice = function (invoicesData) { return function (visitId) { return __awaiter(void 0, void 0, void 0, function () {
@@ -93,4 +132,4 @@ export default {
     getAllInvoices: getAllInvoices,
     createInvoice: createInvoice,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW52b2ljZXMtc2VydmljZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvc2VydmljZXMvaW52b2ljZXMtc2VydmljZXMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsT0FBTyxNQUFNLE1BQU0sMEJBQTBCLENBQUM7QUFHOUMsSUFBTSxPQUFPLEdBQUcsVUFBQyxZQUF5QixJQUFLLE9BQUEsVUFBTyxTQUFpQjs7OztvQkFDN0MscUJBQU0sWUFBWSxDQUFDLEtBQUssQ0FBQyxZQUFZLEVBQUUsU0FBUyxDQUFDLEVBQUE7O2dCQUFuRSxlQUFlLEdBQUcsU0FBaUQ7Z0JBRXpFLElBQUksQ0FBQyxlQUFlLEVBQUU7b0JBQ3BCLHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsZ0JBQWdCOzRCQUM5QixNQUFNLEVBQUUsSUFBSTt5QkFDYixFQUFDO2lCQUNIO2dCQUVELHNCQUFPO3dCQUNMLEtBQUssRUFBRSxJQUFJO3dCQUNYLE1BQU0sRUFBRSxlQUFlO3FCQUN4QixFQUFDOzs7S0FDSCxFQWQ4QyxDQWM5QyxDQUFDO0FBRUYsSUFBTSxjQUFjLEdBQUcsVUFBQyxZQUF5QixJQUFLLE9BQUEsVUFBTyxNQUFjLEVBQUUsT0FBZSxFQUFFLFlBQW9CLEVBQUUsYUFBcUI7OztRQUNqSSxRQUFRLEdBQUcsWUFBWSxDQUFDLEtBQUssQ0FBQyxNQUFNLEVBQUUsT0FBTyxFQUFFLFlBQVksRUFBRSxhQUFhLENBQUMsQ0FBQztRQUVsRixzQkFBTztnQkFDTCxLQUFLLEVBQUUsSUFBSTtnQkFDWCxNQUFNLEVBQUUsUUFBUTthQUNqQixFQUFDOztLQUNILEVBUHFELENBT3JELENBQUM7QUFFRixJQUFNLGFBQWEsR0FBRyxVQUFDLFlBQXlCLElBQUssT0FBQSxVQUFPLE9BQWU7Ozs7b0JBQ2pELHFCQUFNLFlBQVksQ0FBQyxLQUFLLENBQUMsVUFBVSxFQUFFLE9BQU8sQ0FBQyxFQUFBOztnQkFBL0QsZUFBZSxHQUFHLFNBQTZDO2dCQUVyRSxJQUFJLGVBQWUsRUFBRTtvQkFDbkIsc0JBQU87NEJBQ0wsS0FBSyxFQUFFLE1BQU0sQ0FBQyxnQkFBZ0I7NEJBQzlCLE1BQU0sRUFBRSxJQUFJO3lCQUNiLEVBQUM7aUJBQ0g7Z0JBRWUscUJBQU0sWUFBWSxDQUFDLE1BQU0sQ0FBQyxPQUFPLENBQUMsRUFBQTs7Z0JBQTVDLE9BQU8sR0FBRyxTQUFrQztnQkFFbEQsc0JBQU87d0JBQ0wsS0FBSyxFQUFFLElBQUk7d0JBQ1gsTUFBTSxFQUFFLE9BQU87cUJBQ2hCLEVBQUM7OztLQUNILEVBaEJvRCxDQWdCcEQsQ0FBQztBQUVGLGVBQWU7SUFDYixPQUFPLFNBQUE7SUFDUCxjQUFjLGdCQUFBO0lBQ2QsYUFBYSxlQUFBO0NBQ2QsQ0FBQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW52b2ljZXMtc2VydmljZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvc2VydmljZXMvaW52b2ljZXMtc2VydmljZXMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0EsT0FBTyxNQUFNLE1BQU0sMEJBQTBCLENBQUM7QUFHOUMsT0FBTyxTQUFTLE1BQU0seUJBQXlCLENBQUM7QUFFaEQsSUFBTSxPQUFPLEdBQUcsVUFBQyxZQUF5QixJQUFLLE9BQUEsVUFBTyxTQUFpQixFQUFFLFlBQW9CLEVBQUUsSUFBWTs7OztvQkFDakYscUJBQU0sWUFBWSxDQUFDLEtBQUssQ0FBQyxZQUFZLEVBQUUsU0FBUyxDQUFDLEVBQUE7O2dCQUFuRSxlQUFlLEdBQUcsU0FBaUQ7Z0JBRXpFLElBQUksQ0FBQyxlQUFlLEVBQUU7b0JBQ3BCLHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsZ0JBQWdCOzRCQUM5QixNQUFNLEVBQUUsSUFBSTt5QkFDYixFQUFDO2lCQUNIO2dCQUVELElBQUksZUFBZSxDQUFDLE1BQU0sS0FBSyxZQUFZLElBQUksSUFBSSxLQUFLLFNBQVMsQ0FBQyxRQUFRLEVBQUU7b0JBQzFFLHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsdUJBQXVCOzRCQUNyQyxNQUFNLEVBQUUsSUFBSTt5QkFDYixFQUFDO2lCQUNIO2dCQUVELHNCQUFPO3dCQUNMLEtBQUssRUFBRSxJQUFJO3dCQUNYLE1BQU0sRUFBRSxlQUFlO3FCQUN4QixFQUFDOzs7S0FDSCxFQXJCOEMsQ0FxQjlDLENBQUM7QUFFRixJQUFNLGNBQWMsR0FBRyxVQUFDLFlBQXlCLEVBQUUsU0FBb0IsRUFBRSxVQUFzQixJQUFLLE9BQUEsVUFDbEcsTUFBYyxFQUNkLE9BQWUsRUFDZixZQUFvQixFQUNwQixhQUFxQixFQUNyQixZQUFvQixFQUNwQixJQUFZOzs7OztnQkFFWixJQUFJLE1BQU0sS0FBSyxZQUFZLElBQUksSUFBSSxLQUFLLFNBQVMsQ0FBQyxRQUFRLEVBQUU7b0JBQzFELHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsdUJBQXVCOzRCQUNyQyxNQUFNLEVBQUUsSUFBSTt5QkFDYixFQUFDO2lCQUNIO2dCQUVLLFFBQVEsR0FBRyxZQUFZLENBQUMsS0FBSyxDQUFDLE1BQU0sRUFBRSxPQUFPLEVBQUUsWUFBWSxFQUFFLGFBQWEsQ0FBQyxDQUFDO3FCQUU5RSxNQUFNLEVBQU4sd0JBQU07Z0JBQ2EscUJBQU0sU0FBUyxDQUFDLEtBQUssQ0FBQyxTQUFTLEVBQUUsTUFBTSxDQUFDLEVBQUE7O2dCQUF2RCxZQUFZLEdBQUcsU0FBd0M7Z0JBQzdELElBQUksQ0FBQyxZQUFZLEVBQUU7b0JBQ2pCLHNCQUFPOzRCQUNMLEtBQUssRUFBRSxNQUFNLENBQUMsZ0JBQWdCOzRCQUM5QixNQUFNLEVBQUUsSUFBSTt5QkFDYixFQUFDO2lCQUNIOzs7cUJBRUMsT0FBTyxFQUFQLHdCQUFPO2dCQUNhLHFCQUFNLFVBQVUsQ0FBQyxVQUFVLENBQUMsVUFBVSxFQUFFLE9BQU8sQ0FBQyxFQUFBOztnQkFBaEUsYUFBYSxHQUFHLFNBQWdEO2dCQUN0RSxJQUFJLENBQUMsYUFBYSxFQUFFO29CQUNsQixzQkFBTzs0QkFDTCxLQUFLLEVBQUUsTUFBTSxDQUFDLGdCQUFnQjs0QkFDOUIsTUFBTSxFQUFFLElBQUk7eUJBQ2IsRUFBQztpQkFDSDs7b0JBR0gsc0JBQU87b0JBQ0wsS0FBSyxFQUFFLElBQUk7b0JBQ1gsTUFBTSxFQUFFLFFBQVE7aUJBQ2pCLEVBQUM7OztLQUNILEVBeENtRyxDQXdDbkcsQ0FBQztBQUVGLElBQU0sYUFBYSxHQUFHLFVBQUMsWUFBeUIsSUFBSyxPQUFBLFVBQU8sT0FBZTs7OztvQkFDakQscUJBQU0sWUFBWSxDQUFDLEtBQUssQ0FBQyxVQUFVLEVBQUUsT0FBTyxDQUFDLEVBQUE7O2dCQUEvRCxlQUFlLEdBQUcsU0FBNkM7Z0JBRXJFLElBQUksZUFBZSxFQUFFO29CQUNuQixzQkFBTzs0QkFDTCxLQUFLLEVBQUUsTUFBTSxDQUFDLGdCQUFnQjs0QkFDOUIsTUFBTSxFQUFFLElBQUk7eUJBQ2IsRUFBQztpQkFDSDtnQkFFZSxxQkFBTSxZQUFZLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxFQUFBOztnQkFBNUMsT0FBTyxHQUFHLFNBQWtDO2dCQUVsRCxzQkFBTzt3QkFDTCxLQUFLLEVBQUUsSUFBSTt3QkFDWCxNQUFNLEVBQUUsT0FBTztxQkFDaEIsRUFBQzs7O0tBQ0gsRUFoQm9ELENBZ0JwRCxDQUFDO0FBRUYsZUFBZTtJQUNiLE9BQU8sU0FBQTtJQUNQLGNBQWMsZ0JBQUE7SUFDZCxhQUFhLGVBQUE7Q0FDZCxDQUFDIn0=
