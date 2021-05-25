@@ -18,8 +18,8 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   const existingServices = await Promise.all(performedServices.map(async s => {
     const existingService = await servicesData.getServiceBy(s.name, s.carSegmentId);
     if (!existingService) {
-      const createdService = await servicesData.createService(s.name, s.carSegment, s.price);
-      return { ...s, serviceId: createdService.insertId };
+      const createdService = await servicesData.createService(s.name, s.carSegmentId, s.price);
+      return { ...s, serviceId: createdService.serviceId };
     }
     return { ...s, serviceId: existingService.serviceId };
   }));
@@ -27,8 +27,8 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   const existingParts = await Promise.all(usedParts.map(async p => {
     const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
     if (!existingPart) {
-      const createdPart = await partsData.createPart(p.name, p.carSegment, p.price);
-      return { ...p, partId: createdPart.insertId };
+      const createdPart = await partsData.createPart(p.name, p.carSegmentId, p.price);
+      return { ...p, partId: createdPart.partId };
     }
     return { ...p, partId: existingPart.partId };
   }));
@@ -37,9 +37,15 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   const services = await visitsData.registerPerformedServices(existingServices, visit.visitId);
   const parts = await visitsData.registerUsedParts(existingParts, visit.visitId);
 
+  const result = {
+    ...visit,
+    performedServices: existingServices,
+    usedParts: existingParts,
+  };
+
   return {
     error: null,
-    result: visit,
+    result,
   };
 };
 
@@ -117,7 +123,7 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     const existingService = await servicesData.getServiceBy(s.name, s.carSegmentId);
     if (!existingService) {
       const createdService = await servicesData.createService(s.name, s.carSegmentId, s.price);
-      return { ...s, serviceId: createdService.insertId };
+      return { ...s, serviceId: createdService.serviceId };
     }
     return { ...s, serviceId: existingService.serviceId };
   }));
@@ -126,7 +132,7 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
     if (!existingPart) {
       const createdPart = await partsData.createPart(p.name, p.carSegmentId, p.price);
-      return { ...p, partId: createdPart.insertId };
+      return { ...p, partId: createdPart.partId };
     }
     return { ...p, partId: existingPart.partId };
   }));
@@ -138,7 +144,7 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     if (registeredServices.length > 0) {
       const updatedService = visitsData.updatePerformedService(visitId, s.serviceId, s.serviceQty, s.price);
     } else {
-      const newPerformedService = visitsData.registerPerformedServices([s]);
+      const newPerformedService = visitsData.registerPerformedServices([s], visitId);
     }
   });
 
@@ -147,13 +153,21 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     if (registeredParts.length > 0) {
       const updateParts = visitsData.updateUsedPart(visitId, p.partId, p.partQty, p.price);
     } else {
-      const newUsedPart = visitsData.registerUsedParts([p]);
+      const newUsedPart = visitsData.registerUsedParts([p], visitId);
     }
   });
 
+  const result = {
+    notes,
+    performedServices: existingServices,
+    usedParts: existingParts,
+    visitEnd,
+    status,
+  };
+
   return {
     error: null,
-    result: updateVisitData,
+    result,
   };
 };
 
