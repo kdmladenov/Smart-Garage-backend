@@ -17,7 +17,5 @@ export default {
     || (value >= user.MIN_POSTAL_CODE_VALUE && value <= user.MAX_POSTAL_CODE_VALUE),
   streetAddress: (value: string): boolean => typeof value === "undefined"
     || (value.length >= user.MIN_STREET_LENGTH && value.length <= user.MAX_STREET_LENGTH),
-  password: (value: string): boolean => typeof value === "undefined" || user.PASSWORD_REGEX.test(value),
-  reenteredPassword: (value: string): boolean => typeof value === "undefined" || user.PASSWORD_REGEX.test(value),
   role: (value: string): boolean => typeof value === "undefined" || user.ROLES.includes(value),
 };

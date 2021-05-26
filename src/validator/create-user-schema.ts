@@ -20,7 +20,5 @@ export default {
   && value <= user.MAX_POSTAL_CODE_VALUE,
   streetAddress: (value: string): boolean => value.length >= user.MIN_STREET_LENGTH
   && value.length <= user.MAX_STREET_LENGTH,
-  password: (value: string): boolean => user.PASSWORD_REGEX.test(value),
-  reenteredPassword: (value: string): boolean => user.PASSWORD_REGEX.test(value),
   role: (value: string): boolean => user.ROLES.includes(value),
 };
