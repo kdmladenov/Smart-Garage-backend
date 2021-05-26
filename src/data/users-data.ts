@@ -281,7 +281,7 @@ const getAll = async (
     v.vehicle_id as vehicleId,
     v.vin,
     v.license_plate as licensePlate,
-    mo.models_id as modeId,
+    mo.model_id as modeId,
     mo.model_name as model,
     ma.manufacturer_name as make,
     vis.visit_id as visitId,
@@ -295,7 +295,7 @@ const getAll = async (
   FROM users) au USING (user_id)
   LEFT JOIN addresses a USING (address_id)
   RIGHT JOIN vehicles v USING (user_id)
-  JOIN models mo USING (models_id)
+  JOIN models mo USING (model_id)
   JOIN manufacturers ma USING (manufacturer_id)
   RIGHT JOIN visits vis USING (vehicle_id)
   WHERE u.is_deleted = 0
