@@ -1,22 +1,16 @@
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import errors from '../common/service-errors.js';
 import UsersData from '../models/UsersData';
 import UserDetailed from '../models/UserDetailed.js';
 import rolesEnum from '../common/roles.enum.js';
 import { DB_CONFIG, PRIVATE_KEY } from "../../config.js";
 import { forgotPassword } from '../common/constants.js';
+import mailingService from './mailing-service.js';
+import randomStringGenerator from '../common/randomStringGenerator.js';
 
 // register user
 const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
-  if (user.password !== user.reenteredPassword) {
-    return {
-      error: errors.BAD_REQUEST,
-      result: null,
-    };
-  }
-
   const existingUser = (await usersData.getByEmailPhone("email", user.email))
                     || (await usersData.getByEmailPhone("phone", user.phone));
 
@@ -38,11 +32,23 @@ const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
     streetAddress,
   });
 
-  const password = await bcrypt.hash(user.password, 10);
+  const randomPassword = randomStringGenerator(10);
+  const password = await bcrypt.hash(randomPassword, 10);
+  const createdUser = await usersData.create({ ...user, password, addressId });
+
+  const subject = 'Login credentials';
+  const text = `
+    Dear ${createdUser.firstName},
+    Your account at "Smart Garage" has been created. These are your login credentials:
+      username: ${createdUser.email}
+      password: ${randomPassword}
+  `;
+
+  mailingService(existingUser.email, subject, text);
 
   return {
     error: null,
-    result: await usersData.create({ ...user, password, addressId }),
+    result: createdUser,
   };
 };
 
@@ -195,28 +201,34 @@ const forgottenPassword = (usersData: UsersData) => async (
   const link = `http://${DB_CONFIG.host}:${forgotPassword.frontEndPort}/reset-password/${existingUser.userId}/${token}`;
 
   // Sending mail with reset link
-  const transporter = nodemailer.createTransport({
-    service: forgotPassword.emailService,
-    auth: {
-      user: forgotPassword.emailUser,
-      pass: forgotPassword.emailPassword,
-    },
-  });
+  const subject = "Password reset link.";
+  const text = `Dear ${existingUser.firstName},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
+  ${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`;
 
-  const options = {
-    from: forgotPassword.emailUser,
-    to: `${existingUser.email}`,
-    subject: "Password reset link.",
-    text: `Dear ${existingUser.firstName},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
-${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`,
-  };
+  mailingService(existingUser.email, subject, text);
 
-  transporter.sendMail(options, (err, info) => {
-    if (err) {
-      return;
-    }
-    console.log(`Sent: + ${info.response}`);
-  });
+  //   const transporter = nodemailer.createTransport({
+  //     service: forgotPassword.emailService,
+  //     auth: {
+  //       user: forgotPassword.emailUser,
+  //       pass: forgotPassword.emailPassword,
+  //     },
+  //   });
+
+  //   const options = {
+  //     from: forgotPassword.emailUser,
+  //     to: `${existingUser.email}`,
+  //     subject: "Password reset link.",
+  //     text: `Dear ${existingUser.firstName},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
+  // ${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`,
+  //   };
+
+  //   transporter.sendMail(options, (err, info) => {
+  //     if (err) {
+  //       return;
+  //     }
+  //     console.log(`Sent: + ${info.response}`);
+  //   });
 
   return {
     error: null,
@@ -257,27 +269,32 @@ const resetPassword = (usersData: UsersData) => async (
   const _ = await usersData.updatePassword(userId, updated);
 
   // Sending confirmation mail for the reset password
-  const transporter = nodemailer.createTransport({
-    service: forgotPassword.emailService,
-    auth: {
-      user: forgotPassword.emailUser,
-      pass: forgotPassword.emailPassword,
-    },
-  });
+  const subject = "Your password has been reset.";
+  const text = `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`;
 
-  const options = {
-    from: forgotPassword.emailUser,
-    to: `${existingUser.email}`,
-    subject: "Your password has been reset.",
-    text: `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`,
-  };
+  mailingService(existingUser.email, subject, text);
 
-  transporter.sendMail(options, (err, info) => {
-    if (err) {
-      return;
-    }
-    console.log(`Sent: + ${info.response}`);
-  });
+  // const transporter = nodemailer.createTransport({
+  //   service: forgotPassword.emailService,
+  //   auth: {
+  //     user: forgotPassword.emailUser,
+  //     pass: forgotPassword.emailPassword,
+  //   },
+  // });
+
+  // const options = {
+  //   from: forgotPassword.emailUser,
+  //   to: `${existingUser.email}`,
+  //   subject: "Your password has been reset.",
+  //   text: `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`,
+  // };
+
+  // transporter.sendMail(options, (err, info) => {
+  //   if (err) {
+  //     return;
+  //   }
+  //   console.log(`Sent: + ${info.response}`);
+  // });
 
   return {
     error: null,

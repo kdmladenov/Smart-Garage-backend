@@ -62,10 +62,13 @@ export const visit = {
 
 export const forgotPassword = {
   tokenExpiration: "15m",
+  frontEndPort: 3000,
+};
+
+export const email = {
   emailService: "hotmail",
   emailUser: "smartgaragekd@outlook.com",
   emailPassword: "Sekretenklu4",
-  frontEndPort: 3000,
 };
 
 export const part = {
