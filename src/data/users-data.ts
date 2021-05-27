@@ -272,6 +272,7 @@ const getAll = async (
     au.fullName,
     u.first_name as firstName,
     u.last_name as lastName,
+    u.company_name as companyName,
     u.phone,
     u.email,
     a.city,
@@ -281,7 +282,7 @@ const getAll = async (
     v.vehicle_id as vehicleId,
     v.vin,
     v.license_plate as licensePlate,
-    mo.model_id as modeId,
+    mo.model_id as modelId,
     mo.model_name as model,
     ma.manufacturer_name as make,
     vis.visit_id as visitId,
@@ -304,7 +305,8 @@ const getAll = async (
   AND u.phone LIKE '%${phone}%'
   AND mo.model_name LIKE '%${model}%'
   AND ma.manufacturer_name LIKE '%${make}%'
-  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ""}
+  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ''}
+  GROUP BY u.user_id
   ORDER BY ${sortedColumn} ${direction} 
   `;
 
