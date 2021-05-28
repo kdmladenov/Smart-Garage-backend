@@ -205,6 +205,7 @@ usersController
     validateBody("user", forgottenPasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { email }: { email: string } = req.body;
+      console.log(email);
 
       const { error, result } = await usersService.forgottenPassword(usersData)(
         email,
@@ -236,10 +237,15 @@ usersController
         +userId,
         token,
       );
-      if (error === errors.BAD_REQUEST) {
+      if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message:
+            "The link already has been used or expired.",
+        });
+      } else if (error === errors.BAD_REQUEST) {
         res.status(400).send({
           message:
-            "The request was invalid. Passwords do not match or the token has been changed.",
+            "Passwords do not match.",
         });
       } else if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

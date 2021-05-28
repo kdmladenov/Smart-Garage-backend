@@ -1,18 +1,19 @@
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 import errors from '../common/service-errors.js';
 import UsersData from '../models/UsersData';
 import UserDetailed from '../models/UserDetailed.js';
 import rolesEnum from '../common/roles.enum.js';
-import { DB_CONFIG, PRIVATE_KEY } from "../../config.js";
+import { PRIVATE_KEY } from '../../config.js';
 import { forgotPassword } from '../common/constants.js';
 import mailingService from './mailing-service.js';
 import randomStringGenerator from '../common/randomStringGenerator.js';
+import tokenExists from '../data/tokens-data.js';
 
 // register user
 const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
   const existingUser = (await usersData.getByEmailPhone("email", user.email));
-  console.timeLog(existingUser, user);
+
   if (existingUser) {
     return {
       error: errors.DUPLICATE_RECORD,
@@ -38,7 +39,7 @@ const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
   const subject = 'Login credentials';
   const text = `
     Dear ${createdUser.firstName},
-    Your account at "Smart Garage" has been created. These are your login credentials:
+    Your account at 'Smart Garage' has been created. These are your login credentials:
       username: ${createdUser.email}
       password: ${randomPassword}
   `;
@@ -70,7 +71,7 @@ const deleteUser = (usersData: UsersData) => async (userId: number) => {
 };
 
 const getUser = (usersData: UsersData) => async (userId: number, role: string) => {
-  const user = await usersData.getBy("user_id", userId, role);
+  const user = await usersData.getBy('user_id', userId, role);
   if (!user) {
     return {
       error: errors.RECORD_NOT_FOUND,
@@ -94,7 +95,7 @@ const update = (usersData: UsersData) => async (userUpdate: UserDetailed, userId
     };
   }
 
-  const existingUser = await usersData.getBy("user_id", userId, "employee");
+  const existingUser = await usersData.getBy('user_id', userId, 'employee');
   if (!existingUser) {
     return {
       error: errors.RECORD_NOT_FOUND,
@@ -103,7 +104,7 @@ const update = (usersData: UsersData) => async (userUpdate: UserDetailed, userId
   }
 
   if (email) {
-    const user = await usersData.getBy("email", email, "employee");
+    const user = await usersData.getBy('email', email, 'employee');
     if (user && user.userId !== userId) {
       return {
         error: errors.DUPLICATE_RECORD,
@@ -143,7 +144,7 @@ const getAllUsers = (usersData: UsersData) => async (
     sort,
     order,
   );
-  console.log(result[0], "tt");
+  console.log(result[0], 'tt');
   return result;
 };
 // change password
@@ -174,11 +175,11 @@ const changePassword = (usersData: UsersData) => async (passwordData:{[key: stri
   };
 };
 
-// change password
+// reset password
 const forgottenPassword = (usersData: UsersData) => async (
   email: string,
 ) => {
-  const existingUser = await usersData.getBy("email", email);
+  const existingUser = await usersData.getBy('email', email);
   if (!existingUser) {
     return {
       error: errors.RECORD_NOT_FOUND,
@@ -186,7 +187,7 @@ const forgottenPassword = (usersData: UsersData) => async (
     };
   }
   const { password: savedPassword } = await usersData.getPasswordBy(
-    "user_id", existingUser.userId,
+    'user_id', existingUser.userId,
   );
   const newPrivateKey = PRIVATE_KEY + savedPassword;
   const payload = {
@@ -197,12 +198,12 @@ const forgottenPassword = (usersData: UsersData) => async (
   const token = jwt.sign(payload, newPrivateKey, {
     expiresIn: forgotPassword.tokenExpiration,
   });
-  const link = `http://${DB_CONFIG.host}:${forgotPassword.frontEndPort}/reset-password/${existingUser.userId}/${token}`;
+  const link = `http://localhost:${forgotPassword.frontEndPort}/reset-password/${existingUser.userId}/${token}`;
 
   // Sending mail with reset link
-  const subject = "Password reset link.";
+  const subject = 'Password reset link.';
   const text = `Dear ${existingUser.firstName},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
-  ${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`;
+  ${link}\n\nIf you did not initiate the request, just ignore this email - your password will not be changed.`;
 
   mailingService(existingUser.email, subject, text);
 
@@ -219,7 +220,14 @@ const resetPassword = (usersData: UsersData) => async (
   userId: number,
   token: string,
 ) => {
-  const existingUser = await usersData.getBy("user_id", userId);
+  if (await tokenExists(token)) {
+    return {
+      error: errors.OPERATION_NOT_PERMITTED,
+      result: null,
+    };
+  }
+
+  const existingUser = await usersData.getBy('user_id', userId);
   if (!existingUser) {
     return {
       error: errors.RECORD_NOT_FOUND,
@@ -228,13 +236,21 @@ const resetPassword = (usersData: UsersData) => async (
   }
 
   const { password: savedPassword } = await usersData.getPasswordBy(
-    "user_id",
+    'user_id',
     userId,
   );
-  const newPrivateKey = PRIVATE_KEY + savedPassword;
-  const payload = jwt.verify(token, newPrivateKey);
 
-  if (password !== reenteredPassword || !payload) {
+  const newPrivateKey = PRIVATE_KEY + savedPassword;
+  try {
+    jwt.verify(token, newPrivateKey);
+  } catch (err) {
+    return {
+      error: errors.OPERATION_NOT_PERMITTED,
+      result: null,
+    };
+  }
+
+  if (password !== reenteredPassword) {
     return {
       error: errors.BAD_REQUEST,
       result: null,
@@ -245,14 +261,16 @@ const resetPassword = (usersData: UsersData) => async (
   const _ = await usersData.updatePassword(userId, updated);
 
   // Sending confirmation mail for the reset password
-  const subject = "Your password has been reset.";
+  const subject = 'Your password has been reset.';
   const text = `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`;
 
   mailingService(existingUser.email, subject, text);
 
+  const blacklistToken = await usersData.blacklistToken(token);
+
   return {
     error: null,
-    result: { message: "The password was successfully reset" },
+    result: { message: 'The password was successfully reset' },
   };
 };
 export default {

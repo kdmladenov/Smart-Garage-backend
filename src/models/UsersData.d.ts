@@ -3,7 +3,7 @@ interface UsersData {
   getPassword: Function;
   remove: Function;
   loginUser: Function;
-  logoutUser: Function;
+  blacklistToken: Function;
   getBy: Function;
   createAddress: Function;
   getByEmailPhone: Function;
