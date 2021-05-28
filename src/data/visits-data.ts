@@ -125,6 +125,7 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   const sql = `
   SELECT
     vis.notes,
+    vis.visit_id as visitId,
     vis.visit_start as visitStart,
     vis.visit_end as visitEnd,
     vis.status,
@@ -155,13 +156,14 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   LEFT JOIN manufacturers as man USING(manufacturer_id)
   LEFT JOIN users as u USING(user_id)
   LEFT JOIN addresses as a USING(address_id)
-  WHERE user_id = ?
+  WHERE visit_id > 0
+  ${userId ? `AND user_id = ${userId}` : ''}
   ${vehicleId ? `AND vehicle_id = ${vehicleId}` : ''}
   ${visitStatus && `AND vis.status LIKE '%${visitStatus}%'`}
-  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ""}
+  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ''}
   `;
 
-  return db.query(sql, [userId]);
+  return db.query(sql, []);
 };
 
 const updateVisit = async (visitId: number, notes: string, visitEnd: string, status: string) => {

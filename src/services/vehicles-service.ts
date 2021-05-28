@@ -141,8 +141,20 @@ const getVehicle = (vehiclesData: VehiclesData) => async (vehicleId: number) => 
   };
 };
 
-const getAllVehicles = (vehiclesData: VehiclesData) => async (page: number, pagesize: number, email: string, fullName: string) => {
-  const vehicles = await vehiclesData.getAll(page, pagesize, email, fullName);
+const getAllVehicles = (vehiclesData: VehiclesData) => async (
+  page: number,
+  pagesize: number,
+  email: string,
+  fullName: string,
+  userId: number,
+) => {
+  const vehicles = await vehiclesData.getAll(
+    page,
+    pagesize,
+    email,
+    fullName,
+    userId,
+  );
 
   return {
     error: null,

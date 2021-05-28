@@ -136,9 +136,14 @@ const update = async (vehicle: Vehicle) => {
   return vehicle;
 };
 
-const getAll = async (page: number, pagesize: number, email: string, fullName: string) => {
+const getAll = async (
+  page: number,
+  pagesize: number,
+  email: string,
+  fullName: string,
+  userId: number,
+) => {
   const offset = page ? (page - 1) * pagesize : 0;
-
   const sql = `
   SELECT
     v.vehicle_id as vehicleId,
@@ -150,15 +155,25 @@ const getAll = async (page: number, pagesize: number, email: string, fullName: s
     v.transmission,
     v.user_id as userId,
     u.email as email,
-    u.full_name as fullName
+    u.full_name as fullName,
+    mo.manufacturer_id as manufacturerId,
+    mo.car_segment_id as carSegmentId,
+    mo.model_name as model,
+    ma.manufacturer_name as make,
+    se.car_segment as carSegment
   FROM vehicles as v
+  LEFT JOIN models as mo USING(model_id)
+  LEFT JOIN manufacturers as ma USING(manufacturer_id)
+  LEFT JOIN car_segments as se USING(car_segment_id)
   LEFT JOIN (SELECT 
               CONCAT(first_name, ' ', last_name) as full_name,
               email,
               user_id,
               is_deleted
             FROM users) as u USING(user_id)
-  WHERE u.is_deleted = 0 ${email && `AND u.email LIKE('%${email}%')`} ${fullName && `AND u.full_name like('%${fullName}%')`}
+  WHERE u.is_deleted = 0 ${email && `AND u.email LIKE('%${email}%')`} 
+  ${fullName && `AND u.full_name like('%${fullName}%')`}
+  ${userId > 0 ? `AND u.user_id = ${userId}` : ''}
   LIMIT ? OFFSET ?;         
   `;
 

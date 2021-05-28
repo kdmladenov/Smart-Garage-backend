@@ -63,16 +63,24 @@ vehiclesController
       page,
       email,
       fullName,
+      userId,
     } = req.query;
 
     if (pagesize < paging.vehicles.MIN_PAGE_SIZE) pagesize = paging.vehicles.MIN_PAGE_SIZE;
     if (pagesize > paging.vehicles.MAX_PAGE_SIZE) pagesize = paging.vehicles.MAX_PAGE_SIZE;
     page = page || '1';
     email = typeof email === 'string' ? email : '';
+    userId = typeof userId === 'string' ? userId : '';
     fullName = typeof fullName === 'string' ? fullName : '';
     fullName = fullName && fullName.replace('_', ' ');
 
-    const { result } = await vehiclesService.getAllVehicles(vehiclesData)(+page, +pagesize, email, fullName);
+    const { result } = await vehiclesService.getAllVehicles(vehiclesData)(
+      +page,
+      +pagesize,
+      email,
+      fullName,
+      +userId,
+    );
 
     res.status(200).send(result);
   }));
