@@ -12,8 +12,7 @@ import tokenExists from '../data/tokens-data.js';
 
 // register user
 const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
-  const existingUser = (await usersData.getByEmailPhone('email', user.email))
-                    || (await usersData.getByEmailPhone('phone', user.phone));
+  const existingUser = (await usersData.getByEmailPhone("email", user.email));
 
   if (existingUser) {
     return {
@@ -45,7 +44,7 @@ const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
       password: ${randomPassword}
   `;
 
-  mailingService(existingUser.email, subject, text);
+  mailingService(createdUser.email, subject, text);
 
   return {
     error: null,
@@ -208,29 +207,6 @@ const forgottenPassword = (usersData: UsersData) => async (
 
   mailingService(existingUser.email, subject, text);
 
-  //   const transporter = nodemailer.createTransport({
-  //     service: forgotPassword.emailService,
-  //     auth: {
-  //       user: forgotPassword.emailUser,
-  //       pass: forgotPassword.emailPassword,
-  //     },
-  //   });
-
-  //   const options = {
-  //     from: forgotPassword.emailUser,
-  //     to: `${existingUser.email}`,
-  //     subject: 'Password reset link.',
-  //     text: `Dear ${existingUser.firstName},\nA request has been received to reset the password of your Smart Garage account. You can do that by clicking on the below link.\n
-  // ${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`,
-  //   };
-
-  //   transporter.sendMail(options, (err, info) => {
-  //     if (err) {
-  //       return;
-  //     }
-  //     console.log(`Sent: + ${info.response}`);
-  //   });
-
   return {
     error: null,
     result: { message: `The password reset link has been send to ${email}` },
@@ -291,28 +267,6 @@ const resetPassword = (usersData: UsersData) => async (
   mailingService(existingUser.email, subject, text);
 
   const blacklistToken = await usersData.blacklistToken(token);
-
-  // const transporter = nodemailer.createTransport({
-  //   service: forgotPassword.emailService,
-  //   auth: {
-  //     user: forgotPassword.emailUser,
-  //     pass: forgotPassword.emailPassword,
-  //   },
-  // });
-
-  // const options = {
-  //   from: forgotPassword.emailUser,
-  //   to: `${existingUser.email}`,
-  //   subject: 'Your password has been reset.',
-  //   text: `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`,
-  // };
-
-  // transporter.sendMail(options, (err, info) => {
-  //   if (err) {
-  //     return;
-  //   }
-  //   console.log(`Sent: + ${info.response}`);
-  // });
 
   return {
     error: null,

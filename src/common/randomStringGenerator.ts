@@ -1,10 +1,17 @@
-const randomStringGenerator = (length: number, initialValue = '', inOptions: string = 'abcdefghijklmnopqrstuvwxyz0123456789'): string => {
+const randomStringGenerator = (length: number, initialValue = ''): string => {
   let outString = initialValue;
-  for (let i = 0; i < length; i++) {
-    outString += inOptions.charAt(Math.floor(Math.random() * inOptions.length));
+  const lowerChar: string = "abcdefghijklmnopqrstuvwxyz";
+  const upperChar: string = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+  const numbers: string = "0123456789";
+  for (let i = 0; i < length - 2; i++) {
+    outString += lowerChar.charAt(Math.floor(Math.random() * lowerChar.length));
   }
 
-  return outString;
+  return (
+    outString
+    + upperChar.charAt(Math.floor(Math.random() * upperChar.length))
+    + numbers.charAt(Math.floor(Math.random() * numbers.length))
+  );
 };
 
 export default randomStringGenerator;
