@@ -21,7 +21,7 @@ const login = (usersData: UsersData) => async (email: string, password: string) 
 
 // logout
 const logout = (usersData: UsersData) => async (token: string) => {
-  const _ = await usersData.logoutUser(token);
+  const _ = await usersData.blacklistToken(token);
 };
 
 export default {

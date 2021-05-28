@@ -115,7 +115,7 @@ const loginUser = async (email: string) => {
 };
 
 // tokens table includes blacklisted tokens only
-const logoutUser = async (token: string) => {
+const blacklistToken = async (token: string) => {
   const sql = `
     INSERT INTO tokens (
       token
@@ -337,7 +337,7 @@ export default {
   getPassword,
   remove,
   loginUser,
-  logoutUser,
+  blacklistToken,
   getBy,
   createAddress,
   getByEmailPhone,
