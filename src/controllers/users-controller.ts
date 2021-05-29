@@ -1,18 +1,20 @@
-import express, { Request, Response } from "express";
-import usersData from "../data/users-data.js";
-import validateBody from "../middleware/validate-body.js";
-import usersService from "../services/users-service.js";
-import createUserSchema from "../validator/create-user-schema.js";
-import authMiddleware from "../authentication/authMiddleware.js";
-import roleMiddleware from "../middleware/roleMiddleware.js";
-import rolesEnum from "../common/roles.enum.js";
-import errors from "../common/service-errors.js";
-import loggedUserGuard from "../middleware/loggedUserGuard.js";
-import errorHandler from "../middleware/errorHandler.js";
-import updateUserSchema from "../validator/update-user-schema.js";
-import updatePasswordSchema from "../validator/update-password-schema.js";
-import forgottenPasswordSchema from "../validator/forgotten-password-schema.js";
-import resetPasswordSchema from "../validator/reset-password-schema.js";
+/* eslint-disable complexity */
+import express, { Request, Response } from 'express';
+import { paging } from '../common/constants.js';
+import usersData from '../data/users-data.js';
+import validateBody from '../middleware/validate-body.js';
+import usersService from '../services/users-service.js';
+import createUserSchema from '../validator/create-user-schema.js';
+import authMiddleware from '../authentication/authMiddleware.js';
+import roleMiddleware from '../middleware/roleMiddleware.js';
+import rolesEnum from '../common/roles.enum.js';
+import errors from '../common/service-errors.js';
+import loggedUserGuard from '../middleware/loggedUserGuard.js';
+import errorHandler from '../middleware/errorHandler.js';
+import updateUserSchema from '../validator/update-user-schema.js';
+import updatePasswordSchema from '../validator/update-password-schema.js';
+import forgottenPasswordSchema from '../validator/forgotten-password-schema.js';
+import resetPasswordSchema from '../validator/reset-password-schema.js';
 
 const usersController = express.Router();
 
@@ -20,11 +22,11 @@ usersController
 
   // register
   .post(
-    "/",
+    '/',
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
-    validateBody("user", createUserSchema),
+    validateBody('user', createUserSchema),
     errorHandler(async (req: Request, res: Response) => {
       const user = req.body;
 
@@ -32,12 +34,12 @@ usersController
 
       if (error === errors.BAD_REQUEST) {
         res.status(400).send({
-          message: "The request was invalid. Passwords do not match.",
+          message: 'The request was invalid. Passwords do not match.',
         });
       }
       if (error === errors.DUPLICATE_RECORD) {
         res.status(409).send({
-          message: "User with same email already exists.",
+          message: 'User with same email already exists.',
         });
       } else {
         res.status(201).send(result);
@@ -47,7 +49,7 @@ usersController
 
   // Delete user
   .delete(
-    "/:userId",
+    '/:userId',
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
@@ -68,36 +70,44 @@ usersController
   )
   // Get All users
   .get(
-    "/",
+    '/',
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     errorHandler(async (req: Request, res: Response) => {
       // const { role } = req.user!;
-
       let {
-        name = "",
-        email = "",
-        phone = "",
-        model = "",
-        make = "",
-        visitRangeLow = "",
-        visitRangeHigh = "",
-        sort = "name",
-        order = "ASC",
+        pageSize = paging.users.MIN_PAGE_SIZE,
+        page = 1,
+        name = '',
+        email = '',
+        phone = '',
+        model = '',
+        make = '',
+        visitRangeLow = '',
+        visitRangeHigh = '',
+        sort = 'name',
+        order = 'ASC',
       } = req.query;
-      email = typeof email === "string" ? email : "";
-      name = typeof name === "string" ? name : "";
-      phone = typeof phone === "string" ? phone : "";
-      model = typeof model === "string" ? model : "";
-      make = typeof make === "string" ? make : "";
-      visitRangeLow = typeof visitRangeLow === "string" ? visitRangeLow : "";
-      visitRangeHigh = typeof visitRangeHigh === "string" ? visitRangeHigh : "";
-      sort = typeof sort === "string" ? sort : "";
-      order = typeof order === "string" ? order : "";
+
+      if (pageSize < paging.users.MIN_PAGE_SIZE) pageSize = paging.users.MIN_PAGE_SIZE;
+      if (pageSize > paging.users.MAX_PAGE_SIZE) pageSize = paging.users.MAX_PAGE_SIZE;
+      page = page || 1;
+
+      email = typeof email === 'string' ? email : '';
+      name = typeof name === 'string' ? name : '';
+      phone = typeof phone === 'string' ? phone : '';
+      model = typeof model === 'string' ? model : '';
+      make = typeof make === 'string' ? make : '';
+      visitRangeLow = typeof visitRangeLow === 'string' ? visitRangeLow : '';
+      visitRangeHigh = typeof visitRangeHigh === 'string' ? visitRangeHigh : '';
+      sort = typeof sort === 'string' ? sort : '';
+      order = typeof order === 'string' ? order : '';
       // name = name && name.replace("_", " ");
 
       const result = await usersService.getAllUsers(usersData)(
+        +pageSize,
+        +page,
         name,
         email,
         phone,
@@ -114,7 +124,7 @@ usersController
   // )
   // Get a single user
   .get(
-    "/:userId",
+    '/:userId',
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
@@ -137,11 +147,11 @@ usersController
   )
   // Update a single user
   .put(
-    "/:userId",
+    '/:userId',
     authMiddleware,
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
-    validateBody("user", updateUserSchema),
+    validateBody('user', updateUserSchema),
     errorHandler(async (req: Request, res: Response) => {
       const id = req.params.userId;
       const update = req.body;
@@ -154,7 +164,7 @@ usersController
       if (error === errors.BAD_REQUEST) {
         res.status(400).send({
           message:
-            "The request was invalid. Emails are required or do not match.",
+            'The request was invalid. Emails are required or do not match.',
         });
       } else if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -162,7 +172,7 @@ usersController
         });
       } else if (error === errors.DUPLICATE_RECORD) {
         res.status(409).send({
-          message: "User with same email already exists.",
+          message: 'User with same email already exists.',
         });
       } else {
         res.status(200).send(result);
@@ -171,10 +181,10 @@ usersController
   )
   // Change password
   .patch(
-    "/:userId/change-password",
+    '/:userId/change-password',
     authMiddleware,
     loggedUserGuard,
-    validateBody("user", updatePasswordSchema),
+    validateBody('user', updatePasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { role } = req.user!;
       const id = role === rolesEnum.employee ? req.params.userId : req.user!.userId;
@@ -188,7 +198,7 @@ usersController
 
       if (error === errors.BAD_REQUEST) {
         res.status(400).send({
-          message: "The request was invalid. Passwords do not match.",
+          message: 'The request was invalid. Passwords do not match.',
         });
       } else if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -201,8 +211,8 @@ usersController
   )
   // Forgotten password with mail password reset
   .post(
-    "/forgotten-password",
-    validateBody("user", forgottenPasswordSchema),
+    '/forgotten-password',
+    validateBody('user', forgottenPasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { email }: { email: string } = req.body;
       console.log(email);
@@ -215,15 +225,14 @@ usersController
           message: `A user with email ${email} is not found`,
         });
       } else {
-        res
-          .status(200)
-          .send(result);
+        res.status(200).send(result);
       }
     }),
   )
   // Reset password
-  .post("/reset-password/:userId/:token",
-    validateBody("user", resetPasswordSchema),
+  .post(
+    '/reset-password/:userId/:token',
+    validateBody('user', resetPasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
       const {
         password,
@@ -239,13 +248,11 @@ usersController
       );
       if (error === errors.OPERATION_NOT_PERMITTED) {
         res.status(403).send({
-          message:
-            "The link already has been used or expired.",
+          message: 'The link already has been used or expired.',
         });
       } else if (error === errors.BAD_REQUEST) {
         res.status(400).send({
-          message:
-            "Passwords do not match.",
+          message: 'Passwords do not match.',
         });
       } else if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -254,6 +261,7 @@ usersController
       } else {
         res.status(200).send(result);
       }
-    }));
+    }),
+  );
 
 export default usersController;

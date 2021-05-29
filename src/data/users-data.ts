@@ -251,6 +251,8 @@ const updateAddress = async (address: Address) => {
 };
 
 const getAll = async (
+  pageSize: number,
+  page: number,
   name: string,
   email: string,
   phone: string,
@@ -261,13 +263,17 @@ const getAll = async (
   sort: string,
   order: string,
 ) => {
-  const direction = ["ASC", "asc", "DESC", "desc"].includes(order)
+  const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(order)
     ? order
-    : "asc";
-  const sortedColumn = ["fullName", "visitStartDate"].includes(sort) ? sort : "fullName";
+    : 'asc';
+  const sortedColumn = ['fullName', 'visitStartDate'].includes(sort)
+    ? sort
+    : 'fullName';
+  const offset = page ? (page - 1) * pageSize : 0;
 
   const sql = `
     SELECT 
+    COUNT(*) OVER () AS totalDBItems,
     u.user_id as userId,
     au.fullName,
     u.first_name as firstName,
@@ -308,12 +314,10 @@ const getAll = async (
   ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ''}
   GROUP BY u.user_id
   ORDER BY ${sortedColumn} ${direction} 
+  LIMIT ${pageSize} OFFSET ${offset}; 
   `;
 
-  return db.query(sql, [
-    visitRangeLow || null,
-    visitRangeHigh || null,
-  ]);
+  return db.query(sql, [visitRangeLow || null, visitRangeHigh || null]);
 };
 const getPasswordBy = async (column: string, value:string) => {
   const sql = `

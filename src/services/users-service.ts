@@ -123,17 +123,21 @@ const update = (usersData: UsersData) => async (userUpdate: UserDetailed, userId
 };
 
 const getAllUsers = (usersData: UsersData) => async (
+  pageSize: number,
+  page: number,
   name: string,
-  email:string,
+  email: string,
   phone: string,
   model: string,
   make: string,
   visitRangeLow: string,
-  visitRangeHigh:string,
+  visitRangeHigh: string,
   sort: string,
-  order:string,
+  order: string,
 ) => {
   const result = await usersData.getAll(
+    +pageSize,
+    +page,
     name,
     email,
     phone,
@@ -144,7 +148,6 @@ const getAllUsers = (usersData: UsersData) => async (
     sort,
     order,
   );
-  console.log(result[0], 'tt');
   return result;
 };
 // change password
