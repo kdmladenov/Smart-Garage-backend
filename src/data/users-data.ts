@@ -278,7 +278,7 @@ const getAll = async (
     a.city,
     a.country,
     a.postal_code as postalCode,
-    a.street_address as street,
+    a.street_address as streetAddress,
     v.vehicle_id as vehicleId,
     v.vin,
     v.license_plate as licensePlate,

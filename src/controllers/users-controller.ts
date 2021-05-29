@@ -30,11 +30,6 @@ usersController
 
       const { error, result } = await usersService.createUser(usersData)(user);
 
-      if (error === errors.BAD_REQUEST) {
-        res.status(400).send({
-          message: "The request was invalid. Passwords do not match.",
-        });
-      }
       if (error === errors.DUPLICATE_RECORD) {
         res.status(409).send({
           message: "User with same email already exists.",
