@@ -25,6 +25,10 @@ export const user = {
 };
 
 export const paging = {
+  users: {
+    MAX_PAGE_SIZE: 20,
+    MIN_PAGE_SIZE: 10,
+  },
   vehicles: {
     MAX_PAGE_SIZE: 20,
     MIN_PAGE_SIZE: 10,
