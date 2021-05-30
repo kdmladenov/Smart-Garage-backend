@@ -30,7 +30,7 @@ const getModelBy = async (column: string, value: string | number, manufacturer: 
   const sql = `
     SELECT
       m.model_id as id,
-      m.model_name as model,
+      m.model_name as modelName,
       mf.manufacturer_name as manufacturer,
       cs.car_segment as carSegment
     FROM models as m
@@ -158,8 +158,8 @@ const getAll = async (
     u.full_name as fullName,
     mo.manufacturer_id as manufacturerId,
     mo.car_segment_id as carSegmentId,
-    mo.model_name as model,
-    ma.manufacturer_name as make,
+    mo.model_name as modelName,
+    ma.manufacturer_name as manufacturer,
     se.car_segment as carSegment
   FROM vehicles as v
   LEFT JOIN models as mo USING(model_id)
