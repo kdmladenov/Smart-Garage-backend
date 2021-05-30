@@ -27,8 +27,8 @@ const getAllParts = async (
   const sql = `
     SELECT
     s.part_id as partId,
-    s.name as partName,
-    s.price as partPrice,
+    s.name,
+    s.price,
     s.car_segment_id as carSegmentId,
     cs.car_segment as carSegment
     FROM parts as s
@@ -85,14 +85,14 @@ const update = async (updated: UpdatePartsData, partId: number) => {
         SET
         name = ?,
           price = ?,
-          car_segment_id = ?
+          car_segment_id = (SELECT car_segment_id FROM car_segments WHERE car_segment = ?)
         WHERE part_id = ?
     `;
 
   const _ = await db.query(sql, [
     updated.name,
     updated.price,
-    updated.carSegmentId,
+    updated.carSegment,
     partId,
   ]);
 
