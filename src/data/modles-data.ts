@@ -5,7 +5,7 @@ const getAll = async () => {
     SELECT 
       mo.model_id as modelId,
       mo.model_name as modelName,
-      ma.manufacturer_name as manufacturerName,
+      ma.manufacturer_name as manufacturer,
       cs.car_segment as carSegment
     FROM models as mo
     JOIN manufacturers as ma USING(manufacturer_id)
