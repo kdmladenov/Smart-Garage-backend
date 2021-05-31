@@ -1,7 +1,7 @@
 import db from "./pool.js";
 import { UpdatePartsData } from "../models/UpdatePartsData";
 
-const getPartBy = async (name: string, carSegmentId: number) => {
+const getPartBy = async (name: string, carSegment: string) => {
   const sql = `
     SELECT
       part_id as partId,
@@ -12,7 +12,7 @@ const getPartBy = async (name: string, carSegmentId: number) => {
     WHERE name = ? AND car_segment_id = (SELECT car_segment_id FROM car_segments WHERE car_segment = ?) AND is_deleted = 0;
   `;
 
-  return (await db.query(sql, [name, carSegmentId]))[0];
+  return (await db.query(sql, [name, carSegment]))[0];
 };
 
 const getAllParts = async (

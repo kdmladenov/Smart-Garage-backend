@@ -19,12 +19,12 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     // getServiceBy to be changed (takes carSegment, not carSegmentId)
     const existingService = await servicesData.getServiceBy(
       s.name,
-      s.carSegmentId,
+      s.carSegment,
     );
     if (!existingService) {
       const createdService = await servicesData.createService(
         s.name,
-        s.carSegmentId,
+        s.carSegment,
         s.price,
       );
       return { ...s, serviceId: createdService.serviceId };
@@ -34,11 +34,11 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
 
   const existingParts = await Promise.all(usedParts.map(async p => {
     // getPartBy to be changed (takes carSegment, not carSegmentId)
-    const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
+    const existingPart = await partsData.getPartBy(p.name, p.carSegment);
     if (!existingPart) {
       const createdPart = await partsData.createPart(
         p.name,
-        p.carSegmentId,
+        p.carSegment,
         p.price,
       );
       return { ...p, partId: createdPart.partId };
@@ -136,12 +136,12 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     // getServiceBy to be changed (takes carSegment, not carSegmentId)
     const existingService = await servicesData.getServiceBy(
       s.name,
-      s.carSegmentId,
+      s.carSegment,
     );
     if (!existingService) {
       const createdService = await servicesData.createService(
         s.name,
-        s.carSegmentId,
+        s.carSegment,
         s.price,
       );
       return { ...s, serviceId: createdService.serviceId };
@@ -151,11 +151,11 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
 
   const existingParts = await Promise.all(usedParts.map(async p => {
     // getPart to be changed (takes carSegment, not carSegmentId)
-    const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
+    const existingPart = await partsData.getPartBy(p.name, p.carSegment);
     if (!existingPart) {
       const createdPart = await partsData.createPart(
         p.name,
-        p.carSegmentId,
+        p.carSegment,
         p.price,
       );
       return { ...p, partId: createdPart.partId };
