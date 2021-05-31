@@ -18,7 +18,8 @@ export const user = {
 export const service = {
   name: `Expected a string with length in the range [${serviceConstants.SERVICE_NAME_MIN_LENGTH}:${serviceConstants.SERVICE_NAME_MAX_LENGTH}]`,
   price: `Expected a number with value in the range [${serviceConstants.SERVICE_PRICE_MIN_VALUE}:${serviceConstants.SERVICE_PRICE_MAX_VALUE}]`,
-  carSegmentId: 'Expected a positive number',
+  carSegment: 'Expected a string (e.g. "A - mini cars")',
+  carSegmentId: 'Expected a number.',
 };
 
 export const vehicle = {
@@ -30,7 +31,8 @@ export const vehicle = {
   transmission: 'Expected one of "manual", "automatic"',
   modelName: 'Expected a string',
   manufacturer: 'Expected a string',
-  carSegment: 'Expected a string',
+  carSegmentId: 'Expected a number.',
+  carSegment: 'Expected a string (e.g. "A - mini cars")',
 };
 
 export const visit = {

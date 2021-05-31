@@ -2,15 +2,15 @@ import errors from "../common/service-errors.js";
 import { PartsData } from "../models/PartsData.js";
 import { UpdatePartsData } from "../models/UpdatePartsData";
 
-const createPart = (partsData: PartsData) => async (name: string, price: number, carSegmentId: number) => {
-  const existingPart = await partsData.getPartBy(name, carSegmentId);
+const createPart = (partsData: PartsData) => async (name: string, price: number, carSegment: string) => {
+  const existingPart = await partsData.getPartBy(name, carSegment);
   if (existingPart) {
     return {
       error: errors.DUPLICATE_RECORD,
       part: null,
     };
   }
-  const part = await partsData.createPart(name, +carSegmentId, +price);
+  const part = await partsData.createPart(name, carSegment, +price);
 
   return {
     error: null,

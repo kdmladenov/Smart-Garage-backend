@@ -22,21 +22,19 @@ servicesController
     loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("service", createServiceSchema),
-    errorHandler(
-      async (req: Request, res: Response) => {
-        const { name, price, carSegmentId } = req.body;
+    errorHandler(async (req: Request, res: Response) => {
+      const { name, price, carSegment } = req.body;
 
-        const { error, service } = await servicesServices.createService(servicesData)(name, price, carSegmentId);
+      const { error, service } = await servicesServices.createService(servicesData)(name, price, carSegment);
 
-        if (error === errors.DUPLICATE_RECORD) {
-          res.status(409).send({
-            message: "A service with name already exists.",
-          });
-        } else {
-          res.status(201).send(service);
-        }
-      },
-    ),
+      if (error === errors.DUPLICATE_RECORD) {
+        res.status(409).send({
+          message: "A service with name already exists.",
+        });
+      } else {
+        res.status(201).send(service);
+      }
+    }),
   )
   // get all services - search, sort, paging
   .get(

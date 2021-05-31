@@ -23,12 +23,12 @@ partsController
     roleMiddleware(rolesEnum.employee),
     validateBody("part", createPartSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const { name, price, carSegmentId } = req.body;
+      const { name, price, carSegment } = req.body;
 
       const { error, part } = await partsServices.createPart(partsData)(
         name,
         price,
-        carSegmentId,
+        carSegment,
       );
 
       if (error === errors.DUPLICATE_RECORD) {

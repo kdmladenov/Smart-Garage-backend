@@ -1,7 +1,7 @@
 import db from "./pool.js";
 import { UpdateServicesData } from "../models/UpdateServicesData";
 
-const getServiceBy = async (name: string, carSegmentId: number) => {
+const getServiceBy = async (name: string, carSegment: string) => {
   const sql = `
   SELECT
   service_id as serviceId,
@@ -9,10 +9,10 @@ const getServiceBy = async (name: string, carSegmentId: number) => {
   price,
   car_segment_id as carSegmentId
   FROM services
-  WHERE name = ? AND car_segment_id = ? AND is_deleted = 0;
+  WHERE name = ? AND car_segment_id = (SELECT car_segment_id FROM car_segments WHERE car_segment = ?) AND is_deleted = 0;
   `;
 
-  return (await db.query(sql, [name, carSegmentId]))[0];
+  return (await db.query(sql, [name, carSegment]))[0];
 };
 
 const getAllServices = async (
@@ -62,7 +62,7 @@ const getBy = async (column: string, value: string | number) => {
 
 const createService = async (
   name: string,
-  carSegmentId: number,
+  carSegment: string,
   price: number,
 ) => {
   const sql = `
@@ -71,11 +71,11 @@ const createService = async (
         car_segment_id,
         price
       )
-      VALUES (?, ?, ?);
+      VALUES (?, (SELECT car_segment_id FROM car_segments WHERE car_segment = ?), ?);
     `;
 
   // return (await db.query(sql, [name, +carSegmentId, +price]))[0];
-  const result = await db.query(sql, [name, +carSegmentId, +price]);
+  const result = await db.query(sql, [name, carSegment, +price]);
   return getBy('service_id', result.insertId);
 };
 

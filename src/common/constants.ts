@@ -84,3 +84,12 @@ export const part = {
 };
 
 export const sqlDateRegex = /^([0-9]{4}-[0-1][0-9]-[0-3][0-9])$/;
+
+export const carSegments = {
+  1: 'A - mini cars',
+  2: 'B - small cars',
+  3: 'C - medium cars',
+  4: 'D - large cars',
+  5: 'E - executive cars',
+  6: 'F - luxury cars',
+};

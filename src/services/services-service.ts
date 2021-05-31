@@ -2,8 +2,8 @@ import errors from "../common/service-errors.js";
 import { ServicesData } from "../models/ServicesData.js";
 import { UpdateServicesData } from "../models/UpdateServicesData";
 
-const createService = (servicesData: ServicesData) => async (name: string, price: number, carSegmentId: number) => {
-  const existingService = await servicesData.getServiceBy(name, carSegmentId);
+const createService = (servicesData: ServicesData) => async (name: string, price: number, carSegment: string) => {
+  const existingService = await servicesData.getServiceBy(name, carSegment);
   if (existingService) {
     return {
       error: errors.DUPLICATE_RECORD,
@@ -12,7 +12,7 @@ const createService = (servicesData: ServicesData) => async (name: string, price
   }
   const service = await servicesData.createService(
     name,
-    +carSegmentId,
+    carSegment,
     +price,
   );
 

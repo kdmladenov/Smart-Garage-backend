@@ -9,7 +9,7 @@ const getPartBy = async (name: string, carSegmentId: number) => {
       price,
       car_segment_id as carSegmentId
     FROM parts
-    WHERE name = ? AND car_segment_id = ? AND is_deleted = 0;
+    WHERE name = ? AND car_segment_id = (SELECT car_segment_id FROM car_segments WHERE car_segment = ?) AND is_deleted = 0;
   `;
 
   return (await db.query(sql, [name, carSegmentId]))[0];
@@ -62,7 +62,7 @@ const getBy = async (column: string, value: string | number) => {
 
 const createPart = async (
   name: string,
-  carSegmentId: number,
+  carSegment: string,
   price: number,
 ) => {
   const sql = `
@@ -71,11 +71,10 @@ const createPart = async (
         car_segment_id,
         price
         )
-        VALUES (?, ?, ?);
+        VALUES (?, (SELECT car_segment_id FROM car_segments WHERE car_segment = ?), ?);
         `;
 
-  // return (await db.query(sql, [name, +carSegmentId, +price]))[0];
-  const result = await db.query(sql, [name, +carSegmentId, +price]);
+  const result = await db.query(sql, [name, carSegment, +price]);
   return getBy("part_id", result.insertId);
 };
 

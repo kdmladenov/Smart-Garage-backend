@@ -16,18 +16,31 @@ const createVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   } = createVisitData;
 
   const existingServices = await Promise.all(performedServices.map(async s => {
-    const existingService = await servicesData.getServiceBy(s.name, s.carSegmentId);
+    // getServiceBy to be changed (takes carSegment, not carSegmentId)
+    const existingService = await servicesData.getServiceBy(
+      s.name,
+      s.carSegmentId,
+    );
     if (!existingService) {
-      const createdService = await servicesData.createService(s.name, s.carSegmentId, s.price);
+      const createdService = await servicesData.createService(
+        s.name,
+        s.carSegmentId,
+        s.price,
+      );
       return { ...s, serviceId: createdService.serviceId };
     }
     return { ...s, serviceId: existingService.serviceId };
   }));
 
   const existingParts = await Promise.all(usedParts.map(async p => {
+    // getPartBy to be changed (takes carSegment, not carSegmentId)
     const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
     if (!existingPart) {
-      const createdPart = await partsData.createPart(p.name, p.carSegmentId, p.price);
+      const createdPart = await partsData.createPart(
+        p.name,
+        p.carSegmentId,
+        p.price,
+      );
       return { ...p, partId: createdPart.partId };
     }
     return { ...p, partId: existingPart.partId };
@@ -120,18 +133,31 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   } = updateVisitData;
 
   const existingServices = await Promise.all(performedServices.map(async s => {
-    const existingService = await servicesData.getServiceBy(s.name, s.carSegmentId);
+    // getServiceBy to be changed (takes carSegment, not carSegmentId)
+    const existingService = await servicesData.getServiceBy(
+      s.name,
+      s.carSegmentId,
+    );
     if (!existingService) {
-      const createdService = await servicesData.createService(s.name, s.carSegmentId, s.price);
+      const createdService = await servicesData.createService(
+        s.name,
+        s.carSegmentId,
+        s.price,
+      );
       return { ...s, serviceId: createdService.serviceId };
     }
     return { ...s, serviceId: existingService.serviceId };
   }));
 
   const existingParts = await Promise.all(usedParts.map(async p => {
+    // getPart to be changed (takes carSegment, not carSegmentId)
     const existingPart = await partsData.getPartBy(p.name, p.carSegmentId);
     if (!existingPart) {
-      const createdPart = await partsData.createPart(p.name, p.carSegmentId, p.price);
+      const createdPart = await partsData.createPart(
+        p.name,
+        p.carSegmentId,
+        p.price,
+      );
       return { ...p, partId: createdPart.partId };
     }
     return { ...p, partId: existingPart.partId };
