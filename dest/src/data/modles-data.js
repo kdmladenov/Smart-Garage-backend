@@ -38,11 +38,11 @@ import db from "./pool.js";
 var getAll = function () { return __awaiter(void 0, void 0, void 0, function () {
     var sql;
     return __generator(this, function (_a) {
-        sql = "\n    SELECT \n      mo.model_id as modelId,\n      mo.model_name as modelName,\n      ma.manufacturer_name as manufacturerName,\n      cs.car_segment as carSegment\n    FROM models as mo\n    JOIN manufacturers as ma USING(manufacturer_id)\n    JOIN car_segments as cs USING(car_segment_id)\n  ";
+        sql = "\n    SELECT \n      mo.model_id as modelId,\n      mo.model_name as modelName,\n      ma.manufacturer_name as manufacturer,\n      cs.car_segment as carSegment\n    FROM models as mo\n    JOIN manufacturers as ma USING(manufacturer_id)\n    JOIN car_segments as cs USING(car_segment_id)\n  ";
         return [2 /*return*/, db.query(sql, [])];
     });
 }); };
 export default {
     getAll: getAll,
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kbGVzLWRhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvZGF0YS9tb2RsZXMtZGF0YS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxPQUFPLEVBQUUsTUFBTSxXQUFXLENBQUM7QUFFM0IsSUFBTSxNQUFNLEdBQUc7OztRQUNQLEdBQUcsR0FBRyx5U0FTWCxDQUFDO1FBQ0Ysc0JBQU8sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsRUFBRSxDQUFDLEVBQUM7O0tBQzFCLENBQUM7QUFFRixlQUFlO0lBQ2IsTUFBTSxRQUFBO0NBQ1AsQ0FBQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kbGVzLWRhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvZGF0YS9tb2RsZXMtZGF0YS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxPQUFPLEVBQUUsTUFBTSxXQUFXLENBQUM7QUFFM0IsSUFBTSxNQUFNLEdBQUc7OztRQUNQLEdBQUcsR0FBRyxxU0FTWCxDQUFDO1FBQ0Ysc0JBQU8sRUFBRSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsRUFBRSxDQUFDLEVBQUM7O0tBQzFCLENBQUM7QUFFRixlQUFlO0lBQ2IsTUFBTSxRQUFBO0NBQ1AsQ0FBQyJ9
