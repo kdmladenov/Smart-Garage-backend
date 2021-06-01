@@ -36,7 +36,11 @@ vehiclesController
 
     if (error === errors.RECORD_NOT_FOUND) {
       res.status(404).send({
-        message: `Vehicle with vin ${vehicle.vin} is not registered.`,
+        message: `Vehicle is not registered.`,
+      });
+    } else if (error === errors.DUPLICATE_RECORD) {
+      res.status(409).send({
+        message: `Vehicle with same vin or license plate already exists.`,
       });
     } else {
       res.status(200).send(result);
