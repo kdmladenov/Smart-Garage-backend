@@ -1,7 +1,8 @@
 export interface UpdateVisitData {
   notes: string;
-  usedParts: { partId, partQty, price, name, carSegment }[];
-  performedServices: { serviceId, serviceQty, price, name, carSegment }[];
+  usedParts: { partId, partQty, price, name }[];
+  performedServices: { serviceId, serviceQty, price, name }[];
   visitEnd: string;
   status: string;
+  carSegment: string
 }

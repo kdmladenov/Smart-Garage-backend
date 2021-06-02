@@ -50,6 +50,7 @@ const registerUsedParts = async (parts: { [key: string]: string | number }[], vi
 const getVisitBy = async (column: string, value: string | number) => {
   const sql = `
     SELECT
+      vis.visit_id as visitId,
       vis.notes,
       vis.visit_start as visitStart,
       vis.visit_end as visitEnd,
@@ -64,7 +65,8 @@ const getVisitBy = async (column: string, value: string | number) => {
       m.model_name as modelName,
       m.manufacturer_id as manufacturerId,
       man.manufacturer_name as manufacturerName,
-      m.car_segment_id as carSegment,
+      m.car_segment_id as carSegmentId,      
+      cs.car_segment as carSegment,
       veh.user_id as userId,
       u.first_name as firstName,
       u.last_name as lastName,
@@ -81,6 +83,7 @@ const getVisitBy = async (column: string, value: string | number) => {
     LEFT JOIN manufacturers as man USING(manufacturer_id)
     LEFT JOIN users as u USING(user_id)
     LEFT JOIN addresses as a USING(address_id)
+    LEFT JOIN car_segments as cs USING(car_segment_id)
     WHERE ${column} = ?;
   `;
 
