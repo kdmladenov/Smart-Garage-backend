@@ -37,7 +37,7 @@ const getAllServices = async (
     ${serviceName && `AND s.name LIKE '%${serviceName}%'`}
     ${carSegment && `AND cs.car_segment LIKE '%${carSegment}%'`}
     ${priceLow && priceHigh && "AND price BETWEEN ? and ?"}
-    LIMIT ? OFFSET ?;
+    ${pageSize ? `LIMIT ? OFFSET ?` : ''};
     `;
 
   return db.query(sql, [priceLow, priceHigh, +pageSize, +offset]);

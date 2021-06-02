@@ -139,7 +139,8 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
     m.model_name as modelName,
     m.manufacturer_id as manufacturerId,
     man.manufacturer_name as manufacturerName,
-    m.car_segment_id as carSegment,
+    m.car_segment_id as carSegmentId,
+    cs.car_segment as carSegment,
     veh.user_id as userId,
     u.first_name as firstName,
     u.last_name as lastName,
@@ -156,6 +157,7 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   LEFT JOIN manufacturers as man USING(manufacturer_id)
   LEFT JOIN users as u USING(user_id)
   LEFT JOIN addresses as a USING(address_id)
+  LEFT JOIN car_segments as cs USING(car_segment_id)
   WHERE visit_id > 0
   ${userId ? `AND user_id = ${userId}` : ''}
   ${vehicleId ? `AND vehicle_id = ${vehicleId}` : ''}
