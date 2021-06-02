@@ -12,6 +12,13 @@ import tokenExists from '../data/tokens-data.js';
 
 // register user
 const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
+  if (user.email !== user.reenteredEmail) {
+    return {
+      error: errors.BAD_REQUEST,
+      result: null,
+    };
+  }
+
   const existingUser = (await usersData.getByEmailPhone("email", user.email));
 
   if (existingUser) {
