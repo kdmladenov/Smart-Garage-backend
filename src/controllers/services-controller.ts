@@ -42,8 +42,8 @@ servicesController
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
+      const { pageSize } = req.query;
       let {
-        pageSize = paging.services.MIN_PAGE_SIZE,
         page = 1,
         priceLow = SERVICE.SERVICE_PRICE_MIN_VALUE,
         priceHigh = SERVICE.SERVICE_PRICE_MAX_VALUE,
@@ -51,11 +51,15 @@ servicesController
         carSegment,
       } = req.query;
 
-      if (pageSize < paging.services.MIN_PAGE_SIZE) pageSize = paging.services.MIN_PAGE_SIZE;
-      if (pageSize > paging.services.MAX_PAGE_SIZE) pageSize = paging.services.MAX_PAGE_SIZE;
+      let validatedPageSize = paging.services.MIN_PAGE_SIZE;
+      if (pageSize && typeof +pageSize === 'number' && +pageSize < paging.services.MIN_PAGE_SIZE) {
+        validatedPageSize = paging.services.MIN_PAGE_SIZE;
+      } else {
+        validatedPageSize = 0;
+      }
       page = page || 1;
 
-      pageSize = typeof pageSize === "number" ? pageSize : +pageSize;
+      // pageSize = typeof pageSize === "number" ? pageSize : pageSize;
       serviceName = typeof serviceName === "string" ? serviceName : "";
       carSegment = typeof carSegment === "string" ? carSegment : "";
       priceLow = typeof priceLow === "number" ? priceLow : +priceLow || SERVICE.SERVICE_PRICE_MIN_VALUE;
@@ -63,7 +67,7 @@ servicesController
 
       const service = await servicesServices.getAllServices(servicesData)(
         +page,
-        +pageSize,
+        validatedPageSize,
         +priceLow,
         +priceHigh,
         serviceName,

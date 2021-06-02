@@ -294,7 +294,8 @@ const getAll = async (
     vis.visit_id as visitId,
     vis.visit_start as visitStartDate,
     vis.visit_end as visitEndDate,
-    vis.status as visitStatus
+    vis.status as visitStatus,
+    u.role
   FROM users u
   LEFT JOIN (SELECT
   concat(first_name, " ", last_name) as fullName,
