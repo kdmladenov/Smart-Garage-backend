@@ -164,8 +164,15 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     return { ...p, partId: existingPart.partId };
   }));
 
-  console.log(visitId, notes, visitEnd, status);
-  const updatedVisit = await visitsData.updateVisit(visitId, notes, visitEnd, status);
+  let endDate = visitEnd;
+  if (!visitEnd && status === 'ready') {
+    endDate = new Date().toLocaleDateString('fr-CA');
+  }
+  if (visitEnd && status !== 'ready') {
+    endDate = '';
+  }
+
+  const updatedVisit = await visitsData.updateVisit(visitId, notes, endDate, status);
 
   existingServices.forEach(async s => {
     const registeredServices = await visitsData.getPerformedServicesByVisitId(visitId, s.serviceId);

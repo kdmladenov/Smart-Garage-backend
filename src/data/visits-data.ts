@@ -125,6 +125,8 @@ const getUsedPartsByVisitId = async (visitId: number, partId?: number) => {
 };
 
 const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: string, visitRangeHigh: string, visitStatus: string) => {
+  const sortColumn = 'vis.visit_start';
+  const direction = 'DESC';
   const sql = `
   SELECT
     vis.notes,
@@ -166,6 +168,7 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   ${vehicleId ? `AND vehicle_id = ${vehicleId}` : ''}
   ${visitStatus && `AND vis.status LIKE '%${visitStatus}%'`}
   ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ''}
+  ORDER BY ${sortColumn} ${direction}
   `;
 
   return db.query(sql, []);
