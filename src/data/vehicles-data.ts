@@ -146,6 +146,8 @@ const getAll = async (
   modelName: string,
   carSegment: string,
 ) => {
+  const sortColumn = 'ma.manufacturer_name';
+  const direction = 'ASC';
   const offset = page ? (page - 1) * pagesize : 0;
   const sql = `
   SELECT
@@ -180,7 +182,8 @@ const getAll = async (
   ${manufacturer && `AND ma.manufacturer_name like('%${manufacturer}%')`}
   ${modelName && `AND mo.model_name like('%${modelName}%')`}
   ${carSegment && `AND se.car_segment like('%${carSegment}%')`}
-  LIMIT ? OFFSET ?;         
+  ORDER BY ${sortColumn} ${direction}       
+  LIMIT ? OFFSET ?;  
   `;
 
   return db.query(sql, [pagesize, offset]);
