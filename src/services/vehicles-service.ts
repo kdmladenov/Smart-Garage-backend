@@ -147,6 +147,10 @@ const getAllVehicles = (vehiclesData: VehiclesData) => async (
   email: string,
   fullName: string,
   userId: number,
+  manufacturer: string,
+  modelName: string,
+  carSegment: string,
+
 ) => {
   const vehicles = await vehiclesData.getAll(
     page,
@@ -154,6 +158,9 @@ const getAllVehicles = (vehiclesData: VehiclesData) => async (
     email,
     fullName,
     userId,
+    manufacturer,
+    modelName,
+    carSegment,
   );
 
   return {

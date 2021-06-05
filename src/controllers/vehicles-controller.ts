@@ -68,6 +68,9 @@ vehiclesController
       email,
       fullName,
       userId,
+      manufacturer,
+      modelName,
+      carSegment,
     } = req.query;
 
     if (pagesize < paging.vehicles.MIN_PAGE_SIZE) pagesize = paging.vehicles.MIN_PAGE_SIZE;
@@ -77,6 +80,9 @@ vehiclesController
     userId = typeof userId === 'string' ? userId : '';
     fullName = typeof fullName === 'string' ? fullName : '';
     fullName = fullName && fullName.replace('_', ' ');
+    manufacturer = typeof manufacturer === 'string' ? manufacturer : '';
+    modelName = typeof modelName === 'string' ? modelName : '';
+    carSegment = typeof carSegment === 'string' ? carSegment : '';
 
     const { result } = await vehiclesService.getAllVehicles(vehiclesData)(
       +page,
@@ -84,6 +90,9 @@ vehiclesController
       email,
       fullName,
       +userId,
+      manufacturer,
+      modelName,
+      carSegment,
     );
 
     res.status(200).send(result);

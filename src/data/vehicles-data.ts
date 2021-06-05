@@ -142,6 +142,9 @@ const getAll = async (
   email: string,
   fullName: string,
   userId: number,
+  manufacturer: string,
+  modelName: string,
+  carSegment: string,
 ) => {
   const offset = page ? (page - 1) * pagesize : 0;
   const sql = `
@@ -174,6 +177,9 @@ const getAll = async (
   WHERE u.is_deleted = 0 ${email && `AND u.email LIKE('%${email}%')`} 
   ${fullName && `AND u.full_name like('%${fullName}%')`}
   ${userId > 0 ? `AND u.user_id = ${userId}` : ''}
+  ${manufacturer && `AND ma.manufacturer_name like('%${manufacturer}%')`}
+  ${modelName && `AND mo.model_name like('%${modelName}%')`}
+  ${carSegment && `AND se.car_segment like('%${carSegment}%')`}
   LIMIT ? OFFSET ?;         
   `;
 
