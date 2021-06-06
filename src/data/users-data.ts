@@ -256,8 +256,9 @@ const getAll = async (
   name: string,
   email: string,
   phone: string,
-  model: string,
-  make: string,
+  modelName: string,
+  manufacturer: string,
+  carSegment: string,
   visitRangeLow: string,
   visitRangeHigh: string,
   sort: string,
@@ -273,52 +274,57 @@ const getAll = async (
 
   const sql = `
     SELECT 
-    COUNT(*) OVER () AS totalDBItems,
-    u.user_id as userId,
-    au.fullName,
-    u.first_name as firstName,
-    u.last_name as lastName,
-    u.company_name as companyName,
-    u.phone,
-    u.email,
-    a.city,
-    a.country,
-    a.postal_code as postalCode,
-    a.street_address as streetAddress,
-    v.vehicle_id as vehicleId,
-    v.vin,
-    v.license_plate as licensePlate,
-    mo.model_id as modelId,
-    mo.model_name as model,
-    ma.manufacturer_name as make,
-    vis.visit_id as visitId,
-    vis.visit_start as visitStartDate,
-    vis.visit_end as visitEndDate,
-    vis.status as visitStatus,
-    u.role
-  FROM users u
-  LEFT JOIN (SELECT
-  concat(first_name, " ", last_name) as fullName,
-  user_id
-  FROM users) au USING (user_id)
-  LEFT JOIN addresses a USING (address_id)
-  RIGHT JOIN vehicles v USING (user_id)
-  JOIN models mo USING (model_id)
-  JOIN manufacturers ma USING (manufacturer_id)
-  RIGHT JOIN visits vis USING (vehicle_id)
-  WHERE u.is_deleted = 0
-  AND au.fullName LIKE '%${name}%'
-  AND u.email LIKE '%${email}%'
-  AND u.phone LIKE '%${phone}%'
-  AND mo.model_name LIKE '%${model}%'
-  AND ma.manufacturer_name LIKE '%${make}%'
-  ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ''}
-  GROUP BY u.user_id
-  ORDER BY ${sortedColumn} ${direction} 
-  LIMIT ${pageSize} OFFSET ${offset}; 
+      COUNT(*) OVER () AS totalDBItems,
+      u.user_id as userId,
+      au.fullName,
+      u.first_name as firstName,
+      u.last_name as lastName,
+      u.company_name as companyName,
+      u.phone,
+      u.email,
+      a.city,
+      a.country,
+      a.postal_code as postalCode,
+      a.street_address as streetAddress,
+      v.vehicle_id as vehicleId,
+      v.vin,
+      v.license_plate as licensePlate,
+      mo.model_id as modelId,
+      mo.model_name as model,
+      ma.manufacturer_name as make,
+      cs.car_segment as carSegment,
+      vis.visit_id as visitId,
+      vis.visit_start as visitStartDate,
+      vis.visit_end as visitEndDate,
+      vis.status as visitStatus,
+      u.role
+    FROM users u
+    LEFT JOIN (SELECT
+                concat(first_name, " ", last_name) as fullName,
+                user_id
+              FROM users) au USING (user_id)
+    LEFT JOIN addresses a USING (address_id)
+    RIGHT JOIN vehicles v USING (user_id)
+    JOIN models mo USING (model_id)
+    JOIN manufacturers ma USING (manufacturer_id)
+    JOIN car_segments cs USING (car_segment_id)
+    RIGHT JOIN visits vis USING (vehicle_id)
+    WHERE u.is_deleted = 0
+    ${name ? `AND au.fullName LIKE '%${name}%'` : ''}
+    ${email ? `AND u.email LIKE '%${email}%'` : ''}
+    ${phone ? `AND u.phone LIKE '%${phone}%'` : ''}
+    ${modelName ? `AND mo.model_name = "${modelName}"` : ''}
+    ${manufacturer ? `AND ma.manufacturer_name = "${manufacturer}"` : ''}
+    ${carSegment ? `AND cs.car_segment = "${carSegment}"` : ''}
+    ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ''}
+    GROUP BY u.user_id
+    ORDER BY ${sortedColumn} ${direction} 
+    LIMIT ${pageSize} OFFSET ${offset}; 
   `;
 
-  return db.query(sql, [visitRangeLow || null, visitRangeHigh || null]);
+  console.log(sql);
+
+  return db.query(sql, []);
 };
 const getPasswordBy = async (column: string, value:string) => {
   const sql = `

@@ -135,8 +135,9 @@ const getAllUsers = (usersData: UsersData) => async (
   name: string,
   email: string,
   phone: string,
-  model: string,
-  make: string,
+  modelName: string,
+  manufacturer: string,
+  carSegment: string,
   visitRangeLow: string,
   visitRangeHigh: string,
   sort: string,
@@ -148,8 +149,9 @@ const getAllUsers = (usersData: UsersData) => async (
     name,
     email,
     phone,
-    model,
-    make,
+    modelName,
+    manufacturer,
+    carSegment,
     visitRangeLow,
     visitRangeHigh,
     sort,
@@ -157,6 +159,7 @@ const getAllUsers = (usersData: UsersData) => async (
   );
   return result;
 };
+
 // change password
 const changePassword = (usersData: UsersData) => async (passwordData:{[key: string]: string}, userId: number, role: string) => {
   const existingUser = await usersData.getBy('user_id', userId);

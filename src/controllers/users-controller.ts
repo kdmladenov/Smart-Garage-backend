@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import express, { Request, Response } from 'express';
-import { paging } from '../common/constants.js';
+import { carSegments, paging } from '../common/constants.js';
 import usersData from '../data/users-data.js';
 import validateBody from '../middleware/validate-body.js';
 import usersService from '../services/users-service.js';
@@ -82,8 +82,9 @@ usersController
         name = '',
         email = '',
         phone = '',
-        model = '',
-        make = '',
+        modelName = '',
+        manufacturer = '',
+        carSegment = '',
         visitRangeLow = '',
         visitRangeHigh = '',
         sort = 'name',
@@ -97,13 +98,16 @@ usersController
       email = typeof email === 'string' ? email : '';
       name = typeof name === 'string' ? name : '';
       phone = typeof phone === 'string' ? phone : '';
-      model = typeof model === 'string' ? model : '';
-      make = typeof make === 'string' ? make : '';
+      modelName = typeof modelName === 'string' ? modelName : '';
+      manufacturer = typeof manufacturer === 'string' ? manufacturer : '';
+      carSegment = typeof carSegment === 'string' ? carSegment : '';
       visitRangeLow = typeof visitRangeLow === 'string' ? visitRangeLow : '';
       visitRangeHigh = typeof visitRangeHigh === 'string' ? visitRangeHigh : '';
       sort = typeof sort === 'string' ? sort : '';
       order = typeof order === 'string' ? order : '';
       // name = name && name.replace("_", " ");
+
+      console.log(visitRangeLow, visitRangeHigh);
 
       const result = await usersService.getAllUsers(usersData)(
         +pageSize,
@@ -111,8 +115,9 @@ usersController
         name,
         email,
         phone,
-        model,
-        make,
+        modelName,
+        manufacturer,
+        carSegment,
         visitRangeLow,
         visitRangeHigh,
         sort,
