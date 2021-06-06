@@ -54,7 +54,7 @@ const getVisitBy = async (column: string, value: string | number) => {
       vis.notes,
       vis.visit_start as visitStart,
       vis.visit_end as visitEnd,
-      vis.status,
+      vis.status as visitStatus,
       vis.vehicle_id as vehicleId,
       veh.vin,
       veh.license_plate as licensePlate,
@@ -133,7 +133,7 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
     vis.visit_id as visitId,
     vis.visit_start as visitStart,
     vis.visit_end as visitEnd,
-    vis.status,
+    vis.status as visitStatus,
     vis.vehicle_id as vehicleId,
     veh.vin,
     veh.license_plate as licensePlate,
@@ -174,7 +174,7 @@ const getAllVisitsBy = async (userId: number, vehicleId: number, visitRangeLow: 
   return db.query(sql, []);
 };
 
-const updateVisit = async (visitId: number, notes: string, visitEnd: string, status: string) => {
+const updateVisit = async (visitId: number, notes: string, visitEnd: string, visitStatus: string) => {
   const sql = `
     UPDATE visits SET
       notes = ?,
@@ -183,7 +183,7 @@ const updateVisit = async (visitId: number, notes: string, visitEnd: string, sta
     WHERE visit_id = ?
   `;
 
-  return db.query(sql, [notes, visitEnd, status, visitId]);
+  return db.query(sql, [notes, visitEnd, visitStatus, visitId]);
 };
 
 const updatePerformedService = (visitId: number, serviceId: number, serviceQty: number, price: number) => {
