@@ -264,12 +264,8 @@ const getAll = async (
   sort: string,
   order: string,
 ) => {
-  const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(order)
-    ? order
-    : 'asc';
-  const sortedColumn = ['fullName', 'visitStartDate'].includes(sort)
-    ? sort
-    : 'fullName';
+  const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(order) ? order : 'asc';
+  const sortedColumn = ['fullName', 'visitStart'].includes(sort) ? sort : 'fullName';
   const offset = page ? (page - 1) * pageSize : 0;
 
   const sql = `
@@ -290,12 +286,12 @@ const getAll = async (
       v.vin,
       v.license_plate as licensePlate,
       mo.model_id as modelId,
-      mo.model_name as model,
-      ma.manufacturer_name as make,
+      mo.model_name as modelName,
+      ma.manufacturer_name as manufacturer,
       cs.car_segment as carSegment,
       vis.visit_id as visitId,
-      vis.visit_start as visitStartDate,
-      vis.visit_end as visitEndDate,
+      vis.visit_start as visitStart,
+      vis.visit_end as visitEnd,
       vis.status as visitStatus,
       u.role
     FROM users u
