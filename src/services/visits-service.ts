@@ -130,18 +130,19 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     usedParts,
     visitEnd,
     status,
+    carSegment,
   } = updateVisitData;
 
   const existingServices = await Promise.all(performedServices.map(async s => {
     // getServiceBy to be changed (takes carSegment, not carSegmentId)
     const existingService = await servicesData.getServiceBy(
       s.name,
-      s.carSegment,
+      carSegment,
     );
     if (!existingService) {
       const createdService = await servicesData.createService(
         s.name,
-        s.carSegment,
+        carSegment,
         s.price,
       );
       return { ...s, serviceId: createdService.serviceId };
@@ -151,11 +152,11 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
 
   const existingParts = await Promise.all(usedParts.map(async p => {
     // getPart to be changed (takes carSegment, not carSegmentId)
-    const existingPart = await partsData.getPartBy(p.name, p.carSegment);
+    const existingPart = await partsData.getPartBy(p.name, carSegment);
     if (!existingPart) {
       const createdPart = await partsData.createPart(
         p.name,
-        p.carSegment,
+        carSegment,
         p.price,
       );
       return { ...p, partId: createdPart.partId };
@@ -163,7 +164,15 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     return { ...p, partId: existingPart.partId };
   }));
 
-  const updatedVisit = await visitsData.updateVisit(visitId, notes, visitEnd, status);
+  let endDate = visitEnd;
+  if (!visitEnd && status === 'ready') {
+    endDate = new Date().toLocaleDateString('fr-CA');
+  }
+  if (visitEnd && status !== 'ready') {
+    endDate = '';
+  }
+
+  const updatedVisit = await visitsData.updateVisit(visitId, notes, endDate, status);
 
   existingServices.forEach(async s => {
     const registeredServices = await visitsData.getPerformedServicesByVisitId(visitId, s.serviceId);
