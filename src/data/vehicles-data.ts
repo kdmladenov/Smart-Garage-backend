@@ -26,7 +26,7 @@ const createManufacturer = async (manufacturer: string) => {
 };
 
 const getModelBy = async (column: string, value: string | number, manufacturer: string) => {
-  console.log(column, value, manufacturer);
+  // console.log(column, value, manufacturer);
   const sql = `
     SELECT
       m.model_id as id,

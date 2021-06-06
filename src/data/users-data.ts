@@ -256,19 +256,15 @@ const getAll = async (
   name: string,
   email: string,
   phone: string,
-  model: string,
-  make: string,
+  modelName: string,
+  manufacturer: string,
   visitRangeLow: string,
   visitRangeHigh: string,
   sort: string,
   order: string,
 ) => {
-  const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(order)
-    ? order
-    : 'asc';
-  const sortedColumn = ['fullName', 'visitStartDate'].includes(sort)
-    ? sort
-    : 'fullName';
+  const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(order) ? order : 'asc';
+  const sortedColumn = ['fullName', 'visitStart'].includes(sort) ? sort : 'fullName';
   const offset = page ? (page - 1) * pageSize : 0;
 
   const sql = `
@@ -289,11 +285,11 @@ const getAll = async (
     v.vin,
     v.license_plate as licensePlate,
     mo.model_id as modelId,
-    mo.model_name as model,
-    ma.manufacturer_name as make,
+    mo.model_name as modelName,
+    ma.manufacturer_name as manufacturer,
     vis.visit_id as visitId,
-    vis.visit_start as visitStartDate,
-    vis.visit_end as visitEndDate,
+    vis.visit_start as visitStart,
+    vis.visit_end as visitEnd,
     vis.status as visitStatus,
     u.role
   FROM users u
@@ -310,8 +306,8 @@ const getAll = async (
   AND au.fullName LIKE '%${name}%'
   AND u.email LIKE '%${email}%'
   AND u.phone LIKE '%${phone}%'
-  AND mo.model_name LIKE '%${model}%'
-  AND ma.manufacturer_name LIKE '%${make}%'
+  AND mo.model_name LIKE '%${modelName}%'
+  AND ma.manufacturer_name LIKE '%${manufacturer}%'
   ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN ? AND ?` : ''}
   GROUP BY u.user_id
   ORDER BY ${sortedColumn} ${direction} 

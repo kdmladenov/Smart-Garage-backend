@@ -1,18 +1,10 @@
-import errors from "../common/service-errors.js";
-import { CreateVehicleData } from "../models/CreateVehicleData";
-import { VehiclesData } from "../models/VehiclesData";
+import errors from '../common/service-errors.js';
+import { CreateVehicleData } from '../models/CreateVehicleData';
+import { VehiclesData } from '../models/VehiclesData';
 
 const createVehicle = (vehiclesData: VehiclesData) => async (createVehicleData: CreateVehicleData) => {
   const {
-    vin,
-    licensePlate,
-    userId,
-    manufacturedYear,
-    engineType,
-    transmission,
-    modelName,
-    manufacturer,
-    carSegment,
+    vin, licensePlate, userId, manufacturedYear, engineType, transmission, modelName, manufacturer, carSegment,
   } = createVehicleData;
 
   const vehicle = {
@@ -47,9 +39,11 @@ const createVehicle = (vehiclesData: VehiclesData) => async (createVehicleData: 
     vehicle.modelId = +existingModel.id;
   }
 
+  const result = await vehiclesData.create(vehicle);
+
   return {
     error: null,
-    result: await vehiclesData.create(vehicle),
+    result: { ...result, manufacturer, carSegment },
   };
 };
 
@@ -141,20 +135,8 @@ const getVehicle = (vehiclesData: VehiclesData) => async (vehicleId: number) => 
   };
 };
 
-const getAllVehicles = (vehiclesData: VehiclesData) => async (
-  page: number,
-  pagesize: number,
-  email: string,
-  fullName: string,
-  userId: number,
-) => {
-  const vehicles = await vehiclesData.getAll(
-    page,
-    pagesize,
-    email,
-    fullName,
-    userId,
-  );
+const getAllVehicles = (vehiclesData: VehiclesData) => async (page: number, pagesize: number, email: string, fullName: string, userId: number) => {
+  const vehicles = await vehiclesData.getAll(page, pagesize, email, fullName, userId);
 
   return {
     error: null,

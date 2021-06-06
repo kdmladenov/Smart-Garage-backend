@@ -82,8 +82,8 @@ usersController
         name = '',
         email = '',
         phone = '',
-        model = '',
-        make = '',
+        modelName = '',
+        manufacturer = '',
         visitRangeLow = '',
         visitRangeHigh = '',
         sort = 'name',
@@ -97,8 +97,8 @@ usersController
       email = typeof email === 'string' ? email : '';
       name = typeof name === 'string' ? name : '';
       phone = typeof phone === 'string' ? phone : '';
-      model = typeof model === 'string' ? model : '';
-      make = typeof make === 'string' ? make : '';
+      modelName = typeof modelName === 'string' ? modelName : '';
+      manufacturer = typeof manufacturer === 'string' ? manufacturer : '';
       visitRangeLow = typeof visitRangeLow === 'string' ? visitRangeLow : '';
       visitRangeHigh = typeof visitRangeHigh === 'string' ? visitRangeHigh : '';
       sort = typeof sort === 'string' ? sort : '';
@@ -111,8 +111,8 @@ usersController
         name,
         email,
         phone,
-        model,
-        make,
+        modelName,
+        manufacturer,
         visitRangeLow,
         visitRangeHigh,
         sort,
