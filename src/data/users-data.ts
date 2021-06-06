@@ -322,8 +322,6 @@ const getAll = async (
     LIMIT ${pageSize} OFFSET ${offset}; 
   `;
 
-  console.log(sql);
-
   return db.query(sql, []);
 };
 const getPasswordBy = async (column: string, value:string) => {

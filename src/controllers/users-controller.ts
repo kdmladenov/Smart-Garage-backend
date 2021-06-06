@@ -105,9 +105,6 @@ usersController
       visitRangeHigh = typeof visitRangeHigh === 'string' ? visitRangeHigh : '';
       sort = typeof sort === 'string' ? sort : '';
       order = typeof order === 'string' ? order : '';
-      // name = name && name.replace("_", " ");
-
-      console.log(visitRangeLow, visitRangeHigh);
 
       const result = await usersService.getAllUsers(usersData)(
         +pageSize,
@@ -220,11 +217,8 @@ usersController
     validateBody('user', forgottenPasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { email }: { email: string } = req.body;
-      console.log(email);
+      const { error, result } = await usersService.forgottenPassword(usersData)(email);
 
-      const { error, result } = await usersService.forgottenPassword(usersData)(
-        email,
-      );
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
           message: `A user with email ${email} is not found`,
