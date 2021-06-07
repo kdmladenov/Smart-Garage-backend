@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import express, { Request, Response } from "express";
 import partsData from "../data/parts-data.js";
 import validateBody from "../middleware/validate-body.js";
@@ -46,8 +47,8 @@ partsController
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
+      const { pageSize } = req.query;
       let {
-        pageSize = paging.parts.MIN_PAGE_SIZE,
         page = 1,
         priceLow = PART.PART_PRICE_MIN_VALUE,
         priceHigh = PART.PART_PRICE_MAX_VALUE,
@@ -55,11 +56,17 @@ partsController
         carSegment,
       } = req.query;
 
-      if (pageSize < paging.parts.MIN_PAGE_SIZE) pageSize = paging.parts.MIN_PAGE_SIZE;
-      if (pageSize > paging.parts.MAX_PAGE_SIZE) pageSize = paging.parts.MAX_PAGE_SIZE;
+      let validatedPageSize = paging.parts.MIN_PAGE_SIZE;
+
+      if (pageSize && typeof +pageSize !== 'number') {
+        validatedPageSize = 0;
+      } else if (pageSize && +pageSize <= paging.parts.MIN_PAGE_SIZE) {
+        validatedPageSize = paging.parts.MIN_PAGE_SIZE;
+      } else if (pageSize && +pageSize >= paging.parts.MIN_PAGE_SIZE) {
+        validatedPageSize = pageSize ? +pageSize : paging.parts.MIN_PAGE_SIZE;
+      }
       page = page || 1;
 
-      pageSize = typeof pageSize === "number" ? pageSize : +pageSize;
       partName = typeof partName === "string" ? partName : "";
       carSegment = typeof carSegment === "string" ? carSegment : "";
       priceLow = typeof priceLow === "number" ? priceLow : +priceLow || PART.PART_PRICE_MIN_VALUE;
@@ -67,7 +74,7 @@ partsController
 
       const part = await partsServices.getAllParts(partsData)(
         +page,
-        +pageSize,
+        validatedPageSize,
         +priceLow,
         +priceHigh,
         partName,

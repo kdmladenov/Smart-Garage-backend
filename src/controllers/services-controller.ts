@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import express, { Request, Response } from "express";
 import servicesData from "../data/services-data.js";
 import validateBody from "../middleware/validate-body.js";
@@ -52,14 +53,16 @@ servicesController
       } = req.query;
 
       let validatedPageSize = paging.services.MIN_PAGE_SIZE;
-      if (pageSize && typeof +pageSize === 'number' && +pageSize < paging.services.MIN_PAGE_SIZE) {
-        validatedPageSize = paging.services.MIN_PAGE_SIZE;
-      } else {
+
+      if (pageSize && typeof +pageSize !== 'number') {
         validatedPageSize = 0;
+      } else if (pageSize && +pageSize <= paging.services.MIN_PAGE_SIZE) {
+        validatedPageSize = paging.services.MIN_PAGE_SIZE;
+      } else if (pageSize && +pageSize >= paging.services.MIN_PAGE_SIZE) {
+        validatedPageSize = pageSize ? +pageSize : paging.services.MIN_PAGE_SIZE;
       }
       page = page || 1;
 
-      // pageSize = typeof pageSize === "number" ? pageSize : pageSize;
       serviceName = typeof serviceName === "string" ? serviceName : "";
       carSegment = typeof carSegment === "string" ? carSegment : "";
       priceLow = typeof priceLow === "number" ? priceLow : +priceLow || SERVICE.SERVICE_PRICE_MIN_VALUE;

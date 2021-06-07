@@ -26,6 +26,7 @@ const getAllServices = async (
   const offset = page ? (page - 1) * pageSize : 0;
   const sql = `
     SELECT
+    COUNT(*) OVER () AS totalDBItems,
     s.service_id as serviceId,
     s.name,
     s.price,

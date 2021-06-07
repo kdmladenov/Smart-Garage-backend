@@ -147,7 +147,8 @@ const getAll = async (
   const direction = 'ASC';
   const offset = page ? (page - 1) * pagesize : 0;
   const sql = `
-  SELECT
+  SELECT      
+    COUNT(*) OVER () AS totalDBItems,
     v.vehicle_id as vehicleId,
     v.vin,
     v.license_plate as licensePlate,

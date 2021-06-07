@@ -25,7 +25,8 @@ const getAllParts = async (
 ) => {
   const offset = page ? (page - 1) * pageSize : 0;
   const sql = `
-    SELECT
+    SELECT    
+    COUNT(*) OVER () AS totalDBItems,
     s.part_id as partId,
     s.name,
     s.price,

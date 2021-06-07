@@ -17,7 +17,8 @@ const createVehicle = (vehiclesData: VehiclesData) => async (createVehicleData: 
     modelId: 0,
   };
 
-  const existingVehicle = await vehiclesData.getVehicleBy('vin', vin);
+  const existingVehicle = await vehiclesData.getVehicleBy('vin', vin)
+                        || await vehiclesData.getVehicleBy('license_plate', licensePlate);
 
   if (existingVehicle) {
     return {
@@ -34,7 +35,7 @@ const createVehicle = (vehiclesData: VehiclesData) => async (createVehicleData: 
   const existingModel = await vehiclesData.getModelBy('model_name', modelName, manufacturer);
   if (!existingModel) {
     const newModel = await vehiclesData.createModel(modelName, manufacturer, carSegment);
-    vehicle.modelId = +newModel.createId;
+    vehicle.modelId = +newModel.insertId;
   } else {
     vehicle.modelId = +existingModel.id;
   }
