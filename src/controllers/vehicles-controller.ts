@@ -21,7 +21,7 @@ vehiclesController
 
     if (error === errors.DUPLICATE_RECORD) {
       res.status(409).send({
-        message: 'Vehicle with same vin is already registered.',
+        message: 'Vehicle with same vin or license plate is already registered.',
       });
     } else {
       res.status(201).send(result);

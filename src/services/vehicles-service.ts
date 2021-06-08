@@ -44,7 +44,9 @@ const createVehicle = (vehiclesData: VehiclesData) => async (createVehicleData: 
 
   return {
     error: null,
-    result: { ...result, manufacturer, carSegment },
+    result: {
+      ...result, manufacturer, carSegment, modelName,
+    },
   };
 };
 
