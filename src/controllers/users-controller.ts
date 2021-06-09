@@ -188,13 +188,12 @@ usersController
     loggedUserGuard,
     validateBody('user', updatePasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const { role } = req.user!;
-      const id = role === rolesEnum.employee ? req.params.userId : req.user!.userId;
+      const { role, userId } = req.user!;
       const passwordData = req.body;
 
       const { error, result } = await usersService.changePassword(usersData)(
         passwordData,
-        +id,
+        +userId,
         role,
       );
 
@@ -204,7 +203,7 @@ usersController
         });
       } else if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
-          message: `User ${id} is not found.`,
+          message: `User ${userId} is not found.`,
         });
       } else {
         res.status(200).send(result);
