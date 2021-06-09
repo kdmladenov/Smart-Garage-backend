@@ -69,12 +69,6 @@ export const forgotPassword = {
   frontEndPort: 3000,
 };
 
-export const email = {
-  emailService: "hotmail",
-  emailUser: "smartgaragekd@outlook.com",
-  emailPassword: "Sekretenklu4",
-};
-
 export const part = {
   PART_NAME_MIN_LENGTH: 2,
   PART_NAME_MAX_LENGTH: 100,

@@ -16,4 +16,13 @@ export const {
   PORT,
   PRIVATE_KEY,
   TOKEN_LIFETIME,
+  EMAIL_SERVICE,
+  EMAIL_USER,
+  EMAIL_PASSWORD,
 } = config;
+
+// export const {
+//   emailService: "hotmail",
+//   emailUser: "smartgaragekd@outlook.com",
+//   emailPassword: "Sekretenklu4",
+// };

@@ -1,17 +1,17 @@
 import nodemailer from "nodemailer";
-import { email } from '../common/constants.js';
+import * as email from '../../config.js';
 
 const mailingService = (recipient: string, subject: string, text: string) => {
   const transporter = nodemailer.createTransport({
-    service: email.emailService,
+    service: email.EMAIL_SERVICE,
     auth: {
-      user: email.emailUser,
-      pass: email.emailPassword,
+      user: email.EMAIL_USER,
+      pass: email.EMAIL_PASSWORD,
     },
   });
 
   const options = {
-    from: email.emailUser,
+    from: email.EMAIL_USER,
     to: recipient,
     subject,
     text,
