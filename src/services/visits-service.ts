@@ -129,7 +129,7 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     performedServices,
     usedParts,
     visitEnd,
-    status,
+    visitStatus,
     carSegment,
   } = updateVisitData;
 
@@ -165,14 +165,14 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
   }));
 
   let endDate = visitEnd;
-  if (!visitEnd && status === 'ready') {
+  if (!visitEnd && visitStatus === 'ready') {
     endDate = new Date().toLocaleDateString('fr-CA');
   }
-  if (visitEnd && status !== 'ready') {
+  if (visitEnd && visitStatus !== 'ready') {
     endDate = '';
   }
 
-  const updatedVisit = await visitsData.updateVisit(visitId, notes, endDate, status);
+  const updatedVisit = await visitsData.updateVisit(visitId, notes, endDate, visitStatus);
 
   existingServices.forEach(async s => {
     const registeredServices = await visitsData.getPerformedServicesByVisitId(visitId, s.serviceId);
@@ -197,7 +197,7 @@ const updateVisit = (visitsData: VisitsData, servicesData: ServicesData, partsDa
     performedServices: existingServices,
     usedParts: existingParts,
     visitEnd,
-    status,
+    visitStatus,
   };
 
   return {
