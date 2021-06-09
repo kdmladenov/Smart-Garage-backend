@@ -38,8 +38,8 @@ const getAllParts = async (
     ${partName && `AND s.name LIKE '%${partName}%'`}
     ${carSegment && `AND cs.car_segment LIKE '%${carSegment}%'`}
     ${priceLow && priceHigh && 'AND price BETWEEN ? and ?'}
+    ORDER BY name ASC
     ${pageSize ? `LIMIT ? OFFSET ?` : ''}
-    ORDER BY name ASC;
     `;
 
   return db.query(sql, [priceLow, priceHigh, +pageSize, +offset]);
