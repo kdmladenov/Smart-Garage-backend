@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import express, { Request, Response } from 'express';
-import { carSegments, paging } from '../common/constants.js';
+import { paging } from '../common/constants.js';
 import usersData from '../data/users-data.js';
 import validateBody from '../middleware/validate-body.js';
 import usersService from '../services/users-service.js';

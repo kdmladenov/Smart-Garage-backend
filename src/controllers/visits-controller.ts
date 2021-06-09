@@ -19,12 +19,10 @@ import { sqlDateRegex } from '../common/constants.js';
 
 const visitsController = express.Router();
 
+visitsController.use(authMiddleware, loggedUserGuard);
+
 visitsController
-  .post(
-    '/',
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.employee),
+  .post('/', roleMiddleware(rolesEnum.employee),
     validateBody('visit', createVisitSchema),
     errorHandler(async (req: Request, res: Response) => {
       const visit = req.body;
@@ -32,73 +30,58 @@ visitsController
       const { result } = await visitsService.createVisit(visitsData, servicesData, partsData)(visit);
 
       return res.status(201).send(result);
-    }),
-  )
+    }))
 
-  .get(
-    '/:visitId',
-    authMiddleware,
-    loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { visitId } = req.params;
-      const { userId, role } = req.user!;
+  .get('/:visitId', errorHandler(async (req: Request, res: Response) => {
+    const { visitId } = req.params;
+    const { userId, role } = req.user!;
 
-      const { result, error } = await visitsService.getVisit(visitsData)(+visitId, +userId, role);
+    const { result, error } = await visitsService.getVisit(visitsData)(+visitId, +userId, role);
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        return res.status(404).send({
-          message: `Visit with id ${visitId} is not found.`,
-        });
-      }
+    if (error === errors.RECORD_NOT_FOUND) {
+      return res.status(404).send({
+        message: `Visit with id ${visitId} is not found.`,
+      });
+    }
 
-      if (error === errors.OPERATION_NOT_PERMITTED) {
-        return res.status(403).send({
-          message: `This resource is forbidden!`,
-        });
-      }
+    if (error === errors.OPERATION_NOT_PERMITTED) {
+      return res.status(403).send({
+        message: `This resource is forbidden!`,
+      });
+    }
 
-      return res.status(200).send(result);
-    }),
-  )
+    return res.status(200).send(result);
+  }))
 
-  .get(
-    '/',
-    authMiddleware,
-    loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { userId: loggedUserId, role } = req.user!;
-      const { vehicleId, userId } = req.query;
-      let { visitRangeLow, visitRangeHigh, visitStatus } = req.query;
+  .get('/', errorHandler(async (req: Request, res: Response) => {
+    const { userId: loggedUserId, role } = req.user!;
+    const { vehicleId, userId } = req.query;
+    let { visitRangeLow, visitRangeHigh, visitStatus } = req.query;
 
-      visitRangeLow = (typeof visitRangeLow === 'string' && sqlDateRegex.test(visitRangeLow)) ? visitRangeLow : '';
-      visitRangeHigh = (typeof visitRangeHigh === 'string' && sqlDateRegex.test(visitRangeHigh)) ? visitRangeHigh : '';
-      const validatedUserId = userId ? +userId : 0;
-      const validatedVehicleId = vehicleId ? +vehicleId : 0;
-      visitStatus = (typeof visitStatus === 'string' && Object.keys(visitStatusEnum).includes(visitStatus)) ? visitStatus : '';
+    visitRangeLow = (typeof visitRangeLow === 'string' && sqlDateRegex.test(visitRangeLow)) ? visitRangeLow : '';
+    visitRangeHigh = (typeof visitRangeHigh === 'string' && sqlDateRegex.test(visitRangeHigh)) ? visitRangeHigh : '';
+    const validatedUserId = userId ? +userId : 0;
+    const validatedVehicleId = vehicleId ? +vehicleId : 0;
+    visitStatus = (typeof visitStatus === 'string' && Object.keys(visitStatusEnum).includes(visitStatus)) ? visitStatus : '';
 
-      const { result, error } = await visitsService.getAllVisits(visitsData, vehiclesData)(role, +loggedUserId, +validatedUserId, validatedVehicleId, visitRangeLow, visitRangeHigh, visitStatus);
+    const { result, error } = await visitsService.getAllVisits(visitsData, vehiclesData)(role, +loggedUserId, +validatedUserId, validatedVehicleId, visitRangeLow, visitRangeHigh, visitStatus);
 
-      if (error === errors.OPERATION_NOT_PERMITTED) {
-        return res.status(403).send({
-          message: `This resource is forbidden!`,
-        });
-      }
+    if (error === errors.OPERATION_NOT_PERMITTED) {
+      return res.status(403).send({
+        message: `This resource is forbidden!`,
+      });
+    }
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        return res.status(404).send({
-          message: `Vehicle with id ${validatedVehicleId} was not found!`,
-        });
-      }
+    if (error === errors.RECORD_NOT_FOUND) {
+      return res.status(404).send({
+        message: `Vehicle with id ${validatedVehicleId} was not found!`,
+      });
+    }
 
-      return res.status(200).send(result);
-    }),
-  )
+    return res.status(200).send(result);
+  }))
 
-  .put(
-    '/:visitId',
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.employee),
+  .put('/:visitId', roleMiddleware(rolesEnum.employee),
     validateBody('visit', updateVisitSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { visitId } = req.params;
@@ -113,6 +96,5 @@ visitsController
       }
 
       return res.status(200).send(result);
-    }),
-  );
+    }));
 export default visitsController;
