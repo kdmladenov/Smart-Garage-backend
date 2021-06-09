@@ -52,8 +52,7 @@ partsController
       carSegment,
     } = req.query;
 
-    let validatedPageSize = paging.parts.MIN_PAGE_SIZE;
-
+    let validatedPageSize = 0;
     if (pageSize && typeof +pageSize !== 'number') {
       validatedPageSize = 0;
     } else if (pageSize && +pageSize <= paging.parts.MIN_PAGE_SIZE) {
@@ -62,6 +61,7 @@ partsController
       validatedPageSize = pageSize ? +pageSize : paging.parts.MIN_PAGE_SIZE;
     }
     page = page || 1;
+    console.log(validatedPageSize, 'validatedPageSize');
 
     partName = typeof partName === "string" ? partName : "";
     carSegment = typeof carSegment === "string" ? carSegment : "";

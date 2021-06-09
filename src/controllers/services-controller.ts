@@ -48,7 +48,7 @@ servicesController
       carSegment,
     } = req.query;
 
-    let validatedPageSize = paging.services.MIN_PAGE_SIZE;
+    let validatedPageSize = 0;
 
     if (pageSize && typeof +pageSize !== 'number') {
       validatedPageSize = 0;

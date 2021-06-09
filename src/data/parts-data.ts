@@ -37,8 +37,8 @@ const getAllParts = async (
     WHERE is_deleted = 0
     ${partName && `AND s.name LIKE '%${partName}%'`}
     ${carSegment && `AND cs.car_segment LIKE '%${carSegment}%'`}
-    ${priceLow && priceHigh && "AND price BETWEEN ? and ?"}
-    LIMIT ? OFFSET ?;
+    ${priceLow && priceHigh && 'AND price BETWEEN ? and ?'}
+    ${pageSize ? `LIMIT ? OFFSET ?` : ''};
     `;
 
   return db.query(sql, [priceLow, priceHigh, +pageSize, +offset]);
