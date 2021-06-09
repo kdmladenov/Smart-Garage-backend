@@ -15,12 +15,12 @@ import errorHandler from "../middleware/errorHandler.js";
 
 const partsController = express.Router();
 
+partsController.use(authMiddleware, loggedUserGuard);
+
 partsController
   // create part
   .post(
     "/",
-    authMiddleware,
-    loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("part", createPartSchema),
     errorHandler(async (req: Request, res: Response) => {
@@ -42,75 +42,63 @@ partsController
     }),
   )
   // get all parts - search, paging
-  .get(
-    "/",
-    authMiddleware,
-    loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { pageSize } = req.query;
-      let {
-        page = 1,
-        priceLow = PART.PART_PRICE_MIN_VALUE,
-        priceHigh = PART.PART_PRICE_MAX_VALUE,
-        partName,
-        carSegment,
-      } = req.query;
+  .get("/", errorHandler(async (req: Request, res: Response) => {
+    const { pageSize } = req.query;
+    let {
+      page = 1,
+      priceLow = PART.PART_PRICE_MIN_VALUE,
+      priceHigh = PART.PART_PRICE_MAX_VALUE,
+      partName,
+      carSegment,
+    } = req.query;
 
-      let validatedPageSize = paging.parts.MIN_PAGE_SIZE;
+    let validatedPageSize = paging.parts.MIN_PAGE_SIZE;
 
-      if (pageSize && typeof +pageSize !== 'number') {
-        validatedPageSize = 0;
-      } else if (pageSize && +pageSize <= paging.parts.MIN_PAGE_SIZE) {
-        validatedPageSize = paging.parts.MIN_PAGE_SIZE;
-      } else if (pageSize && +pageSize >= paging.parts.MIN_PAGE_SIZE) {
-        validatedPageSize = pageSize ? +pageSize : paging.parts.MIN_PAGE_SIZE;
-      }
-      page = page || 1;
+    if (pageSize && typeof +pageSize !== 'number') {
+      validatedPageSize = 0;
+    } else if (pageSize && +pageSize <= paging.parts.MIN_PAGE_SIZE) {
+      validatedPageSize = paging.parts.MIN_PAGE_SIZE;
+    } else if (pageSize && +pageSize >= paging.parts.MIN_PAGE_SIZE) {
+      validatedPageSize = pageSize ? +pageSize : paging.parts.MIN_PAGE_SIZE;
+    }
+    page = page || 1;
 
-      partName = typeof partName === "string" ? partName : "";
-      carSegment = typeof carSegment === "string" ? carSegment : "";
-      priceLow = typeof priceLow === "number" ? priceLow : +priceLow || PART.PART_PRICE_MIN_VALUE;
-      priceHigh = typeof priceHigh === "number" ? priceHigh : +priceHigh || PART.PART_PRICE_MAX_VALUE;
+    partName = typeof partName === "string" ? partName : "";
+    carSegment = typeof carSegment === "string" ? carSegment : "";
+    priceLow = typeof priceLow === "number" ? priceLow : +priceLow || PART.PART_PRICE_MIN_VALUE;
+    priceHigh = typeof priceHigh === "number" ? priceHigh : +priceHigh || PART.PART_PRICE_MAX_VALUE;
 
-      const part = await partsServices.getAllParts(partsData)(
-        +page,
-        validatedPageSize,
-        +priceLow,
-        +priceHigh,
-        partName,
-        carSegment,
-      );
+    const part = await partsServices.getAllParts(partsData)(
+      +page,
+      validatedPageSize,
+      +priceLow,
+      +priceHigh,
+      partName,
+      carSegment,
+    );
 
-      res.status(200).send(part);
-    }),
-  )
+    res.status(200).send(part);
+  }))
 
   // get by id
-  .get(
-    "/:partId",
-    authMiddleware,
-    loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { partId } = req.params;
+  .get("/:partId", errorHandler(async (req: Request, res: Response) => {
+    const { partId } = req.params;
 
-      const { error, part } = await partsServices.getPartById(partsData)(
-        +partId,
-      );
+    const { error, part } = await partsServices.getPartById(partsData)(
+      +partId,
+    );
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: `A part with number ${partId} is not found!`,
-        });
-      } else {
-        res.status(200).send(part);
-      }
-    }),
-  )
+    if (error === errors.RECORD_NOT_FOUND) {
+      res.status(404).send({
+        message: `A part with number ${partId} is not found!`,
+      });
+    } else {
+      res.status(200).send(part);
+    }
+  }))
   // update
   .put(
     "/:partId",
-    authMiddleware,
-    loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("part", updatePartSchema),
     errorHandler(async (req: Request, res: Response) => {
@@ -131,26 +119,20 @@ partsController
     }),
   )
   // delete part
-  .delete(
-    "/:partId",
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.employee),
-    errorHandler(async (req: Request, res: Response) => {
-      const { partId } = req.params;
+  .delete("/:partId", roleMiddleware(rolesEnum.employee), errorHandler(async (req: Request, res: Response) => {
+    const { partId } = req.params;
 
-      const { error, part } = await partsServices.deletePart(partsData)(
-        +partId,
-      );
+    const { error, part } = await partsServices.deletePart(partsData)(
+      +partId,
+    );
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: `A part with id ${part} is not found!`,
-        });
-      } else {
-        res.status(200).send(part);
-      }
-    }),
-  );
+    if (error === errors.RECORD_NOT_FOUND) {
+      res.status(404).send({
+        message: `A part with id ${part} is not found!`,
+      });
+    } else {
+      res.status(200).send(part);
+    }
+  }));
 
 export default partsController;

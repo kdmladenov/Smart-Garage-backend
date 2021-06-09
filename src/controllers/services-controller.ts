@@ -15,12 +15,12 @@ import errorHandler from "../middleware/errorHandler.js";
 
 const servicesController = express.Router();
 
+servicesController.use(authMiddleware, loggedUserGuard);
+
 servicesController
   // create service
   .post(
     "/",
-    authMiddleware,
-    loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("service", createServiceSchema),
     errorHandler(async (req: Request, res: Response) => {
@@ -38,74 +38,62 @@ servicesController
     }),
   )
   // get all services - search, sort, paging
-  .get(
-    "/",
-    authMiddleware,
-    loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { pageSize } = req.query;
-      let {
-        page = 1,
-        priceLow = SERVICE.SERVICE_PRICE_MIN_VALUE,
-        priceHigh = SERVICE.SERVICE_PRICE_MAX_VALUE,
-        serviceName,
-        carSegment,
-      } = req.query;
+  .get("/", errorHandler(async (req: Request, res: Response) => {
+    const { pageSize } = req.query;
+    let {
+      page = 1,
+      priceLow = SERVICE.SERVICE_PRICE_MIN_VALUE,
+      priceHigh = SERVICE.SERVICE_PRICE_MAX_VALUE,
+      serviceName,
+      carSegment,
+    } = req.query;
 
-      let validatedPageSize = paging.services.MIN_PAGE_SIZE;
+    let validatedPageSize = paging.services.MIN_PAGE_SIZE;
 
-      if (pageSize && typeof +pageSize !== 'number') {
-        validatedPageSize = 0;
-      } else if (pageSize && +pageSize <= paging.services.MIN_PAGE_SIZE) {
-        validatedPageSize = paging.services.MIN_PAGE_SIZE;
-      } else if (pageSize && +pageSize >= paging.services.MIN_PAGE_SIZE) {
-        validatedPageSize = pageSize ? +pageSize : paging.services.MIN_PAGE_SIZE;
-      }
-      page = page || 1;
+    if (pageSize && typeof +pageSize !== 'number') {
+      validatedPageSize = 0;
+    } else if (pageSize && +pageSize <= paging.services.MIN_PAGE_SIZE) {
+      validatedPageSize = paging.services.MIN_PAGE_SIZE;
+    } else if (pageSize && +pageSize >= paging.services.MIN_PAGE_SIZE) {
+      validatedPageSize = pageSize ? +pageSize : paging.services.MIN_PAGE_SIZE;
+    }
+    page = page || 1;
 
-      serviceName = typeof serviceName === "string" ? serviceName : "";
-      carSegment = typeof carSegment === "string" ? carSegment : "";
-      priceLow = typeof priceLow === "number" ? priceLow : +priceLow || SERVICE.SERVICE_PRICE_MIN_VALUE;
-      priceHigh = typeof priceHigh === "number" ? priceHigh : +priceHigh || SERVICE.SERVICE_PRICE_MAX_VALUE;
+    serviceName = typeof serviceName === "string" ? serviceName : "";
+    carSegment = typeof carSegment === "string" ? carSegment : "";
+    priceLow = typeof priceLow === "number" ? priceLow : +priceLow || SERVICE.SERVICE_PRICE_MIN_VALUE;
+    priceHigh = typeof priceHigh === "number" ? priceHigh : +priceHigh || SERVICE.SERVICE_PRICE_MAX_VALUE;
 
-      const service = await servicesServices.getAllServices(servicesData)(
-        +page,
-        validatedPageSize,
-        +priceLow,
-        +priceHigh,
-        serviceName,
-        carSegment,
-      );
+    const service = await servicesServices.getAllServices(servicesData)(
+      +page,
+      validatedPageSize,
+      +priceLow,
+      +priceHigh,
+      serviceName,
+      carSegment,
+    );
 
-      res.status(200).send(service);
-    }),
-  )
+    res.status(200).send(service);
+  }))
 
   // get by id
-  .get(
-    "/:serviceId",
-    authMiddleware,
-    loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { serviceId } = req.params;
+  .get("/:serviceId", errorHandler(async (req: Request, res: Response) => {
+    const { serviceId } = req.params;
 
-      const { error, service } = await servicesServices.getServiceById(servicesData)(+serviceId);
+    const { error, service } = await servicesServices.getServiceById(servicesData)(+serviceId);
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: `A service with number ${serviceId} is not found!`,
-        });
-      } else {
-        res.status(200).send(service);
-      }
-    }),
-  )
+    if (error === errors.RECORD_NOT_FOUND) {
+      res.status(404).send({
+        message: `A service with number ${serviceId} is not found!`,
+      });
+    } else {
+      res.status(200).send(service);
+    }
+  }))
 
   // update
   .put(
     "/:serviceId",
-    authMiddleware,
-    loggedUserGuard,
     roleMiddleware(rolesEnum.employee),
     validateBody("service", updateServiceSchema),
     errorHandler(async (req: Request, res: Response) => {
@@ -123,24 +111,18 @@ servicesController
     }),
   )
   // delete service
-  .delete(
-    "/:serviceId",
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.employee),
-    errorHandler(async (req: Request, res: Response) => {
-      const { serviceId } = req.params;
+  .delete("/:serviceId", roleMiddleware(rolesEnum.employee), errorHandler(async (req: Request, res: Response) => {
+    const { serviceId } = req.params;
 
-      const { error, service } = await servicesServices.deleteService(servicesData)(+serviceId);
+    const { error, service } = await servicesServices.deleteService(servicesData)(+serviceId);
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: `A service with id ${service} is not found!`,
-        });
-      } else {
-        res.status(200).send(service);
-      }
-    }),
-  );
+    if (error === errors.RECORD_NOT_FOUND) {
+      res.status(404).send({
+        message: `A service with id ${service} is not found!`,
+      });
+    } else {
+      res.status(200).send(service);
+    }
+  }));
 
 export default servicesController;

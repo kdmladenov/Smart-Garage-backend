@@ -271,49 +271,147 @@ const getAll = async (
   const sql = `
     SELECT 
       COUNT(*) OVER () AS totalDBItems,
-      u.user_id as userId,
+      uvv.is_deleted,
+      uvv.user_id as userId,
       au.fullName,
-      u.first_name as firstName,
-      u.last_name as lastName,
-      u.company_name as companyName,
-      u.phone,
-      u.email,
+      uvv.firstName,
+      uvv.lastName,
+      uvv.companyName,
+      uvv.phone,
+      uvv.email,    
       a.city,
-      a.country,
+      a.country,    
       a.postal_code as postalCode,
-      a.street_address as streetAddress,
-      v.vehicle_id as vehicleId,
-      v.vin,
-      v.license_plate as licensePlate,
+      a.street_address as streetAddress, 
+      uvv.vehicle_id as vehicleId,
+      uvv.vin,
+      uvv.licensePlate,       
       mo.model_id as modelId,
       mo.model_name as modelName,
-      ma.manufacturer_name as manufacturer,
+      ma.manufacturer_name as manufacturer,    
       cs.car_segment as carSegment,
-      vis.visit_id as visitId,
-      vis.visit_start as visitStart,
-      vis.visit_end as visitEnd,
-      vis.status as visitStatus,
-      u.role
-    FROM users u
-    LEFT JOIN (SELECT
-                concat(first_name, " ", last_name) as fullName,
-                user_id
-              FROM users) au USING (user_id)
-    LEFT JOIN addresses a USING (address_id)
-    RIGHT JOIN vehicles v USING (user_id)
-    JOIN models mo USING (model_id)
-    JOIN manufacturers ma USING (manufacturer_id)
-    JOIN car_segments cs USING (car_segment_id)
-    RIGHT JOIN visits vis USING (vehicle_id)
-    WHERE u.is_deleted = 0
+      uvv.address_id as addressId,
+      uvv.visitId,
+      uvv.visitStart,
+      uvv.visitEnd,
+      uvv.visitStatus,
+      uvv.role
+    FROM (SELECT
+            uv.is_deleted, 
+            uv.user_id,
+            uv.firstName,
+            uv.lastName,
+            uv.companyName,
+            uv.phone,
+            uv.email,
+            uv.vehicle_id,
+            uv.model_id,
+            uv.vin,
+            uv.licensePlate,
+            uv.address_id,
+            uv.role,
+            vis.visit_id as visitId,
+            vis.visit_start as visitStart,
+            vis.visit_end as visitEnd,
+            vis.status as visitStatus
+          FROM (SELECT
+                  u.is_deleted,
+                  u.user_id,
+                  u.first_name as firstName,
+                  u.last_name as lastName,
+                  u.company_name as companyName,
+                  u.phone,
+                  u.email,
+                  u.address_id,
+                  u.role,
+                  v.vehicle_id,
+                  v.model_id,
+                  v.vin,
+                  v.license_plate as licensePlate
+                FROM users u LEFT OUTER JOIN vehicles v USING (user_id)
+                UNION
+                SELECT
+                  u.is_deleted,
+                  u.user_id,
+                  u.first_name as firstName,
+                  u.last_name as lastName,
+                  u.company_name as companyName,
+                  u.phone,
+                  u.email,
+                  u.address_id,
+                  u.role,
+                  v.vehicle_id,
+                  v.model_id,
+                  v.vin,
+                  v.license_plate as licensePlate
+                FROM users u RIGHT OUTER JOIN vehicles v USING (user_id)) as uv LEFT OUTER JOIN visits vis USING (vehicle_id)
+          UNION
+          SELECT
+            uv.is_deleted,
+            uv.user_id,
+            uv.firstName,
+            uv.lastName,
+            uv.companyName,
+            uv.phone,
+            uv.email,
+            uv.vehicle_id,
+            uv.model_id,
+            uv.vin,
+            uv.licensePlate,
+            uv.address_id,
+            uv.role,
+            vis.visit_id as visitId,
+            vis.visit_start as visitStart,
+            vis.visit_end as visitEnd,
+            vis.status as visitStatus
+          FROM (SELECT
+                  u.is_deleted,
+                  u.user_id,
+                  u.first_name as firstName,
+                  u.last_name as lastName,
+                  u.company_name as companyName,
+                  u.phone,
+                  u.email,
+                  u.address_id,
+                  u.role,
+                  v.vehicle_id,
+                  v.model_id,
+                  v.vin,
+                  v.license_plate as licensePlate
+                FROM users u LEFT OUTER JOIN vehicles v USING (user_id)
+                UNION
+                SELECT
+                  u.is_deleted,
+                  u.user_id,
+                  u.first_name as firstName,
+                  u.last_name as lastName,
+                  u.company_name as companyName,
+                  u.phone,
+                  u.email,
+                  u.address_id,
+                  u.role,
+                  v.vehicle_id,
+                  v.model_id,
+                  v.vin,
+                  v.license_plate as licensePlate
+                FROM users u RIGHT OUTER JOIN vehicles v USING (user_id)) as uv RIGHT OUTER JOIN visits vis USING (vehicle_id)) as uvv
+  LEFT JOIN addresses a USING (address_id)
+  LEFT JOIN models mo USING (model_id)
+  LEFT JOIN manufacturers ma USING (manufacturer_id)
+  LEFT JOIN car_segments cs USING (car_segment_id)
+  LEFT JOIN (SELECT
+            concat(first_name, " ", last_name) as fullName,
+            user_id
+          FROM users) au USING (user_id)
+  WHERE uvv.is_deleted = 0
     ${name ? `AND au.fullName LIKE '%${name}%'` : ''}
-    ${email ? `AND u.email LIKE '%${email}%'` : ''}
-    ${phone ? `AND u.phone LIKE '%${phone}%'` : ''}
+    ${email ? `AND uvv.email LIKE '%${email}%'` : ''}
+    ${phone ? `AND uvv.phone LIKE '%${phone}%'` : ''}
     ${modelName ? `AND mo.model_name = "${modelName}"` : ''}
     ${manufacturer ? `AND ma.manufacturer_name = "${manufacturer}"` : ''}
     ${carSegment ? `AND cs.car_segment = "${carSegment}"` : ''}
-    ${visitRangeLow && visitRangeHigh ? `AND vis.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ''}
-    GROUP BY u.user_id
+    ${visitRangeLow && visitRangeHigh ? `AND uvv.visit_start BETWEEN "${visitRangeLow}" AND "${visitRangeHigh}"` : ''}
+    GROUP BY uvv.user_id
     ORDER BY ${sortedColumn} ${direction} 
     LIMIT ${pageSize} OFFSET ${offset}; 
   `;

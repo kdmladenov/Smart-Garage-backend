@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import express, { Request, Response } from 'express';
-import { carSegments, paging } from '../common/constants.js';
+import { paging } from '../common/constants.js';
 import usersData from '../data/users-data.js';
 import validateBody from '../middleware/validate-body.js';
 import usersService from '../services/users-service.js';
@@ -188,13 +188,12 @@ usersController
     loggedUserGuard,
     validateBody('user', updatePasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const { role } = req.user!;
-      const id = role === rolesEnum.employee ? req.params.userId : req.user!.userId;
+      const { role, userId } = req.user!;
       const passwordData = req.body;
 
       const { error, result } = await usersService.changePassword(usersData)(
         passwordData,
-        +id,
+        +userId,
         role,
       );
 
@@ -204,7 +203,7 @@ usersController
         });
       } else if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
-          message: `User ${id} is not found.`,
+          message: `User ${userId} is not found.`,
         });
       } else {
         res.status(200).send(result);

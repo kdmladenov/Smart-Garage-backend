@@ -13,8 +13,10 @@ import errors from '../common/service-errors.js';
 
 const vehiclesController = express.Router();
 
+vehiclesController.use(authMiddleware, loggedUserGuard);
+
 vehiclesController
-  .post('/', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody('vehicle', createVehicleSchema), errorHandler(async (req: Request, res: Response) => {
+  .post('/', roleMiddleware(rolesEnum.employee), validateBody('vehicle', createVehicleSchema), errorHandler(async (req: Request, res: Response) => {
     const vehicle = req.body;
 
     const { result, error } = await vehiclesService.createVehicle(vehiclesData)(vehicle);
@@ -28,7 +30,7 @@ vehiclesController
     }
   }))
 
-  .put('/:vehicleId', authMiddleware, loggedUserGuard, roleMiddleware(rolesEnum.employee), validateBody('vehicle', createVehicleSchema), errorHandler(async (req: Request, res: Response) => {
+  .put('/:vehicleId', roleMiddleware(rolesEnum.employee), validateBody('vehicle', createVehicleSchema), errorHandler(async (req: Request, res: Response) => {
     const vehicle = req.body;
     const { vehicleId } = req.params;
 
@@ -47,7 +49,7 @@ vehiclesController
     }
   }))
 
-  .get('/:vehicleId', authMiddleware, loggedUserGuard, errorHandler(async (req: Request, res: Response) => {
+  .get('/:vehicleId', errorHandler(async (req: Request, res: Response) => {
     const { vehicleId } = req.params;
 
     const { result, error } = await vehiclesService.getVehicle(vehiclesData)(+vehicleId);
@@ -61,7 +63,7 @@ vehiclesController
     }
   }))
 
-  .get('/', authMiddleware, loggedUserGuard, errorHandler(async (req: Request, res: Response) => {
+  .get('/', errorHandler(async (req: Request, res: Response) => {
     let {
       pagesize = paging.vehicles.MIN_PAGE_SIZE,
       page,
