@@ -8,5 +8,5 @@ export default {
   performedServices: (value: { serviceId?: number; serviceQty: number; price: number }[]) => Array.isArray(value)
   && value.map((s) => (!s.serviceId || s.serviceId > 0) && s.serviceQty > 0 && s.price > 0).every((b) => b === true),
   visitEnd: (value: string) => value === null || (typeof value === 'string' && !new Date(value).toString().includes('Invalid')),
-  status: (value: string) => Object.keys(visitStatusEnum).includes(value),
+  visitStatus: (value: string) => Object.keys(visitStatusEnum).includes(value),
 };

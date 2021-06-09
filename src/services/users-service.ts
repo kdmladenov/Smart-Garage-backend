@@ -49,6 +49,9 @@ const createUser = (usersData: UsersData) => async (user: UserDetailed) => {
     Your account at 'Smart Garage' has been created. These are your login credentials:
       username: ${createdUser.email}
       password: ${randomPassword}
+
+    Click the link below to go to the login page.
+    http://localhost:3000/login
   `;
 
   mailingService(createdUser.email, subject, text);
