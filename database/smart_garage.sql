@@ -1,290 +1,375 @@
--- MySQL Workbench Forward Engineering
+CREATE DATABASE  IF NOT EXISTS `smart_garage` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `smart_garage`;
+-- MariaDB dump 10.19  Distrib 10.5.9-MariaDB, for Win64 (AMD64)
+--
+-- Host: triton.rdb.superhosting.bg    Database: smart_garage
+-- ------------------------------------------------------
+-- Server version	10.3.29-MariaDB-log
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema smart_garage
--- -----------------------------------------------------
+--
+-- Table structure for table `addresses`
+--
 
--- -----------------------------------------------------
--- Schema smart_garage
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `smart_garage` DEFAULT CHARACTER SET utf8 ;
-USE `smart_garage` ;
+DROP TABLE IF EXISTS `addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `addresses` (
+  `address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `city` varchar(45) NOT NULL,
+  `country` varchar(45) NOT NULL,
+  `postal_code` int(11) NOT NULL,
+  `street_address` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`address_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Table `smart_garage`.`addresses`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`addresses` (
-  `address_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `city` VARCHAR(45) NOT NULL,
-  `country` VARCHAR(45) NOT NULL,
-  `postal_code` INT(11) NOT NULL,
-  `street_address` VARCHAR(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`address_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 109
-DEFAULT CHARACTER SET = latin1;
+--
+-- Dumping data for table `addresses`
+--
 
+LOCK TABLES `addresses` WRITE;
+/*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+INSERT INTO `addresses` VALUES (1,'Montana','Bulgaria',3203,'69 Hoard Center'),(2,'Montana','Bulgaria',8240,'36988 Melvin Crossing'),(3,'Ruse','Bulgaria',1387,'53 Sunfield Drive'),(4,'Vratsa','Bulgaria',6541,'23139 Debra Plaza'),(5,'Montana','Bulgaria',9537,'8981 Beilfuss Circle'),(6,'Ruse','Bulgaria',2266,'316 Ohio Parkway'),(7,'Varna','Bulgaria',6753,'50 Crownhardt Drive'),(8,'Pernik','Bulgaria',5225,'8751 Stone Corner Pass'),(9,'Sofia','Bulgaria',5097,'899 Bellgrove Plaza'),(10,'Varna','Bulgaria',3705,'186 Superior Park'),(11,'Pernik','Bulgaria',7322,'7874 Calypso Hill'),(12,'Varna','Bulgaria',2475,'705 Pleasure Way'),(13,'Varna','Bulgaria',2947,'680 Ramsey Road'),(14,'Pleven','Bulgaria',1644,'754 Nevada Terrace'),(15,'Plovdiv','Bulgaria',3145,'33292 Johnson Road'),(16,'Blagoevgrad','Bulgaria',5821,'3671 Buena Vista Alley'),(17,'Pleven','Bulgaria',3330,'6652 Shelley Drive'),(18,'Blagoevgrad','Bulgaria',7951,'52937 Golf Course Junction'),(19,'Blagoevgrad','Bulgaria',8383,'21 Ilene Point'),(20,'Montana','Bulgaria',5488,'8 Sugar Park'),(21,'Bourgas','Bulgaria',2897,'10547 Marquette Junction'),(22,'Ruse','Bulgaria',5119,'0 Clove Street'),(23,'Bourgas','Bulgaria',4079,'84 Northridge Center'),(24,'Varna','Bulgaria',3903,'2 Mariners Cove Drive'),(25,'Varna','Bulgaria',2056,'9 Sycamore Road'),(26,'Blagoevgrad','Bulgaria',1265,'4356 Surrey Alley'),(27,'Blagoevgrad','Bulgaria',6806,'7715 Maple Wood Plaza'),(28,'Bourgas','Bulgaria',5604,'2677 Aberg Court'),(29,'Montana','Bulgaria',1661,'685 Pankratz Park'),(30,'Vratsa','Bulgaria',8826,'905 Morrow Court'),(31,'Montana','Bulgaria',6579,'82 Dexter Parkway'),(32,'Montana','Bulgaria',9808,'4 School Court'),(33,'Sofia','Bulgaria',9021,'632 Hoepker Park'),(34,'Plovdiv','Bulgaria',1223,'6 Killdeer Terrace'),(35,'Bourgas','Bulgaria',4921,'13593 Doe Crossing Crossing'),(36,'Blagoevgrad','Bulgaria',3209,'1350 Pierstorff Parkway'),(37,'Varna','Bulgaria',4334,'559 Jana Crossing'),(38,'Pernik','Bulgaria',5028,'0618 Donald Lane'),(39,'Montana','Bulgaria',6510,'51 Trailsway Hill'),(40,'Pernik','Bulgaria',4825,'34512 Sloan Lane'),(41,'Vratsa','Bulgaria',6996,'67304 Del Mar Plaza'),(42,'Vratsa','Bulgaria',382,'164 Old Shore Hill'),(43,'Ruse','Bulgaria',5450,'52 Schiller Center'),(44,'Sofia','Bulgaria',1602,'96 Oneill Alley'),(45,'Vratsa','Bulgaria',2732,'003 Dakota Point'),(46,'Bourgas','Bulgaria',1496,'348 Shoshone Circle'),(47,'Ruse','Bulgaria',2383,'52 Spenser Junction'),(48,'Montana','Bulgaria',3644,'843 Tomscot Plaza'),(49,'Sofia','Bulgaria',564,'16 Mesta Avenue'),(50,'Montana','Bulgaria',8370,'130 Northfield Alley'),(51,'Pleven','Bulgaria',6287,'69682 Spaight Alley'),(52,'Sofia','Bulgaria',8732,'47774 Ilene Road'),(53,'Sofia','Bulgaria',8164,'2683 Mayfield Plaza'),(54,'Pleven','Bulgaria',1119,'202 Northridge Way'),(55,'Sofia','Bulgaria',2965,'68019 Sunbrook Terrace'),(56,'Sofia','Bulgaria',329,'3543 Mcguire Alley'),(57,'Bourgas','Bulgaria',1124,'93 Dovetail Street'),(58,'Vratsa','Bulgaria',5918,'4 Lawn Plaza'),(59,'Blagoevgrad','Bulgaria',6445,'7583 Fulton Junction'),(60,'Ruse','Bulgaria',1174,'80595 Trailsway Point'),(61,'Pernik','Bulgaria',5827,'90705 Little Fleur Circle'),(62,'Pleven','Bulgaria',604,'7 Dunning Center'),(63,'Sofia','Bulgaria',1185,'1 Grayhawk Hill'),(64,'Pleven','Bulgaria',5288,'13 Vermont Lane'),(65,'Pleven','Bulgaria',4150,'9352 Mendota Park'),(66,'Montana','Bulgaria',9685,'06789 Washington Way'),(67,'Sofia','Bulgaria',317,'4 Golf Course Crossing'),(68,'Bourgas','Bulgaria',6988,'4 Schlimgen Avenue'),(69,'Pernik','Bulgaria',2161,'72152 Clove Trail'),(70,'Plovdiv','Bulgaria',1320,'59 Swallow Terrace'),(71,'Pernik','Bulgaria',8797,'18 Corben Circle'),(72,'Bourgas','Bulgaria',9579,'25226 Bartelt Terrace'),(73,'Ruse','Bulgaria',3853,'4 Forster Court'),(74,'Plovdiv','Bulgaria',5803,'0 Lindbergh Pass'),(75,'Vratsa','Bulgaria',5440,'98441 Fulton Junction'),(76,'Pernik','Bulgaria',7662,'25338 Summer Ridge Trail'),(77,'Bourgas','Bulgaria',9996,'4764 Donald Road'),(78,'Pernik','Bulgaria',744,'11555 Merrick Way'),(79,'Varna','Bulgaria',8840,'1 Mcguire Crossing'),(80,'Varna','Bulgaria',2893,'4611 Bayside Place'),(81,'Vratsa','Bulgaria',1978,'70 Scofield Terrace'),(82,'Pernik','Bulgaria',2225,'2660 Lillian Park'),(83,'Montana','Bulgaria',8351,'5 Boyd Lane'),(84,'Plovdiv','Bulgaria',8747,'0929 Dapin Point'),(85,'Ruse','Bulgaria',1354,'730 Fairfield Point'),(86,'Ruse','Bulgaria',315,'286 Duke Point'),(87,'Pleven','Bulgaria',888,'7567 Brickson Park Road'),(88,'Ruse','Bulgaria',8825,'5 Gulseth Road'),(89,'Pleven','Bulgaria',6399,'87062 Sachtjen Junction'),(90,'Plovdiv','Bulgaria',504,'32782 John Wall Street'),(91,'Sofia','Bulgaria',3917,'5 Bunker Hill Lane'),(92,'Sofia','Bulgaria',9301,'60145 Browning Crossing'),(93,'Sofia','Bulgaria',9237,'02 Lakewood Gardens Drive'),(94,'Plovdiv','Bulgaria',1160,'4 Sunbrook Street'),(95,'Montana','Bulgaria',4050,'842 Commercial Pass'),(96,'Pernik','Bulgaria',7036,'7 Old Shore Lane'),(97,'Plovdiv','Bulgaria',694,'72 Grover Trail'),(98,'Pleven','Bulgaria',3381,'2397 Grover Junction'),(99,'Pernik','Bulgaria',7926,'02859 Fisk Crossing'),(100,'Varna','Bulgaria',2221,'5291 Artisan Trail str'),(101,'Sofia','Bulgaria',1618,'Krasno selo'),(102,'Sofia','Bulgaria',1505,'19 Madrid blvd');
+/*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- -----------------------------------------------------
--- Table `smart_garage`.`car_segments`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`car_segments` (
-  `car_segment_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `car_segment` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`car_segment_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 7
-DEFAULT CHARACTER SET = latin1;
+--
+-- Table structure for table `car_segments`
+--
 
+DROP TABLE IF EXISTS `car_segments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `car_segments` (
+  `car_segment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `car_segment` varchar(45) NOT NULL,
+  PRIMARY KEY (`car_segment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Table `smart_garage`.`manufacturers`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`manufacturers` (
-  `manufacturer_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `manufacturer_name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`manufacturer_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 20
-DEFAULT CHARACTER SET = latin1;
+--
+-- Dumping data for table `car_segments`
+--
 
+LOCK TABLES `car_segments` WRITE;
+/*!40000 ALTER TABLE `car_segments` DISABLE KEYS */;
+INSERT INTO `car_segments` VALUES (1,'A - mini cars'),(2,'B - small cars'),(3,'C - medium cars'),(4,'D - large cars'),(5,'E - executive cars'),(6,'F - luxury cars');
+/*!40000 ALTER TABLE `car_segments` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- -----------------------------------------------------
--- Table `smart_garage`.`models`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`models` (
-  `model_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `model_name` VARCHAR(45) NOT NULL,
-  `manufacturer_id` INT(11) NOT NULL,
-  `car_segment_id` INT(11) NOT NULL,
+--
+-- Table structure for table `manufacturers`
+--
+
+DROP TABLE IF EXISTS `manufacturers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `manufacturers` (
+  `manufacturer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `manufacturer_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`manufacturer_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `manufacturers`
+--
+
+LOCK TABLES `manufacturers` WRITE;
+/*!40000 ALTER TABLE `manufacturers` DISABLE KEYS */;
+INSERT INTO `manufacturers` VALUES (1,'Audi'),(2,'BMW'),(3,'Citroen'),(4,'Fiat'),(5,'Honda'),(6,'Mercedes-Benz'),(7,'Nissan'),(8,'Opel'),(9,'Peugeot'),(10,'Skoda'),(11,'Toyota'),(12,'VW'),(13,'Renault'),(14,'Ford'),(15,'Hyundai'),(16,'Mazda'),(17,'Tesla'),(18,'Lexus'),(19,'Seat');
+/*!40000 ALTER TABLE `manufacturers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `models`
+--
+
+DROP TABLE IF EXISTS `models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `models` (
+  `model_id` int(11) NOT NULL AUTO_INCREMENT,
+  `model_name` varchar(45) NOT NULL,
+  `manufacturer_id` int(11) NOT NULL,
+  `car_segment_id` int(11) NOT NULL,
   PRIMARY KEY (`model_id`),
-  INDEX `fk_models_manufacturers1_idx` (`manufacturer_id` ASC) VISIBLE,
-  INDEX `fk_models_car_segments1_idx` (`car_segment_id` ASC) VISIBLE,
-  CONSTRAINT `fk_models_car_segments1`
-    FOREIGN KEY (`car_segment_id`)
-    REFERENCES `smart_garage`.`car_segments` (`car_segment_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_models_manufacturers1`
-    FOREIGN KEY (`manufacturer_id`)
-    REFERENCES `smart_garage`.`manufacturers` (`manufacturer_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 79
-DEFAULT CHARACTER SET = latin1;
+  KEY `fk_models_manufacturers1_idx` (`manufacturer_id`),
+  KEY `fk_models_car_segments1_idx` (`car_segment_id`),
+  CONSTRAINT `fk_models_car_segments1` FOREIGN KEY (`car_segment_id`) REFERENCES `car_segments` (`car_segment_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_models_manufacturers1` FOREIGN KEY (`manufacturer_id`) REFERENCES `manufacturers` (`manufacturer_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `models`
+--
 
--- -----------------------------------------------------
--- Table `smart_garage`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`users` (
-  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(45) NOT NULL,
-  `last_name` VARCHAR(45) NOT NULL,
-  `company_name` VARCHAR(45) NOT NULL,
-  `phone` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `address_id` INT(11) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `is_deleted` TINYINT(4) NOT NULL DEFAULT 0,
-  `role` ENUM('customer', 'employee') NOT NULL,
-  PRIMARY KEY (`user_id`),
-  INDEX `fk_customers_addresses_idx` (`address_id` ASC) VISIBLE,
-  CONSTRAINT `fk_customers_addresses`
-    FOREIGN KEY (`address_id`)
-    REFERENCES `smart_garage`.`addresses` (`address_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 103
-DEFAULT CHARACTER SET = latin1;
+LOCK TABLES `models` WRITE;
+/*!40000 ALTER TABLE `models` DISABLE KEYS */;
+INSERT INTO `models` VALUES (1,'A8',1,6),(2,'A6',1,5),(3,'A5',1,4),(4,'A4',1,4),(5,'A3',1,3),(6,'A2',1,2),(7,'7  Series',2,6),(8,'6  Series',2,5),(9,'5  Series',2,5),(10,'3  Series',2,4),(11,'2  Series',2,3),(12,'1  Series',2,3),(13,'C2',3,2),(14,'C3',3,2),(15,'C4',3,3),(16,'C5',3,4),(17,'C6',3,5),(18,'KA',14,1),(19,'500',4,1),(20,'Punto',4,2),(21,'Tipo',4,3),(22,'Uno',4,1),(23,'Civic',5,3),(24,'Fiesta',14,2),(25,'Jazz',5,2),(26,'B-Max',14,2),(27,'Focus',14,3),(28,'S',6,6),(29,'E',6,5),(30,'C',6,4),(31,'Mondeo',14,4),(32,'A',6,3),(33,'i20',15,2),(34,'Micra',7,2),(35,'i10',15,1),(36,'i30',15,3),(37,'i40',15,4),(38,'Panda',4,1),(39,'Leaf',7,3),(40,'Astra',8,3),(41,'Corsa',8,2),(42,'Insignia',8,4),(43,'CC',12,4),(44,'Accord',5,4),(45,'Kadett',8,3),(46,'508',9,4),(47,'208',9,2),(48,'301',9,3),(49,'308',9,3),(50,'206',9,2),(51,'306',9,3),(52,'Octavia',10,3),(53,'Superb',10,4),(54,'Fabia',10,2),(55,'Citigo',10,1),(56,'108',9,1),(57,'Mazda6',16,4),(58,'Aygo',11,1),(59,'Yaris',11,2),(60,'Corolla',11,3),(61,'Avensis',11,4),(62,'Camry',11,4),(63,'Mazda2',16,2),(64,'Golf',12,3),(65,'Passat',12,4),(66,'Zoe',13,2),(67,'Polo',12,2),(68,'Jetta',12,3),(69,'Up!',12,1),(70,'Clio',13,2),(71,'Megane',13,3),(72,'Twingo',13,1),(73,'S',17,5),(74,'ES',18,6),(75,'Ibiza',19,2),(76,'New Leon',19,3),(77,'7 Series',2,5),(78,'3 Series',2,3);
+/*!40000 ALTER TABLE `models` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `parts`
+--
 
--- -----------------------------------------------------
--- Table `smart_garage`.`vehicles`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`vehicles` (
-  `vehicle_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `vin` VARCHAR(45) NOT NULL,
-  `license_plate` VARCHAR(45) NOT NULL,
-  `user_id` INT(11) NOT NULL,
-  `model_id` INT(11) NOT NULL,
-  `manufactured_year` INT(11) NOT NULL,
-  `engine_type` ENUM('gasoline', 'diesel', 'electric', 'hybrid') NOT NULL,
-  `transmission` ENUM('manual', 'automatic') NOT NULL DEFAULT 'manual',
-  `is_deleted` TINYINT(4) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`vehicle_id`),
-  INDEX `fk_vehicles_models1_idx` (`model_id` ASC) VISIBLE,
-  INDEX `fk_vehicles_customers1_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_vehicles_models1`
-    FOREIGN KEY (`model_id`)
-    REFERENCES `smart_garage`.`models` (`model_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_vehicles_user1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `smart_garage`.`users` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 18
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `smart_garage`.`visits`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`visits` (
-  `visit_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `notes` VARCHAR(255) NOT NULL,
-  `visit_start` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  `visit_end` DATE NULL DEFAULT NULL,
-  `vehicle_id` INT(11) NOT NULL,
-  `status` ENUM('not started', 'in progress', 'ready') NOT NULL DEFAULT 'not started',
-  PRIMARY KEY (`visit_id`),
-  INDEX `fk_visits_vehicles1_idx` (`vehicle_id` ASC) VISIBLE,
-  CONSTRAINT `fk_visits_vehicles1`
-    FOREIGN KEY (`vehicle_id`)
-    REFERENCES `smart_garage`.`vehicles` (`vehicle_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 26
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `smart_garage`.`invoices`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`invoices` (
-  `invoice_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  `due_date` DATETIME NOT NULL DEFAULT current_timestamp() + interval 10 day,
-  `visit_id` INT(11) NOT NULL,
-  PRIMARY KEY (`invoice_id`),
-  INDEX `fk_invoices_visits1_idx` (`visit_id` ASC) VISIBLE,
-  CONSTRAINT `fk_invoices_visits1`
-    FOREIGN KEY (`visit_id`)
-    REFERENCES `smart_garage`.`visits` (`visit_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `smart_garage`.`parts`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`parts` (
-  `part_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `price` FLOAT NOT NULL,
-  `car_segment_id` INT(11) NOT NULL,
-  `is_deleted` TINYINT(4) NOT NULL DEFAULT 0,
+DROP TABLE IF EXISTS `parts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `parts` (
+  `part_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `price` float NOT NULL,
+  `car_segment_id` int(11) NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`part_id`),
-  INDEX `fk_parts_car_segments1_idx` (`car_segment_id` ASC) VISIBLE,
-  CONSTRAINT `fk_parts_car_segments1`
-    FOREIGN KEY (`car_segment_id`)
-    REFERENCES `smart_garage`.`car_segments` (`car_segment_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 1006
-DEFAULT CHARACTER SET = latin1;
+  KEY `fk_parts_car_segments1_idx` (`car_segment_id`),
+  CONSTRAINT `fk_parts_car_segments1` FOREIGN KEY (`car_segment_id`) REFERENCES `car_segments` (`car_segment_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1006 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `parts`
+--
 
--- -----------------------------------------------------
--- Table `smart_garage`.`services`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`services` (
-  `service_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `price` FLOAT NOT NULL,
-  `car_segment_id` INT(11) NOT NULL,
-  `is_deleted` TINYINT(4) NOT NULL DEFAULT 0,
+LOCK TABLES `parts` WRITE;
+/*!40000 ALTER TABLE `parts` DISABLE KEYS */;
+INSERT INTO `parts` VALUES (1,'4X4 ACTUATOR/TRANS CASE MOTOR',25.58,1,0),(2,'ABS SPEED SENSOR',11.5,1,1),(3,'AC CONDENSOR',34.54,1,0),(4,'AC HOSE SINGLE',16.62,1,0),(5,'AIR BAG (Front)',56.3,1,0),(6,'AIR CLEANER (AIR BOX)',11.5,1,0),(7,'ALTERNATOR',28.14,1,0),(8,'ANTENNA-POWER',20.46,1,0),(9,'ASH TRAY',3.82,1,0),(10,'AXLE ASSEM. 4X4 FRONT COMPLETE',183.02,1,0),(11,'AXLE ASSEM. RWD INDEPENDENT',142.06,1,0),(12,'AXLE SHAFT 4X4 (FRONT)',42.22,1,0),(13,'BACKING PLATE (W/ACCESS.)',21.74,1,0),(14,'BATTERY',42.22,1,0),(15,'BATTERY TERMINAL (PAIR)',3.82,1,0),(16,'BED MAT',28.14,1,0),(17,'BELT TENSIONER W/O BRACKET',14.06,1,0),(18,'BOAT LOWER UNIT',160,1,0),(19,'BRAKE BOOSTER',21.74,1,0),(20,'BRAKE CALIPER (SINGLE PISTON)',15.34,1,0),(21,'BRAKE DRUM (WITH HUB)',24.3,1,0),(22,'BRAKE HUB 4X4',34.54,1,0),(23,'BRAKE HUB WITH ABS',42.22,1,0),(24,'BRAKE PROPORTIONING VALVE',10.22,1,0),(25,'BRAKE SHOES/BRAKE PAD',1.26,1,0),(26,'BUMPER COVER',38.38,1,0),(27,'BUMPER GUARD',7.66,1,0),(28,'BUMPER SHOCK/BRACKET (EACH)',14.06,1,0),(29,'CABLES',8.94,1,0),(30,'CAMSHAFT',21.74,1,0),(31,'CARBURETOR 1 OR 2 BRL',28.14,1,0),(32,'CARGO COVER',11.5,1,0),(33,'CHARCOAL CANISTER',12.78,1,0),(34,'CLOCK SPRING (AIR BAG)',20.46,1,0),(35,'CLUTCH FORK',8.94,1,0),(36,'CLUTCH SLAVE CYLINDER',10.22,1,0),(37,'COIL STANDARD',12.78,1,0),(38,'COILOVER SLEEVE',12.78,1,0),(39,'CONNECTOR/BULB SOCKET UP TO 10',2.54,1,0),(40,'CONSOLE UPPER',16.62,1,0),(41,'CONTROL MODULE - SMALL',24.3,1,0),(42,'CRANKSHAFT',34.54,1,0),(43,'CRUISE CONTROL',19.18,1,0),(44,'CYLINDER HEAD-ALUM (W/CAM)',70.38,1,0),(45,'CYLINDER HEAD-CAST IRON (W/O CAM)',42.22,1,0),(46,'DIPSTICK',3.82,1,0),(47,'DISTRIBUTOR CAP',6.38,1,0),(48,'DISTRIBUTOR ELECTRONIC w/MODULE',42.22,1,0),(49,'DOMELIGHT',8.94,1,0),(50,'DOOR HINGE (EACH)',7.66,1,0),(51,'DOOR LOCK CYLINDER',2.54,1,0),(52,'DOOR SWING',5.1,1,0),(53,'DOOR w/POWER WINDOW',84.46,1,0),(54,'DRIVE SHAFT 4X4 FRONT',56.3,1,0),(55,'EGR VALVE',11.5,1,0),(56,'ENGINE BLOCK BARE (NO INTERNALS)',34.54,1,0),(57,'ENGINE SUPPORT K MEMBER (ALUM)',70.38,1,0),(58,'EXHAUST PIPE',7.66,1,0),(59,'FAN BLADE',7.66,1,0),(60,'FENDER EXTENSION',10.22,1,0),(61,'FLYWHEEL AUTOMATIC',20.46,1,0),(62,'FOG LAMP',14.06,1,0),(63,'FUEL CAP',3.82,1,0),(64,'FUEL FILLER NECK',10.22,1,0),(65,'FUEL INJECTOR (EACH)',7.66,1,0),(66,'FUEL PUMP ELEC. IN TANK',28.14,1,0),(67,'FUEL PUMP REGULAR',11.5,1,0),(68,'FUEL TANK SWITCHING UNIT',28.14,1,0),(69,'GAUGES (EACH)',6.38,1,0),(70,'GLASS-REAR SLIDER',34.54,1,0),(71,'GLASS-VENT W/FRAME',20.46,1,0),(72,'GRILLE (W/O ACCESSORIES)',37.1,1,0),(73,'GRILLE W/PARK LAMPS',42.22,1,0),(74,'HATCH SHOCK (EACH)',7.66,1,0),(75,'HEAD LAMP COVER W/PARK',17.9,1,0),(76,'HEAD LAMP HID ASSEMBLY',70.38,1,0),(77,'HEAD LAMP REGULAR',2.54,1,0),(78,'HEADLINER',14.06,1,0),(79,'HEAT RISER',8.94,1,0),(80,'HEATER CONTROL-MANUAL',14.06,1,0),(81,'HEATER MOTOR',21.74,1,0),(82,'HOOD HINGE (EACH)',10.22,1,0),(83,'HOOD ORNAMENT',5.1,1,0),(84,'HORN',6.38,1,0),(85,'HYBRID BATTERY',639.98,1,0),(86,'IDLE AIR CONTROL VALVE',11.5,1,0),(87,'INFO CENTER',15.34,1,0),(88,'INTAKE BOOT',12.78,1,0),(89,'INTAKE MANIFOLD - COMPOSITE',30.7,1,0),(90,'INTERIOR TRIM LENGTH 1\'-2\'',5.1,1,0),(91,'INTERIOR TRIM LENGTH UNDER 1\'',2.54,1,0),(92,'LADDER RACK',56.3,1,0),(93,'LIGHT BAR',44.78,1,0),(94,'LUGGAGE RACK',15.34,1,0),(95,'MASS AIR FLOW SENSOR',42.22,1,0),(96,'MIRROR-INSIDE ELECTRIC',12.78,1,0),(97,'MIRROR-OUTSIDE STD.',11.5,1,0),(98,'MOTOR MOUNT (EACH)',11.5,1,0),(99,'MUFFLER',17.9,1,0),(100,'OIL COOLER',14.06,1,0),(101,'OIL PUMP',10.22,1,0),(102,'PEDAL ASSEMBLY (MULTIPLE PEDAL)',28.14,1,0),(103,'PITMAN/IDLER ARM',11.5,1,0),(104,'POWER STEER. PRESSURE HOSE',8.94,1,0),(105,'POWER WINDOW SWITCH - DRIVER',14.06,1,0),(106,'PROJECTOR LAMP/BULB',17.9,1,0),(107,'RADIATOR (ALUMINUM)',51.18,1,0),(108,'RADIATOR FAN MOTOR',21.74,1,0),(109,'RADIATOR HOSE',2.54,1,0),(110,'RADIATOR SUPPORT CAP METAL',17.9,1,0),(111,'RADIO AM',3.82,1,0),(112,'RADIO AM/FM DVD PLAYER W/SCREEN',70.38,1,0),(113,'RADIO AMPLIFIER (AFTERMARKET)',37.1,1,0),(114,'RADIO SPEAKER SUBWOOFER',34.54,1,0),(115,'RAINGAURD (EACH)',6.38,1,0),(116,'RELAY / SENSOR ELECTRICAL',3.82,1,0),(117,'ROCKER ARM',1.26,1,0),(118,'SCOOTER ENGINE/TRANS. COMBO',70.38,1,0),(119,'SEAT - CAPTAIN CHAIR',38.38,1,0),(120,'SEAT - POWER',30.7,1,0),(121,'SEAT - WITH AIRBAG',70.38,1,0),(122,'SHIFT BOOT',3.82,1,0),(123,'SHIFT LEVER HANDLE',5.1,1,0),(124,'SHOCK ABSORBER',8.94,1,0),(125,'SMOG PUMP VALVE',8.94,1,0),(126,'SPARE TIRE HOLDER/TIE (TRUNK)',10.22,1,0),(127,'SPEEDOMETER-REGULAR',17.9,1,0),(128,'SPINDLE/KNUCKLE W-HUB',30.7,1,0),(129,'SPRING - COIL',12.78,1,0),(130,'STARTER SOLENOID',5.1,1,0),(131,'STEERING COLUMN-TILT',42.22,1,0),(132,'STEERING GEAR-MANUAL',28.14,1,0),(133,'STEERING RACK - POWER',42.22,1,0),(134,'STEERING WHEEL COVER',3.82,1,0),(135,'STRUT - W/OUT COIL SPRING',34.54,1,0),(136,'SUN VISOR (INTERIOR)',5.1,1,0),(137,'SUPER CHARGER',140.78,1,0),(138,'SWAY/STABALIZER BAR LINK',5.1,1,0),(139,'TAIL LAMP INNER',12.78,1,0),(140,'TAILGATE',62.7,1,0),(141,'THROTTLE BODY ELECTRONIC',70.38,1,0),(142,'TIE ROD END (EACH)',8.94,1,0),(143,'TIMING GEAR',10.22,1,0),(144,'TOOL BOX (METAL)',76.78,1,0),(145,'TOW HOOK (EACH)',5.1,1,0),(146,'TRAILER HITCH-REG. TYPE',16.62,1,0),(147,'TRANS. CROSSMEMBER (STEEL)',21.74,1,0),(148,'TRANSMISSION - FWD/RWD',183.02,1,0),(149,'TRANSMISSION VALVE BODY',48.62,1,0),(150,'TRUNK HATCH WITH GLASS',70.38,1,0),(151,'TRUNK LID',56.3,1,0),(152,'TURN SIGNAL LEVER W/CRUISE',12.78,1,0),(153,'TURN SIGNAL SWITCH ASS. W/ACC',42.22,1,0),(154,'UNDERSHIELD',12.78,1,0),(155,'VALVE COVER-ALUMINUM',17.9,1,0),(156,'VOLTAGE REGULATOR',6.38,1,0),(157,'WASHER RESERVOIR W/PUMP',11.5,1,0),(158,'WHEEL - ALUMINUM (16 INCH LARGER)',31.98,1,0),(159,'WHEEL - STEEL (16 INCH AND LARGER)',26.86,1,0),(160,'WINDOW REGULATOR',15.34,1,0),(161,'WINDSHIELD WIPER MOTOR',21.74,1,0),(162,'WIPER BLADE',2.54,1,0),(163,'WIRING HARNESS',28.14,1,0),(164,'ABS BRAKE UNIT',95.02,2,0),(165,'AC CLUTCH',18.7,2,0),(166,'AC EVAPORATOR',31.66,2,0),(167,'AC RECEIVER/DRYER',11.5,2,0),(168,'AIR BAG (Side/Curtain/Knee)',41.74,2,0),(169,'AIR FILTER',2.86,2,0),(170,'ANTENNA-MANUAL',8.62,2,0),(171,'ANTI FREEZE (PER GALLON)',4.3,2,0),(172,'AUTOMATIC SIDE DOOR OPENER',71.98,2,0),(173,'AXLE ASSEM. FWD TRAILING AXLE (W/DRUMS)',63.34,2,0),(174,'AXLE CARRIER',63.34,2,0),(175,'AXLE SHAFT FWD',35.98,2,0),(176,'BACKING PLATE (W/O ACCES)',10.06,2,0),(177,'BATTERY CABLE',2.86,2,0),(178,'BATTERY TRAY',2.86,2,0),(179,'BELL HOUSING-CLUTCH',28.78,2,0),(180,'BLEND DOOR MOTOR/ACTUATOR',12.94,2,0),(181,'BOAT TRIM SHOCK',31.66,2,0),(182,'BRAKE BOOSTER HYDRAULIC',47.5,2,0),(183,'BRAKE CALIPER BRACKET',11.5,2,0),(184,'BRAKE FLUID RESERVOIR',8.62,2,0),(185,'BRAKE HUB FWD',21.58,2,0),(186,'BRAKE MASTER CYLINDER',18.7,2,0),(187,'BRAKE ROTOR',15.82,2,0),(188,'BRAKE WHEEL CYLINDER',8.62,2,0),(189,'BUMPER END CAP (EACH)',12.94,2,0),(190,'BUMPER REINFORCEMENT (ALUM)',47.5,2,0),(191,'BUMPER/BRUSH GUARD',71.98,2,0),(192,'CAMERA/TV MONITORS',38.86,2,0),(193,'CAMSHAFT HOUSING',18.7,2,0),(194,'CARBURETOR 4 BRL',38.86,2,0),(195,'CARGO TABLE',10.06,2,0),(196,'CHOKE PULL OFF',7.18,2,0),(197,'CLUTCH BEARING',7.18,2,0),(198,'CLUTCH MASTER CYLINDER',17.26,2,0),(199,'COIL - SINGLE FROM PACK',14.38,2,0),(200,'COIL WITH IGNITER',14.38,2,0),(201,'COLD AIR INTAKE',21.58,2,0),(202,'CONSOLE',20.14,2,0),(203,'CONTROL ARM (ALUMINIUM)',38.86,2,0),(204,'CONVERTIBLE TOP',118.06,2,0),(205,'CRANKSHAFT POSITION SENSOR',15.82,2,0),(206,'CUPHOLDER',4.3,2,0),(207,'CYLINDER HEAD-ALUM (W/O CAM)',63.34,2,0),(208,'DASH COMP',70.54,2,0),(209,'DIPSTICK W/TUBE',7.18,2,0),(210,'DISTRIBUTOR CAP ELEC.',20.14,2,0),(211,'DISTRIBUTOR MODULE',21.58,2,0),(212,'DOOR HANDLE INSIDE',7.18,2,0),(213,'DOOR LATCH',12.94,2,0),(214,'DOOR- Powered/Automatic side',95.02,2,0),(215,'DOOR TRIM PANEL(W/O ACCESSORIES)',12.94,2,0),(216,'DRAG LINK-STEERING LINKAGE',20.14,2,0),(217,'E BRAKE HANDLE/PEDAL',18.7,2,0),(218,'ENGINE (ALL)',276.46,2,0),(219,'ENGINE COVER',17.26,2,0),(220,'ENGINE SUPPORT K MEMBER (STEEL)',63.34,2,0),(221,'FAN BELT - SERPENTINE',8.62,2,0),(222,'FAN CLUTCH',15.82,2,0),(223,'FENDER INNER',15.82,2,0),(224,'FLYWHEEL COVER',8.62,2,0),(225,'FRAME ASSEMBLY',316.78,2,0),(226,'FUEL DISTRIBUTOR',38.86,2,0),(227,'FUEL GAUGE (IN DASH)',5.74,2,0),(228,'FUEL INJECTOR RAIL',20.14,2,0),(229,'FUEL PUMP ELEC. IN TANK W/SENDING',34.54,2,0),(230,'FUEL SENDING UNIT',12.94,2,0),(231,'FUSE BOX',17.26,2,0),(232,'GLASS VENT W/O FRAME',15.82,2,0),(233,'GLASS-REAR STATIONARY',31.66,2,0),(234,'GLOVE BOX ASSEMBLY',23.02,2,0),(235,'GRILLE INSERT',11.5,2,0),(236,'HANDICAP HAND CONTROLS',79.18,2,0),(237,'HEAD LAMP COMPOSITE',14.38,2,0),(238,'HEAD LAMP HALOGEN',4.3,2,0),(239,'HEAD LAMP HID BALLAST',14.38,2,0),(240,'HEAD LAMP SWITCH',12.94,2,0),(241,'HEADREST',14.38,2,0),(242,'HEAT SHIELD',11.5,2,0),(243,'HEATER CORE',15.82,2,0),(244,'HEATER VENT',2.86,2,0),(245,'HOOD INSULATION',7.18,2,0),(246,'HOOD PROP',8.62,2,0),(247,'HUB CAP-REGULAR',8.62,2,0),(248,'HYBRID SYNERGY DRIVE UNIT',287.98,2,0),(249,'IDLER PULLEY',11.5,2,0),(250,'INSTRUMENT CLUSTER DIG.',41.74,2,0),(251,'INTAKE MANIFOLD - ALUMINUM',47.5,2,0),(252,'INTAKE MANIFOLD W/THROTTLE BODY',79.18,2,0),(253,'INTERIOR TRIM LENGTH 2\'-3\'',11.5,2,0),(254,'JACK',15.82,2,0),(255,'LICENSE PLATE BRACKET',4.3,2,0),(256,'LUG WRENCH',4.3,2,0),(257,'MAP SENSOR',21.58,2,0),(258,'MIRROR BACK',7.18,2,0),(259,'MIRROR-OUTSIDE ELECTRIC',21.58,2,0),(260,'MOLDINGS - RUBBER (PER INCH)',0.14,2,0),(261,'MOTORS ELECTRICAL (MISC.)',24.46,2,0),(262,'NEUTRAL SAFTEY SWITCH',12.94,2,0),(263,'OIL PAN-ALUMINUM',27.34,2,0),(264,'OXYGEN SENSOR',11.5,2,0),(265,'PINION SHAFT',28.78,2,0),(266,'POWER DOOR LOCK ACTUATOR',10.06,2,0),(267,'POWER STEERING PUMP',24.46,2,0),(268,'POWER WINDOW SWITCH - SINGLE',8.62,2,0),(269,'PULLEY',10.06,2,0),(270,'RADIATOR (BRASS)',79.18,2,0),(271,'RADIATOR FAN MOTOR W/SHROUD',38.86,2,0),(272,'RADIATOR OVERFLOW TANK',10.06,2,0),(273,'RADIATOR SUPPORT CAP PLASTIC',10.06,2,0),(274,'RADIO AM/FM',10.06,2,0),(275,'RADIO AM/FM W/CASSETTE',27.34,2,0),(276,'RADIO AMPLIFIER (FACTORY)',17.26,2,0),(277,'RADIO SPEAKER-AFTER MARKET',14.38,2,0),(278,'REAR DECK COVER',11.5,2,0),(279,'RELAY ASSEMBLY',14.38,2,0),(280,'ROCKER SHAFT ASSEMBLY',21.58,2,0),(281,'SEAT - BENCH',20.14,2,0),(282,'SEAT - CAPTAINS CHAIR',43.18,2,0),(283,'SEAT - TRACK W/MOTOR',31.66,2,0),(284,'SEAT BASE/BACK',18.7,2,0),(285,'SHIFT COLLAR',17.26,2,0),(286,'SHIFT LINKAGE',18.7,2,0),(287,'SHOCK ABSORBER-AIR',31.66,2,0),(288,'SPARE TIRE CARRIER',20.14,2,0),(289,'SPARK PLUG WIRES (EACH)',1.42,2,0),(290,'SPINDLE/KNUCKLE',27.34,2,0),(291,'SPOILER/AIR DAM',20.14,2,0),(292,'SPRING - LEAF',23.02,2,0),(293,'STEERING COLUMN- WITH AIR BAG',95.02,2,0),(294,'STEERING GEAR - ELECTRIC',57.58,2,0),(295,'STEERING RACK - ELECTRIC',79.18,2,0),(296,'STEERING SHAFT- INTERMEDIATE',17.26,2,0),(297,'STRUT - AIR RIDE TYPE',63.34,2,0),(298,'STRUT - W/SPINDLE',54.7,2,0),(299,'SUNROOF / \"T-TOP\"\"\"',38.86,2,0),(300,'SUSPENSION AIR BAG',23.02,2,0),(301,'TACHOMETER',12.94,2,0),(302,'TAIL LAMP CENTER REFLECTOR',31.66,2,0),(303,'THERMOSTAT HOUSING',8.62,2,0),(304,'THROTTLE BODY W/INTAKE ATTACHED',79.18,2,0),(305,'TIMING CHAIN',5.74,2,0),(306,'TIRE (15 INCH AND SMALLER)',34.54,2,0),(307,'TOOL BOX (PLASTIC)',57.58,2,0),(308,'TRAILER HITCH BALL',4.3,2,0),(309,'TRAILING AXLE FWD W/DRUMS',63.34,2,0),(310,'TRANSFER CASE',118.06,2,0),(311,'TRANSMISSION COMPUTER',47.5,2,0),(312,'TRIM RING (EACH)',5.74,2,0),(313,'TRUNK LATCH',14.38,2,0),(314,'TURBO CHARGER',79.18,2,0),(315,'TURN SIGNAL LEVER W/O CRUISE',8.62,2,0),(316,'TURN SIGNAL SWITCH W/HEADLAMP',38.86,2,0),(317,'VACUUM LOCK PUMP',30.22,2,0),(318,'VALVE COVER-COMPOSITE',15.82,2,0),(319,'WASHER PUMP',8.62,2,0),(320,'WATER PUMP',12.94,2,0),(321,'WHEEL - SPARE W/DONUT TIRE',17.26,2,0),(322,'WHEEL CENTER CAP',5.74,2,0),(323,'WINDOW REGULATOR W/MOTOR',21.58,2,0),(324,'WINDSHIELD WIPER TRANS. (PER SIDE)',11.5,2,0),(325,'WIPER SWITCH ONLY',10.06,2,0),(326,'YOKE',20.14,2,0),(327,'ABS CONTROL MODULE',52.78,3,0),(328,'AC COMPRESSOR',52.78,3,0),(329,'AC HOSE DOUBLE',27.18,3,0),(330,'ACCELERATOR PEDAL',20.78,3,0),(331,'AIR BAG IMPACT SENSOR',22.38,3,0),(332,'AIR SHOCK PUMP',35.18,3,0),(333,'ANTENNA-MAST',4.78,3,0),(334,'ARMREST',9.58,3,0),(335,'AXLE ASSEM. 4X4 FRONT (W/O DRUMS)',175.98,3,0),(336,'AXLE ASSEM. RWD (W/O DRUMS)',87.98,3,0),(337,'AXLE CARRIER (GEARS ONLY)',52.78,3,0),(338,'AXLE SHAFT RWD',30.38,3,0),(339,'BALL JOINT',4.78,3,0),(340,'BATTERY HOLD DOWN',3.18,3,0),(341,'BED LINER',70.38,3,0),(342,'BELT TENSIONER W/BRACKET',22.38,3,0),(343,'BLOWER MOTOR RESISTOR',14.38,3,0),(344,'BRACKET (ENGINE)',11.18,3,0),(345,'BRAKE CALIPER (DUAL PISTON)',20.78,3,0),(346,'BRAKE DRUM',17.58,3,0),(347,'BRAKE HOSE/LINE',12.78,3,0),(348,'BRAKE HUB RWD',15.98,3,0),(349,'BRAKE PEDAL',20.78,3,0),(350,'BRAKE ROTOR (8 LUG)',39.98,3,0),(351,'BUMPER (W/O ACCESSORIES)',70.38,3,0),(352,'BUMPER FILLER',17.58,3,0),(353,'BUMPER REINFORCEMENT (STEEL)',35.18,3,0),(354,'CAB (BARE)',318.4,3,0),(355,'CAMPER SHELL',87.98,3,0),(356,'CAMSHAFT POSITION SENSOR',17.58,3,0),(357,'CARBURETOR ELECTRONIC',52.78,3,0),(358,'CARPET (PER SECTION)',25.58,3,0),(359,'CLOCK',9.58,3,0),(360,'CLUTCH DISC',15.98,3,0),(361,'CLUTCH PRESSURE PLATE',19.18,3,0),(362,'COIL PACK ELECTRONIC',44.78,3,0),(363,'COILOVER AFTERMARKET',73.58,3,0),(364,'COMPUTER-ECM',52.78,3,0),(365,'CONSOLE COVER',9.58,3,0),(366,'CONTROL ARM (STEEL)',30.38,3,0),(367,'COWL PANEL SCREEN',12.78,3,0),(368,'CROSSOVER PIPE',22.38,3,0),(369,'CYLINDER HEAD ALUM-DUAL CAM',105.58,3,0),(370,'CYLINDER HEAD-CAST IRON (W/CAM)',70.38,3,0),(371,'DASH PAD',20.78,3,0),(372,'DISTRIBUTOR (POINT TYPE)',25.58,3,0),(373,'DISTRIBUTOR ELECTRONIC',43.18,3,0),(374,'DIVIDER (VAN)',55.98,3,0),(375,'DOOR HANDLE OUTSIDE',7.98,3,0),(376,'DOOR LATCH W/POWER LOCK',25.58,3,0),(377,'DOOR SHELL {no glass, motors, hinges}',35.18,3,0),(378,'DOOR w/MANUAL WINDOW',87.98,3,0),(379,'DRIVE SHAFT (PER SECTION)',25.58,3,0),(380,'EGR PRESSURE FEEDBACK SENSOR',15.98,3,0),(381,'ENGINE BLOCK (SHORT BLOCK)',105.58,3,0),(382,'ENGINE COVER (DOG HOUSE)',27.18,3,0),(383,'EXHAUST MANIFOLD',25.58,3,0),(384,'FAN BELT - V TYPE',3.18,3,0),(385,'FENDER (W/O ACCESSORIES)',47.98,3,0),(386,'FLOOR MATS',3.18,3,0),(387,'FLYWHEEL STANDARD',30.38,3,0),(388,'FRONT END (W/O COOLERS)',526.38,3,0),(389,'FUEL FILLER DOOR',9.58,3,0),(390,'FUEL INJECTION PUMP',87.98,3,0),(391,'FUEL PRESSURE REGULATOR',14.38,3,0),(392,'FUEL PUMP ELECTRIC',25.58,3,0),(393,'FUEL TANK (UNPROCESSED)',60.78,3,0),(394,'FUSE BOX COVER',4.78,3,0),(395,'GLASS-DOOR',35.18,3,0),(396,'GLASS-SIDE (VAN)',35.18,3,0),(397,'GLOVE BOX DOOR',7.98,3,0),(398,'GRILLE SHELL',55.98,3,0),(399,'HARMONIC BALANCER',23.98,3,0),(400,'HEAD LAMP COVER (W/O PARK)',14.38,3,0),(401,'HEAD LAMP HID (BULB)',52.78,3,0),(402,'HEAD LAMP MOUNT BRACKET',11.18,3,0),(403,'HEADER PANEL (NO ACCESS.)',63.98,3,0),(404,'HEADREST ELECTRIC',28.78,3,0),(405,'HEATER CONTROL - ELECTRONIC',35.18,3,0),(406,'HEATER HOUSING',22.38,3,0),(407,'HOOD (NO ACCESSORIES)',70.38,3,0),(408,'HOOD LATCH',14.38,3,0),(409,'HOOD W/GRILL',105.58,3,0),(410,'HUB CAP-WIRE',12.78,3,0),(411,'I - BEAM FRONT SUSPENSION',60.78,3,0),(412,'IGNITION SWITCH',17.58,3,0),(413,'INSTRUMENT CLUSTER REG.',27.18,3,0),(414,'INTAKE MANIFOLD - CAST IRON',31.98,3,0),(415,'INTERCOOLER',60.78,3,0),(416,'INTERIOR TRIM LENGTH OVER 3\'',15.98,3,0),(417,'JUMPER CABLES',11.18,3,0),(418,'LIFT GATE (BOX TRUCK)',0,3,0),(419,'LUG WRENCH - 4 WAY',9.58,3,0),(420,'MARKER LIGHT',12.78,3,0),(421,'MIRROR-INSIDE',9.58,3,0),(422,'MIRROR-OUTSIDE REMOTE',17.58,3,0),(423,'MOLDINGS - STEEL (PER INCH)',0.16,3,0),(424,'MUDGAURD (EACH)',6.38,3,0),(425,'OIL CAP',4.78,3,0),(426,'OIL PAN-STEEL',17.58,3,0),(427,'PARKING LAMP',15.98,3,0),(428,'PISTON (EACH)',11.18,3,0),(429,'POWER SEAT BELT TRACK',43.18,3,0),(430,'POWER STEERING RESERVOIR',9.58,3,0),(431,'POWER WINDOW SWITCH W/MIRROR',22.38,3,0),(432,'QUARTER PANEL CENER CUT',123.18,3,0),(433,'RADIATOR DUAL FAN W/ SHROUD',52.78,3,0),(434,'RADIATOR FAN SHROUD',11.18,3,0),(435,'RADIATOR SUPPORT',35.18,3,0),(436,'RADIATOR/WASHER TANK COMBO',14.38,3,0),(437,'RADIO AM/FM DVD PLAYER W/O SCREEN',43.18,3,0),(438,'RADIO AM/FM W/CD PLAYER',43.18,3,0),(439,'RADIO SPEAKER (FACTORY)',9.58,3,0),(440,'RADIO W/ HEATER CONTROL',57.58,3,0),(441,'REAR END CLIP',439.98,3,0),(442,'RING GEAR',31.98,3,0),(443,'RUNNING BOARDS',25.58,3,0),(444,'SEAT - BUCKET (EACH)',25.58,3,0),(445,'SEAT - COVER',4.78,3,0),(446,'SEAT - TRACK W/O MOTOR',17.58,3,0),(447,'SEAT BELT (PER PERSON)',17.58,3,0),(448,'SHIFT KNOB',4.78,3,0),(449,'SHIFTER ASSEMBLY (FLOOR)',35.18,3,0),(450,'SMOG PUMP',23.98,3,0),(451,'SPARE TIRE COVER',15.98,3,0),(452,'SPEEDOMETER-DIGITAL',38.38,3,0),(453,'SPINDLE/KNUCKLE W-ABS HUB',60.78,3,0),(454,'SPRING - AIR BAG',35.18,3,0),(455,'STARTER',47.98,3,0),(456,'STEERING COLUMN-REGULAR',35.18,3,0),(457,'STEERING GEAR - POWER',52.78,3,0),(458,'STEERING RACK - MANUAL',35.18,3,0),(459,'STEERING WHEEL',20.78,3,0),(460,'STRUT - W/COIL SPRING',60.78,3,0),(461,'STRUT MOUNT',9.58,3,0),(462,'SUNROOF SHADE',15.98,3,0),(463,'SWAY/STABALIZER BAR',22.38,3,0),(464,'TAIL LAMP',31.98,3,0),(465,'TAIL PIPE',9.58,3,0),(466,'THROTTLE BODY',54.38,3,0),(467,'THROTTLE POSITION SENSOR',22.38,3,0),(468,'TIMING CHAIN COVER',14.38,3,0),(469,'TIRE (16 INCH AND LARGER)',38.38,3,0),(470,'TORQUE CONVERTER',22.38,3,0),(471,'TRAILER HITCH-REESE TYPE',43.18,3,0),(472,'TRANS. CROSSMEMBER (ALUMINUM)',39.98,3,0),(473,'TRANSMISSION - 4X4',263.98,3,0),(474,'TRANSMISSION SOLENOID PACK',43.18,3,0),(475,'TRUCK BED W/OUT TAILGTE',319.98,3,0),(476,'TRUNK LATCH W/ MOTOR',27.18,3,0),(477,'TURBO INTERCOOLER',60.78,3,0),(478,'TURN SIGNAL SWITCH',15.98,3,0),(479,'TURN SIGNAL SWITCH W/WIPERS',25.58,3,0),(480,'VACUUM TREE (EACH)',3.18,3,0),(481,'VALVE COVER-STEEL',9.58,3,0),(482,'WASHER RESERVOIR W/O PUMP',9.58,3,0),(483,'WHEEL - ALUMINUM',35.18,3,0),(484,'WHEEL - STEEL',17.58,3,0),(485,'WINDOW CRANK',7.98,3,0),(486,'WINDSHIELD',78.38,3,0),(487,'WIPER ARM',9.58,3,0),(488,'WIPER TRANS LINK',3.18,3,0),(489,'4X4 ACTUATOR/TRANS CASE MOTOR',47.97,4,0),(490,'ABS SPEED SENSOR',21.57,4,0),(491,'AC CONDENSOR',64.77,4,0),(492,'AC HOSE SINGLE',31.17,4,0),(493,'AIR BAG (Front)',105.57,4,0),(494,'AIR CLEANER (AIR BOX)',21.57,4,0),(495,'ALTERNATOR',52.77,4,0),(496,'ANTENNA-POWER',38.37,4,0),(497,'ASH TRAY',7.17,4,0),(498,'AXLE ASSEM. 4X4 FRONT COMPLETE',343.17,4,0),(499,'AXLE ASSEM. RWD INDEPENDENT',266.37,4,0),(500,'AXLE SHAFT 4X4 (FRONT)',79.17,4,0),(501,'BACKING PLATE (W/ACCESS.)',40.77,4,0),(502,'BATTERY',79.17,4,0),(503,'BATTERY TERMINAL (PAIR)',7.17,4,0),(504,'BED MAT',52.77,4,0),(505,'BELT TENSIONER W/O BRACKET',26.37,4,0),(506,'BOAT LOWER UNIT',300,4,0),(507,'BRAKE BOOSTER',40.77,4,0),(508,'BRAKE CALIPER (SINGLE PISTON)',28.77,4,0),(509,'BRAKE DRUM (WITH HUB)',45.57,4,0),(510,'BRAKE HUB 4X4',64.77,4,0),(511,'BRAKE HUB WITH ABS',79.17,4,0),(512,'BRAKE PROPORTIONING VALVE',19.17,4,0),(513,'BRAKE SHOES/BRAKE PAD',2.37,4,0),(514,'BUMPER COVER',71.97,4,0),(515,'BUMPER GUARD',14.37,4,0),(516,'BUMPER SHOCK/BRACKET (EACH)',26.37,4,0),(517,'CABLES',16.77,4,0),(518,'CAMSHAFT',40.77,4,0),(519,'CARBURETOR 1 OR 2 BRL',52.77,4,0),(520,'CARGO COVER',21.57,4,0),(521,'CHARCOAL CANISTER',23.97,4,0),(522,'CLOCK SPRING (AIR BAG)',38.37,4,0),(523,'CLUTCH FORK',16.77,4,0),(524,'CLUTCH SLAVE CYLINDER',19.17,4,0),(525,'COIL STANDARD',23.97,4,0),(526,'COILOVER SLEEVE',23.97,4,0),(527,'CONNECTOR/BULB SOCKET UP TO 10',4.77,4,0),(528,'CONSOLE UPPER',31.17,4,0),(529,'CONTROL MODULE - SMALL',45.57,4,0),(530,'CRANKSHAFT',64.77,4,0),(531,'CRUISE CONTROL',35.97,4,0),(532,'CYLINDER HEAD-ALUM (W/CAM)',131.97,4,0),(533,'CYLINDER HEAD-CAST IRON (W/O CAM)',79.17,4,0),(534,'DIPSTICK',7.17,4,0),(535,'DISTRIBUTOR CAP',11.97,4,0),(536,'DISTRIBUTOR ELECTRONIC w/MODULE',79.17,4,0),(537,'DOMELIGHT',16.77,4,0),(538,'DOOR HINGE (EACH)',14.37,4,0),(539,'DOOR LOCK CYLINDER',4.77,4,0),(540,'DOOR SWING',9.57,4,0),(541,'DOOR w/POWER WINDOW',158.37,4,0),(542,'DRIVE SHAFT 4X4 FRONT',105.57,4,0),(543,'EGR VALVE',21.57,4,0),(544,'ENGINE BLOCK BARE (NO INTERNALS)',64.77,4,0),(545,'ENGINE SUPPORT K MEMBER (ALUM)',131.97,4,0),(546,'EXHAUST PIPE',14.37,4,0),(547,'FAN BLADE',14.37,4,0),(548,'FENDER EXTENSION',19.17,4,0),(549,'FLYWHEEL AUTOMATIC',38.37,4,0),(550,'FOG LAMP',26.37,4,0),(551,'FUEL CAP',7.17,4,0),(552,'FUEL FILLER NECK',19.17,4,0),(553,'FUEL INJECTOR (EACH)',14.37,4,0),(554,'FUEL PUMP ELEC. IN TANK',52.77,4,0),(555,'FUEL PUMP REGULAR',21.57,4,0),(556,'FUEL TANK SWITCHING UNIT',52.77,4,0),(557,'GAUGES (EACH)',11.97,4,0),(558,'GLASS-REAR SLIDER',64.77,4,0),(559,'GLASS-VENT W/FRAME',38.37,4,0),(560,'GRILLE (W/O ACCESSORIES)',69.57,4,0),(561,'GRILLE W/PARK LAMPS',79.17,4,0),(562,'HATCH SHOCK (EACH)',14.37,4,0),(563,'HEAD LAMP COVER W/PARK',33.57,4,0),(564,'HEAD LAMP HID ASSEMBLY',131.97,4,0),(565,'HEAD LAMP REGULAR',4.77,4,0),(566,'HEADLINER',26.37,4,0),(567,'HEAT RISER',16.77,4,0),(568,'HEATER CONTROL-MANUAL',26.37,4,0),(569,'HEATER MOTOR',40.77,4,0),(570,'HOOD HINGE (EACH)',19.17,4,0),(571,'HOOD ORNAMENT',9.57,4,0),(572,'HORN',11.97,4,0),(573,'HYBRID BATTERY',1199.97,4,0),(574,'IDLE AIR CONTROL VALVE',21.57,4,0),(575,'INFO CENTER',28.77,4,0),(576,'INTAKE BOOT',23.97,4,0),(577,'INTAKE MANIFOLD - COMPOSITE',57.57,4,0),(578,'INTERIOR TRIM LENGTH 1\'-2\'',9.57,4,0),(579,'INTERIOR TRIM LENGTH UNDER 1\'',4.77,4,0),(580,'LADDER RACK',105.57,4,0),(581,'LIGHT BAR',83.97,4,0),(582,'LUGGAGE RACK',28.77,4,0),(583,'MASS AIR FLOW SENSOR',79.17,4,0),(584,'MIRROR-INSIDE ELECTRIC',23.97,4,0),(585,'MIRROR-OUTSIDE STD.',21.57,4,0),(586,'MOTOR MOUNT (EACH)',21.57,4,0),(587,'MUFFLER',33.57,4,0),(588,'OIL COOLER',26.37,4,0),(589,'OIL PUMP',19.17,4,0),(590,'PEDAL ASSEMBLY (MULTIPLE PEDAL)',52.77,4,0),(591,'PITMAN/IDLER ARM',21.57,4,0),(592,'POWER STEER. PRESSURE HOSE',16.77,4,0),(593,'POWER WINDOW SWITCH - DRIVER',26.37,4,0),(594,'PROJECTOR LAMP/BULB',33.57,4,0),(595,'RADIATOR (ALUMINUM)',95.97,4,0),(596,'RADIATOR FAN MOTOR',40.77,4,0),(597,'RADIATOR HOSE',4.77,4,0),(598,'RADIATOR SUPPORT CAP METAL',33.57,4,0),(599,'RADIO AM',7.17,4,0),(600,'RADIO AM/FM DVD PLAYER W/SCREEN',131.97,4,0),(601,'RADIO AMPLIFIER (AFTERMARKET)',69.57,4,0),(602,'RADIO SPEAKER SUBWOOFER',64.77,4,0),(603,'RAINGAURD (EACH)',11.97,4,0),(604,'RELAY / SENSOR ELECTRICAL',7.17,4,0),(605,'ROCKER ARM',2.37,4,0),(606,'SCOOTER ENGINE/TRANS. COMBO',131.97,4,0),(607,'SEAT - CAPTAIN CHAIR',71.97,4,0),(608,'SEAT - POWER',57.57,4,0),(609,'SEAT - WITH AIRBAG',131.97,4,0),(610,'SHIFT BOOT',7.17,4,0),(611,'SHIFT LEVER HANDLE',9.57,4,0),(612,'SHOCK ABSORBER',16.77,4,0),(613,'SMOG PUMP VALVE',16.77,4,0),(614,'SPARE TIRE HOLDER/TIE (TRUNK)',19.17,4,0),(615,'SPEEDOMETER-REGULAR',33.57,4,0),(616,'SPINDLE/KNUCKLE W-HUB',57.57,4,0),(617,'SPRING - COIL',23.97,4,0),(618,'STARTER SOLENOID',9.57,4,0),(619,'STEERING COLUMN-TILT',79.17,4,0),(620,'STEERING GEAR-MANUAL',52.77,4,0),(621,'STEERING RACK - POWER',79.17,4,0),(622,'STEERING WHEEL COVER',7.17,4,0),(623,'STRUT - W/OUT COIL SPRING',64.77,4,0),(624,'SUN VISOR (INTERIOR)',9.57,4,0),(625,'SUPER CHARGER',263.97,4,0),(626,'SWAY/STABALIZER BAR LINK',9.57,4,0),(627,'TAIL LAMP INNER',23.97,4,0),(628,'TAILGATE',117.57,4,0),(629,'THROTTLE BODY ELECTRONIC',131.97,4,0),(630,'TIE ROD END (EACH)',16.77,4,0),(631,'TIMING GEAR',19.17,4,0),(632,'TOOL BOX (METAL)',143.97,4,0),(633,'TOW HOOK (EACH)',9.57,4,0),(634,'TRAILER HITCH-REG. TYPE',31.17,4,0),(635,'TRANS. CROSSMEMBER (STEEL)',40.77,4,0),(636,'TRANSMISSION - FWD/RWD',343.17,4,0),(637,'TRANSMISSION VALVE BODY',91.17,4,0),(638,'TRUNK HATCH WITH GLASS',131.97,4,0),(639,'TRUNK LID',105.57,4,0),(640,'TURN SIGNAL LEVER W/CRUISE',23.97,4,0),(641,'TURN SIGNAL SWITCH ASS. W/ACC',79.17,4,0),(642,'UNDERSHIELD',23.97,4,0),(643,'VALVE COVER-ALUMINUM',33.57,4,0),(644,'VOLTAGE REGULATOR',11.97,4,0),(645,'WASHER RESERVOIR W/PUMP',21.57,4,0),(646,'WHEEL - ALUMINUM (16 INCH LARGER)',59.97,4,0),(647,'WHEEL - STEEL (16 INCH AND LARGER)',50.37,4,0),(648,'WINDOW REGULATOR',28.77,4,0),(649,'WINDSHIELD WIPER MOTOR',40.77,4,0),(650,'WIPER BLADE',4.77,4,0),(651,'WIRING HARNESS',52.77,4,0),(652,'ABS BRAKE UNIT',211.16,5,0),(653,'AC CLUTCH',41.56,5,0),(654,'AC EVAPORATOR',70.36,5,0),(655,'AC RECEIVER/DRYER',25.56,5,0),(656,'AIR BAG (Side/Curtain/Knee)',92.76,5,0),(657,'AIR FILTER',6.36,5,0),(658,'ANTENNA-MANUAL',19.16,5,0),(659,'ANTI FREEZE (PER GALLON)',9.56,5,0),(660,'AUTOMATIC SIDE DOOR OPENER',159.96,5,0),(661,'AXLE ASSEM. FWD TRAILING AXLE (W/DRUMS)',140.76,5,0),(662,'AXLE CARRIER',140.76,5,0),(663,'AXLE SHAFT FWD',79.96,5,0),(664,'BACKING PLATE (W/O ACCES)',22.36,5,0),(665,'BATTERY CABLE',6.36,5,0),(666,'BATTERY TRAY',6.36,5,0),(667,'BELL HOUSING-CLUTCH',63.96,5,0),(668,'BLEND DOOR MOTOR/ACTUATOR',28.76,5,0),(669,'BOAT TRIM SHOCK',70.36,5,0),(670,'BRAKE BOOSTER HYDRAULIC',105.56,5,0),(671,'BRAKE CALIPER BRACKET',25.56,5,0),(672,'BRAKE FLUID RESERVOIR',19.16,5,0),(673,'BRAKE HUB FWD',47.96,5,0),(674,'BRAKE MASTER CYLINDER',41.56,5,0),(675,'BRAKE ROTOR',35.16,5,0),(676,'BRAKE WHEEL CYLINDER',19.16,5,0),(677,'BUMPER END CAP (EACH)',28.76,5,0),(678,'BUMPER REINFORCEMENT (ALUM)',105.56,5,0),(679,'BUMPER/BRUSH GUARD',159.96,5,0),(680,'CAMERA/TV MONITORS',86.36,5,0),(681,'CAMSHAFT HOUSING',41.56,5,0),(682,'CARBURETOR 4 BRL',86.36,5,0),(683,'CARGO TABLE',22.36,5,0),(684,'CHOKE PULL OFF',15.96,5,0),(685,'CLUTCH BEARING',15.96,5,0),(686,'CLUTCH MASTER CYLINDER',38.36,5,0),(687,'COIL - SINGLE FROM PACK',31.96,5,0),(688,'COIL WITH IGNITER',31.96,5,0),(689,'COLD AIR INTAKE',47.96,5,0),(690,'CONSOLE',44.76,5,0),(691,'CONTROL ARM (ALUMINIUM)',86.36,5,0),(692,'CONVERTIBLE TOP',262.36,5,0),(693,'CRANKSHAFT POSITION SENSOR',35.16,5,0),(694,'CUPHOLDER',9.56,5,0),(695,'CYLINDER HEAD-ALUM (W/O CAM)',140.76,5,0),(696,'DASH COMP',156.76,5,0),(697,'DIPSTICK W/TUBE',15.96,5,0),(698,'DISTRIBUTOR CAP ELEC.',44.76,5,0),(699,'DISTRIBUTOR MODULE',47.96,5,0),(700,'DOOR HANDLE INSIDE',15.96,5,0),(701,'DOOR LATCH',28.76,5,0),(702,'DOOR- Powered/Automatic side',211.16,5,0),(703,'DOOR TRIM PANEL(W/O ACCESSORIES)',28.76,5,0),(704,'DRAG LINK-STEERING LINKAGE',44.76,5,0),(705,'E BRAKE HANDLE/PEDAL',41.56,5,0),(706,'ENGINE (ALL)',614.36,5,0),(707,'ENGINE COVER',38.36,5,0),(708,'ENGINE SUPPORT K MEMBER (STEEL)',140.76,5,0),(709,'FAN BELT - SERPENTINE',19.16,5,0),(710,'FAN CLUTCH',35.16,5,0),(711,'FENDER INNER',35.16,5,0),(712,'FLYWHEEL COVER',19.16,5,0),(713,'FRAME ASSEMBLY',703.96,5,0),(714,'FUEL DISTRIBUTOR',86.36,5,0),(715,'FUEL GAUGE (IN DASH)',12.76,5,0),(716,'FUEL INJECTOR RAIL',44.76,5,0),(717,'FUEL PUMP ELEC. IN TANK W/SENDING',76.76,5,0),(718,'FUEL SENDING UNIT',28.76,5,0),(719,'FUSE BOX',38.36,5,0),(720,'GLASS VENT W/O FRAME',35.16,5,0),(721,'GLASS-REAR STATIONARY',70.36,5,0),(722,'GLOVE BOX ASSEMBLY',51.16,5,0),(723,'GRILLE INSERT',25.56,5,0),(724,'HANDICAP HAND CONTROLS',175.96,5,0),(725,'HEAD LAMP COMPOSITE',31.96,5,0),(726,'HEAD LAMP HALOGEN',9.56,5,0),(727,'HEAD LAMP HID BALLAST',31.96,5,0),(728,'HEAD LAMP SWITCH',28.76,5,0),(729,'HEADREST',31.96,5,0),(730,'HEAT SHIELD',25.56,5,0),(731,'HEATER CORE',35.16,5,0),(732,'HEATER VENT',6.36,5,0),(733,'HOOD INSULATION',15.96,5,0),(734,'HOOD PROP',19.16,5,0),(735,'HUB CAP-REGULAR',19.16,5,0),(736,'HYBRID SYNERGY DRIVE UNIT',639.96,5,0),(737,'IDLER PULLEY',25.56,5,0),(738,'INSTRUMENT CLUSTER DIG.',92.76,5,0),(739,'INTAKE MANIFOLD - ALUMINUM',105.56,5,0),(740,'INTAKE MANIFOLD W/THROTTLE BODY',175.96,5,0),(741,'INTERIOR TRIM LENGTH 2\'-3\'',25.56,5,0),(742,'JACK',35.16,5,0),(743,'LICENSE PLATE BRACKET',9.56,5,0),(744,'LUG WRENCH',9.56,5,0),(745,'MAP SENSOR',47.96,5,0),(746,'MIRROR BACK',15.96,5,0),(747,'MIRROR-OUTSIDE ELECTRIC',47.96,5,0),(748,'MOLDINGS - RUBBER (PER INCH)',0.32,5,0),(749,'MOTORS ELECTRICAL (MISC.)',54.36,5,0),(750,'NEUTRAL SAFTEY SWITCH',28.76,5,0),(751,'OIL PAN-ALUMINUM',60.76,5,0),(752,'OXYGEN SENSOR',25.56,5,0),(753,'PINION SHAFT',63.96,5,0),(754,'POWER DOOR LOCK ACTUATOR',22.36,5,0),(755,'POWER STEERING PUMP',54.36,5,0),(756,'POWER WINDOW SWITCH - SINGLE',19.16,5,0),(757,'PULLEY',22.36,5,0),(758,'RADIATOR (BRASS)',175.96,5,0),(759,'RADIATOR FAN MOTOR W/SHROUD',86.36,5,0),(760,'RADIATOR OVERFLOW TANK',22.36,5,0),(761,'RADIATOR SUPPORT CAP PLASTIC',22.36,5,0),(762,'RADIO AM/FM',22.36,5,0),(763,'RADIO AM/FM W/CASSETTE',60.76,5,0),(764,'RADIO AMPLIFIER (FACTORY)',38.36,5,0),(765,'RADIO SPEAKER-AFTER MARKET',31.96,5,0),(766,'REAR DECK COVER',25.56,5,0),(767,'RELAY ASSEMBLY',31.96,5,0),(768,'ROCKER SHAFT ASSEMBLY',47.96,5,0),(769,'SEAT - BENCH',44.76,5,0),(770,'SEAT - CAPTAINS CHAIR',95.96,5,0),(771,'SEAT - TRACK W/MOTOR',70.36,5,0),(772,'SEAT BASE/BACK',41.56,5,0),(773,'SHIFT COLLAR',38.36,5,0),(774,'SHIFT LINKAGE',41.56,5,0),(775,'SHOCK ABSORBER-AIR',70.36,5,0),(776,'SPARE TIRE CARRIER',44.76,5,0),(777,'SPARK PLUG WIRES (EACH)',3.16,5,0),(778,'SPINDLE/KNUCKLE',60.76,5,0),(779,'SPOILER/AIR DAM',44.76,5,0),(780,'SPRING - LEAF',51.16,5,0),(781,'STEERING COLUMN- WITH AIR BAG',211.16,5,0),(782,'STEERING GEAR - ELECTRIC',127.96,5,0),(783,'STEERING RACK - ELECTRIC',175.96,5,0),(784,'STEERING SHAFT- INTERMEDIATE',38.36,5,0),(785,'STRUT - AIR RIDE TYPE',140.76,5,0),(786,'STRUT - W/SPINDLE',121.56,5,0),(787,'SUNROOF / \"T-TOP\"\"\"',86.36,5,0),(788,'SUSPENSION AIR BAG',51.16,5,0),(789,'TACHOMETER',28.76,5,0),(790,'TAIL LAMP CENTER REFLECTOR',70.36,5,0),(791,'THERMOSTAT HOUSING',19.16,5,0),(792,'THROTTLE BODY W/INTAKE ATTACHED',175.96,5,0),(793,'TIMING CHAIN',12.76,5,0),(794,'TIRE (15 INCH AND SMALLER)',76.76,5,0),(795,'TOOL BOX (PLASTIC)',127.96,5,0),(796,'TRAILER HITCH BALL',9.56,5,0),(797,'TRAILING AXLE FWD W/DRUMS',140.76,5,0),(798,'TRANSFER CASE',262.36,5,0),(799,'TRANSMISSION COMPUTER',105.56,5,0),(800,'TRIM RING (EACH)',12.76,5,0),(801,'TRUNK LATCH',31.96,5,0),(802,'TURBO CHARGER',175.96,5,0),(803,'TURN SIGNAL LEVER W/O CRUISE',19.16,5,0),(804,'TURN SIGNAL SWITCH W/HEADLAMP',86.36,5,0),(805,'VACUUM LOCK PUMP',67.16,5,0),(806,'VALVE COVER-COMPOSITE',35.16,5,0),(807,'WASHER PUMP',19.16,5,0),(808,'WATER PUMP',28.76,5,0),(809,'WHEEL - SPARE W/DONUT TIRE',38.36,5,0),(810,'WHEEL CENTER CAP',12.76,5,0),(811,'WINDOW REGULATOR W/MOTOR',47.96,5,0),(812,'WINDSHIELD WIPER TRANS. (PER SIDE)',25.56,5,0),(813,'WIPER SWITCH ONLY',22.36,5,0),(814,'YOKE',44.76,5,0),(815,'ABS CONTROL MODULE',158.35,6,0),(816,'AC COMPRESSOR',158.35,6,0),(817,'AC HOSE DOUBLE',81.55,6,0),(818,'ACCELERATOR PEDAL',62.35,6,0),(819,'AIR BAG IMPACT SENSOR',67.15,6,0),(820,'AIR SHOCK PUMP',105.55,6,0),(821,'ANTENNA-MAST',14.35,6,0),(822,'ARMREST',28.75,6,0),(823,'AXLE ASSEM. 4X4 FRONT (W/O DRUMS)',527.95,6,0),(824,'AXLE ASSEM. RWD (W/O DRUMS)',263.95,6,0),(825,'AXLE CARRIER (GEARS ONLY)',158.35,6,0),(826,'AXLE SHAFT RWD',91.15,6,0),(827,'BALL JOINT',14.35,6,0),(828,'BATTERY HOLD DOWN',9.55,6,0),(829,'BED LINER',211.15,6,0),(830,'BELT TENSIONER W/BRACKET',67.15,6,0),(831,'BLOWER MOTOR RESISTOR',43.15,6,0),(832,'BRACKET (ENGINE)',33.55,6,0),(833,'BRAKE CALIPER (DUAL PISTON)',62.35,6,0),(834,'BRAKE DRUM',52.75,6,0),(835,'BRAKE HOSE/LINE',38.35,6,0),(836,'BRAKE HUB RWD',47.95,6,0),(837,'BRAKE PEDAL',62.35,6,0),(838,'BRAKE ROTOR (8 LUG)',119.95,6,0),(839,'BUMPER (W/O ACCESSORIES)',211.15,6,0),(840,'BUMPER FILLER',52.75,6,0),(841,'BUMPER REINFORCEMENT (STEEL)',105.55,6,0),(842,'CAB (BARE)',955.2,6,0),(843,'CAMPER SHELL',263.95,6,0),(844,'CAMSHAFT POSITION SENSOR',52.75,6,0),(845,'CARBURETOR ELECTRONIC',158.35,6,0),(846,'CARPET (PER SECTION)',76.75,6,0),(847,'CLOCK',28.75,6,0),(848,'CLUTCH DISC',47.95,6,0),(849,'CLUTCH PRESSURE PLATE',57.55,6,0),(850,'COIL PACK ELECTRONIC',134.35,6,0),(851,'COILOVER AFTERMARKET',220.75,6,0),(852,'COMPUTER-ECM',158.35,6,0),(853,'CONSOLE COVER',28.75,6,0),(854,'CONTROL ARM (STEEL)',91.15,6,0),(855,'COWL PANEL SCREEN',38.35,6,0),(856,'CROSSOVER PIPE',67.15,6,0),(857,'CYLINDER HEAD ALUM-DUAL CAM',316.75,6,0),(858,'CYLINDER HEAD-CAST IRON (W/CAM)',211.15,6,0),(859,'DASH PAD',62.35,6,0),(860,'DISTRIBUTOR (POINT TYPE)',76.75,6,0),(861,'DISTRIBUTOR ELECTRONIC',129.55,6,0),(862,'DIVIDER (VAN)',167.95,6,0),(863,'DOOR HANDLE OUTSIDE',23.95,6,0),(864,'DOOR LATCH W/POWER LOCK',76.75,6,0),(865,'DOOR SHELL {no glass, motors, hinges}',105.55,6,0),(866,'DOOR w/MANUAL WINDOW',263.95,6,0),(867,'DRIVE SHAFT (PER SECTION)',76.75,6,0),(868,'EGR PRESSURE FEEDBACK SENSOR',47.95,6,0),(869,'ENGINE BLOCK (SHORT BLOCK)',316.75,6,0),(870,'ENGINE COVER (DOG HOUSE)',81.55,6,0),(871,'EXHAUST MANIFOLD',76.75,6,0),(872,'FAN BELT - V TYPE',9.55,6,0),(873,'FENDER (W/O ACCESSORIES)',143.95,6,0),(874,'FLOOR MATS',9.55,6,0),(875,'FLYWHEEL STANDARD',91.15,6,0),(876,'FRONT END (W/O COOLERS)',1579.15,6,0),(877,'FUEL FILLER DOOR',28.75,6,0),(878,'FUEL INJECTION PUMP',263.95,6,0),(879,'FUEL PRESSURE REGULATOR',43.15,6,0),(880,'FUEL PUMP ELECTRIC',76.75,6,0),(881,'FUEL TANK (UNPROCESSED)',182.35,6,0),(882,'FUSE BOX COVER',14.35,6,0),(883,'GLASS-DOOR',105.55,6,0),(884,'GLASS-SIDE (VAN)',105.55,6,0),(885,'GLOVE BOX DOOR',23.95,6,0),(886,'GRILLE SHELL',167.95,6,0),(887,'HARMONIC BALANCER',71.95,6,0),(888,'HEAD LAMP COVER (W/O PARK)',43.15,6,0),(889,'HEAD LAMP HID (BULB)',158.35,6,0),(890,'HEAD LAMP MOUNT BRACKET',33.55,6,0),(891,'HEADER PANEL (NO ACCESS.)',191.95,6,0),(892,'HEADREST ELECTRIC',86.35,6,0),(893,'HEATER CONTROL - ELECTRONIC',105.55,6,0),(894,'HEATER HOUSING',67.15,6,0),(895,'HOOD (NO ACCESSORIES)',211.15,6,0),(896,'HOOD LATCH',43.15,6,0),(897,'HOOD W/GRILL',316.75,6,0),(898,'HUB CAP-WIRE',38.35,6,0),(899,'I - BEAM FRONT SUSPENSION',182.35,6,0),(900,'IGNITION SWITCH',52.75,6,0),(901,'INSTRUMENT CLUSTER REG.',81.55,6,0),(902,'INTAKE MANIFOLD - CAST IRON',95.95,6,0),(903,'INTERCOOLER',182.35,6,0),(904,'INTERIOR TRIM LENGTH OVER 3\'',47.95,6,0),(905,'JUMPER CABLES',33.55,6,0),(906,'LIFT GATE (BOX TRUCK)',0,6,0),(907,'LUG WRENCH - 4 WAY',28.75,6,0),(908,'MARKER LIGHT',38.35,6,0),(909,'MIRROR-INSIDE',28.75,6,0),(910,'MIRROR-OUTSIDE REMOTE',52.75,6,0),(911,'MOLDINGS - STEEL (PER INCH)',0.48,6,0),(912,'MUDGAURD (EACH)',19.15,6,0),(913,'OIL CAP',14.35,6,0),(914,'OIL PAN-STEEL',52.75,6,0),(915,'PARKING LAMP',47.95,6,0),(916,'PISTON (EACH)',33.55,6,0),(917,'POWER SEAT BELT TRACK',129.55,6,0),(918,'POWER STEERING RESERVOIR',28.75,6,0),(919,'POWER WINDOW SWITCH W/MIRROR',67.15,6,0),(920,'QUARTER PANEL CENER CUT',369.55,6,0),(921,'RADIATOR DUAL FAN W/ SHROUD',158.35,6,0),(922,'RADIATOR FAN SHROUD',33.55,6,0),(923,'RADIATOR SUPPORT',105.55,6,0),(924,'RADIATOR/WASHER TANK COMBO',43.15,6,0),(925,'RADIO AM/FM DVD PLAYER W/O SCREEN',129.55,6,0),(926,'RADIO AM/FM W/CD PLAYER',129.55,6,0),(927,'RADIO SPEAKER (FACTORY)',28.75,6,0),(928,'RADIO W/ HEATER CONTROL',172.75,6,0),(929,'REAR END CLIP',1319.95,6,0),(930,'RING GEAR',95.95,6,0),(931,'RUNNING BOARDS',76.75,6,0),(932,'SEAT - BUCKET (EACH)',76.75,6,0),(933,'SEAT - COVER',14.35,6,0),(934,'SEAT - TRACK W/O MOTOR',52.75,6,0),(935,'SEAT BELT (PER PERSON)',52.75,6,0),(936,'SHIFT KNOB',14.35,6,0),(937,'SHIFTER ASSEMBLY (FLOOR)',105.55,6,0),(938,'SMOG PUMP',71.95,6,0),(939,'SPARE TIRE COVER',47.95,6,0),(940,'SPEEDOMETER-DIGITAL',115.15,6,0),(941,'SPINDLE/KNUCKLE W-ABS HUB',182.35,6,0),(942,'SPRING - AIR BAG',105.55,6,0),(943,'STARTER',143.95,6,0),(944,'STEERING COLUMN-REGULAR',105.55,6,0),(945,'STEERING GEAR - POWER',158.35,6,0),(946,'STEERING RACK - MANUAL',105.55,6,0),(947,'STEERING WHEEL',62.35,6,0),(948,'STRUT - W/COIL SPRING',182.35,6,0),(949,'STRUT MOUNT',28.75,6,0),(950,'SUNROOF SHADE',47.95,6,0),(951,'SWAY/STABALIZER BAR',67.15,6,0),(952,'TAIL LAMP',95.95,6,0),(953,'TAIL PIPE',28.75,6,0),(954,'THROTTLE BODY',163.15,6,0),(955,'THROTTLE POSITION SENSOR',67.15,6,0),(956,'TIMING CHAIN COVER',43.15,6,0),(957,'TIRE (16 INCH AND LARGER)',115.15,6,0),(958,'TORQUE CONVERTER',67.15,6,0),(959,'TRAILER HITCH-REESE TYPE',129.55,6,0),(960,'TRANS. CROSSMEMBER (ALUMINUM)',119.95,6,0),(961,'TRANSMISSION - 4X4',791.95,6,0),(962,'TRANSMISSION SOLENOID PACK',129.55,6,0),(963,'TRUCK BED W/OUT TAILGTE',959.95,6,0),(964,'TRUNK LATCH W/ MOTOR',81.55,6,0),(965,'TURBO INTERCOOLER',182.35,6,0),(966,'TURN SIGNAL SWITCH',47.95,6,0),(967,'TURN SIGNAL SWITCH W/WIPERS',76.75,6,0),(968,'VACUUM TREE (EACH)',9.55,6,0),(969,'VALVE COVER-STEEL',28.75,6,0),(970,'WASHER RESERVOIR W/O PUMP',28.75,6,0),(971,'WHEEL - ALUMINUM',105.55,6,0),(972,'WHEEL - STEEL',52.75,6,0),(973,'WINDOW CRANK',23.95,6,0),(974,'WINDSHIELD',235.15,6,0),(975,'WIPER ARM',28.75,6,0),(976,'WIPER TRANS LINK',9.55,6,0),(977,'RADIATOR DUAL FAN W/O SHROUD',148.35,6,0),(978,'RADIATOR DUAL FAN W/O',145.35,6,0),(979,'RADIATOR DUAL W/O',141.35,6,0),(980,'DUAL FAN W/',158.55,6,0),(981,'RADIATOR DUAL FAN W/ SHROUD',158.35,5,0),(982,'RADIATOR/WASHER TANK COMBO',43.15,5,0),(983,'AC CONDENSOR Premium',50.5,5,0),(984,'RADIATOR DUAL FAN W/ PREMIUM SHROUD',220,5,0),(1004,'Rim weights',3,3,0),(1005,'Fron bridgesprings',45,1,0);
+/*!40000 ALTER TABLE `parts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `performed_services`
+--
+
+DROP TABLE IF EXISTS `performed_services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `performed_services` (
+  `visit_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `service_qty` int(11) NOT NULL,
+  `price` float NOT NULL,
+  PRIMARY KEY (`visit_id`,`service_id`),
+  KEY `fk_table1_visits1_idx` (`visit_id`),
+  KEY `fk_table1_services1_idx` (`service_id`),
+  CONSTRAINT `fk_table1_services1` FOREIGN KEY (`service_id`) REFERENCES `services` (`service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_table1_visits1` FOREIGN KEY (`visit_id`) REFERENCES `visits` (`visit_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `performed_services`
+--
+
+LOCK TABLES `performed_services` WRITE;
+/*!40000 ALTER TABLE `performed_services` DISABLE KEYS */;
+INSERT INTO `performed_services` VALUES (1,281,1,30),(2,279,1,120),(2,281,1,30),(3,281,1,30),(3,322,1,101),(4,228,1,120),(4,230,1,30),(6,114,1,250),(6,115,1,150),(7,99,2,108),(7,100,1,31.5),(8,243,2,50),(8,248,1,50),(9,175,4,105),(9,176,2,165),(10,287,2,150),(10,289,2,90),(11,71,2,135),(11,92,1,9),(12,77,4,9),(13,194,1,15),(14,326,1,45),(14,327,2,14),(15,67,2,45),(15,328,2,45),(16,147,1,15),(16,152,1,25),(17,11,3,12),(18,288,2,120),(19,271,2,150),(19,284,2,105),(20,101,1,22.5),(21,274,3,90),(21,289,3,90),(22,272,3,150),(22,291,2,150),(23,288,2,120),(23,289,2,90),(24,275,3,450),(25,280,2,75),(25,322,3,101);
+/*!40000 ALTER TABLE `performed_services` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `services` (
+  `service_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `price` float NOT NULL,
+  `car_segment_id` int(11) NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`service_id`),
-  INDEX `fk_services_car_segments1_idx` (`car_segment_id` ASC) VISIBLE,
-  CONSTRAINT `fk_services_car_segments1`
-    FOREIGN KEY (`car_segment_id`)
-    REFERENCES `smart_garage`.`car_segments` (`car_segment_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 329
-DEFAULT CHARACTER SET = latin1;
+  KEY `fk_services_car_segments1_idx` (`car_segment_id`),
+  CONSTRAINT `fk_services_car_segments1` FOREIGN KEY (`car_segment_id`) REFERENCES `car_segments` (`car_segment_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=329 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `services`
+--
 
--- -----------------------------------------------------
--- Table `smart_garage`.`performed_services`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`performed_services` (
-  `visit_id` INT(11) NOT NULL,
-  `service_id` INT(11) NOT NULL,
-  `service_qty` INT(11) NOT NULL,
-  `price` FLOAT NOT NULL,
-  PRIMARY KEY (`visit_id`, `service_id`),
-  INDEX `fk_table1_visits1_idx` (`visit_id` ASC) VISIBLE,
-  INDEX `fk_table1_services1_idx` (`service_id` ASC) VISIBLE,
-  CONSTRAINT `fk_table1_services1`
-    FOREIGN KEY (`service_id`)
-    REFERENCES `smart_garage`.`services` (`service_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_table1_visits1`
-    FOREIGN KEY (`visit_id`)
-    REFERENCES `smart_garage`.`visits` (`visit_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+LOCK TABLES `services` WRITE;
+/*!40000 ALTER TABLE `services` DISABLE KEYS */;
+INSERT INTO `services` VALUES (1,'REPLACEMENT CLUTCH',120,1,1),(2,'FRONT BRIDGE REPAIR: Replacement hinge',18,4,0),(3,'FRONT BRIDGE REPAIR: Replacing the nozzle',12,1,0),(4,'FRONT BRIDGE REPAIR: Overlay change',16,1,0),(5,'FRONT BRIDGE REPAIR: Change stabilizing bar',24,1,0),(6,'FRONT BRIDGE REPAIR: Replacement of a ridge',24,1,0),(7,'FRONT BRIDGE REPAIR: Replacement front spring',40,1,0),(8,'FRONT BRIDGE REPAIR: Shank replacement',40,1,0),(9,'FRONT BRIDGE REPAIR: Change of square p-s',24,1,0),(10,'FRONT BRIDGE REPAIR: Changing the drive shaft',40,1,0),(11,'FRONT BRIDGE REPAIR: Change of tie',12,1,0),(12,'ENGINE: Engine removal and installation',200,1,0),(13,'ENGINE: Removal head',120,1,0),(14,'ENGINE: Change of eng. chain',64,1,0),(15,'ENGINE: Change of eng. belt',80,1,0),(16,'ENGINE: Replacement collector',40,1,0),(17,'ENGINE: Replacement oil seal',40,1,0),(18,'ENGINE: Replacement crankcase gasket',24,1,0),(19,'ENGINE: Replacement gasket valvest',24,1,0),(20,'TRANSMISSION: Replacement transmission box ',120,1,0),(21,'STEERING SYSTEM: Change of steering box',60,1,0),(22,'STEERING SYSTEM: Change of steering rail',56,1,0),(23,'STEERING SYSTEM: Change of hydraulic rail',88,1,0),(24,'COOLING SYSTEM: Replacing the radiator',32,1,0),(25,'COOLING SYSTEM: Thermostat change',20,1,0),(26,'COOLING SYSTEM: Water change',8,1,0),(27,'COOLING SYSTEM: Replacement radiator heating',80,1,0),(28,'COOLING SYSTEM: Water pump replacement',56,1,0),(29,'CARDAN REPAIR: Changing the square',28,1,0),(30,'CARDAN REPAIR: Replacing the rubber box',20,1,0),(31,'CARDAN REPAIR: Replacement hanging bearing',28,1,0),(32,'CARDAN REPAIR: Cardan shaft change',40,1,0),(33,'REAR AXLE: Changing the drive shaft',32,1,0),(34,'REAR AXLE: Rear springs replacement',24,1,0),(35,'REAR AXLE: Shock absorber replacement',24,1,0),(36,'REAR AXLE: Differential oil seal replacement',40,1,0),(37,'BRAKING SYSTEM: Replacement breaking pump',24,1,0),(38,'BRAKING SYSTEM: Power-steering change',32,1,0),(39,'BRAKING SYSTEM: Replacing the hose',20,1,0),(40,'BRAKING SYSTEM: Rear brake pads replacement',24,1,0),(41,'BRAKING SYSTEM: Deaeration',8,1,0),(42,'BRAKING SYSTEM: Manual cable change',28,1,0),(43,'BRAKING SYSTEM: Adjustable parking brake',8,1,0),(44,'BRAKING SYSTEM: Change of a breaking disk',20,1,0),(45,'EL. INSTALLATION: Replacing the halogen bulb',12,1,0),(46,'EL. INSTALLATION: Stop machine change ',12,1,0),(47,'EL. INSTALLATION: Wiper repair',28,1,0),(48,'EL. INSTALLATION: Heating fan repair',96,1,0),(49,'EL. INSTALLATION: Repair of electric windows',28,1,0),(50,'EL. INSTALLATION: Installation of fog lights',20,1,0),(51,'EL. INSTALLATION: Installation of cd players',20,1,0),(52,'REPLACEMENT CLUTCH',135,2,0),(53,'FRONT BRIDGE REPAIR: Replacement hinge',18,2,0),(54,'FRONT BRIDGE REPAIR: Replacing the nozzle',13.5,2,0),(55,'FRONT BRIDGE REPAIR: Overlay change',18,2,0),(56,'FRONT BRIDGE REPAIR: Change stabilizing bar',27,2,0),(57,'FRONT BRIDGE REPAIR: Replacement of a ridge',27,2,0),(58,'FRONT BRIDGE REPAIR: Replacement front spring',45,2,0),(59,'FRONT BRIDGE REPAIR: Shank replacement',45,2,0),(60,'FRONT BRIDGE REPAIR: Change of square p-s',27,2,0),(61,'FRONT BRIDGE REPAIR: Changing the drive shaft',45,2,0),(62,'FRONT BRIDGE REPAIR: Change of tie',13.5,2,0),(63,'ENGINE: Engine removal and installation',225,2,0),(64,'ENGINE: Removal head',135,2,0),(65,'ENGINE: Change of eng. chain',72,2,0),(66,'ENGINE: Change of eng. belt',90,2,0),(67,'ENGINE: Replacement collector',45,2,0),(68,'ENGINE: Replacement oil seal',45,2,0),(69,'ENGINE: Replacement crankcase gasket',27,2,0),(70,'ENGINE: Replacement gasket valves',27,2,0),(71,'TRANSMISSION: Replacement transmission box ',135,2,0),(72,'STEERING SYSTEM: Change of steering box',67.5,2,0),(73,'STEERING SYSTEM: Change of steering rail',63,2,0),(74,'STEERING SYSTEM: Change of hydraulic rail',99,2,0),(75,'COOLING SYSTEM: Replacing the radiator',36,2,0),(76,'COOLING SYSTEM: Thermostat change',22.5,2,0),(77,'COOLING SYSTEM: Water change',9,2,0),(78,'COOLING SYSTEM: Replacement radiator heating',90,2,0),(79,'COOLING SYSTEM: Water pump replacement',63,2,0),(80,'CARDAN REPAIR: Changing the square',31.5,2,0),(81,'CARDAN REPAIR: Replacing the rubber box',22.5,2,0),(82,'CARDAN REPAIR: Replacement hanging bearing',31.5,2,0),(83,'CARDAN REPAIR: Cardan shaft change',45,2,0),(84,'REAR AXLE: Changing the drive shaft',36,2,0),(85,'REAR AXLE: Rear springs replacement',27,2,0),(86,'REAR AXLE: Shock absorber replacement',27,2,0),(87,'REAR AXLE: Differential oil seal replacement',45,2,0),(88,'BRAKING SYSTEM: Replacement breaking pump',27,2,0),(89,'BRAKING SYSTEM: Power-steering change',36,2,0),(90,'BRAKING SYSTEM: Replacing the hose',22.5,2,0),(91,'BRAKING SYSTEM: Rear brake pads replacement',27,2,0),(92,'BRAKING SYSTEM: Deaeration',9,2,0),(93,'BRAKING SYSTEM: Manual cable change',31.5,2,0),(94,'BRAKING SYSTEM: Adjustable parking brake',9,2,0),(95,'BRAKING SYSTEM: Change of a breaking disk',22.5,2,0),(96,'EL. INSTALLATION: Replacing the halogen bulb',13.5,2,0),(97,'EL. INSTALLATION: Stop machine change ',13.5,2,0),(98,'EL. INSTALLATION: Wiper repair',31.5,2,0),(99,'EL. INSTALLATION: Heating fan repair',108,2,0),(100,'EL. INSTALLATION: Repair of electric windows',31.5,2,0),(101,'EL. INSTALLATION: Installation of fog lights',22.5,2,0),(102,'EL. INSTALLATION: Installation of cd players',22.5,2,0),(103,'REPLACEMENT CLUTCH',150,3,0),(104,'FRONT BRIDGE REPAIR: Replacement hinge',20,3,0),(105,'FRONT BRIDGE REPAIR: Replacing the nozzle',15,3,0),(106,'FRONT BRIDGE REPAIR: Overlay change',20,3,0),(107,'FRONT BRIDGE REPAIR: Change stabilizing bar',30,3,0),(108,'FRONT BRIDGE REPAIR: Replacement of a ridge',30,3,0),(109,'FRONT BRIDGE REPAIR: Replacement front spring',50,3,0),(110,'FRONT BRIDGE REPAIR: Shank replacement',50,3,0),(111,'FRONT BRIDGE REPAIR: Change of square p-s',30,3,0),(112,'FRONT BRIDGE REPAIR: Changing the drive shaft',50,3,0),(113,'FRONT BRIDGE REPAIR: Change of tie',15,3,0),(114,'ENGINE: Engine removal and installation',250,3,0),(115,'ENGINE: Removal head',150,3,0),(116,'ENGINE: Change of eng. chain',80,3,0),(117,'ENGINE: Change of eng. belt',100,3,0),(118,'ENGINE: Replacement collector',50,3,0),(119,'ENGINE: Replacement oil seal',50,3,0),(120,'ENGINE: Replacement crankcase gasket',30,3,0),(121,'ENGINE: Replacement gasket valves',30,3,0),(122,'TRANSMISSION: Replacement transmission box ',150,3,0),(123,'STEERING SYSTEM: Change of steering box',75,3,0),(124,'STEERING SYSTEM: Change of steering rail',70,3,0),(125,'STEERING SYSTEM: Change of hydraulic rail',110,3,0),(126,'COOLING SYSTEM: Replacing the radiator',40,3,0),(127,'COOLING SYSTEM: Thermostat change',25,3,0),(128,'COOLING SYSTEM: Water change',10,3,0),(129,'COOLING SYSTEM: Replacement radiator heating',100,3,0),(130,'COOLING SYSTEM: Water pump replacement',70,3,0),(131,'CARDAN REPAIR: Changing the square',35,3,0),(132,'CARDAN REPAIR: Replacing the rubber box',25,3,0),(133,'CARDAN REPAIR: Replacement hanging bearing',35,3,0),(134,'CARDAN REPAIR: Cardan shaft change',50,3,0),(135,'REAR AXLE: Changing the drive shaft',40,3,0),(136,'REAR AXLE: Rear springs replacement',30,3,0),(137,'REAR AXLE: Shock absorber replacement',30,3,0),(138,'REAR AXLE: Differential oil seal replacement',50,3,0),(139,'BRAKING SYSTEM: Replacement breaking pump',30,3,0),(140,'BRAKING SYSTEM: Power-steering change',40,3,0),(141,'BRAKING SYSTEM: Replacing the hose',25,3,0),(142,'BRAKING SYSTEM: Rear brake pads replacement',30,3,0),(143,'BRAKING SYSTEM: Deaeration',10,3,0),(144,'BRAKING SYSTEM: Manual cable change',35,3,0),(145,'BRAKING SYSTEM: Adjustable parking brake',10,3,0),(146,'BRAKING SYSTEM: Change of a breaking disk',25,3,0),(147,'EL. INSTALLATION: Replacing the halogen bulb',15,3,0),(148,'EL. INSTALLATION: Stop machine change ',15,3,0),(149,'EL. INSTALLATION: Wiper repair',35,3,0),(150,'EL. INSTALLATION: Heating fan repair',120,3,0),(151,'EL. INSTALLATION: Repair of electric windows',35,3,0),(152,'EL. INSTALLATION: Installation of fog lights',25,3,0),(153,'EL. INSTALLATION: Installation of cd players',25,3,0),(154,'REPLACEMENT CLUTCH',225,4,0),(155,'FRONT BRIDGE REPAIR: Replacement hinge',30,4,0),(156,'FRONT BRIDGE REPAIR: Replacing the nozzle',22.5,4,0),(157,'FRONT BRIDGE REPAIR: Overlay change',30,4,0),(158,'FRONT BRIDGE REPAIR: Change stabilizing bar',45,4,0),(159,'FRONT BRIDGE REPAIR: Replacement of a ridge',45,4,0),(160,'FRONT BRIDGE REPAIR: Replacement front spring',75,4,0),(161,'FRONT BRIDGE REPAIR: Shank replacement',75,4,0),(162,'FRONT BRIDGE REPAIR: Change of square p-s',45,4,0),(163,'FRONT BRIDGE REPAIR: Changing the drive shaft',75,4,0),(164,'FRONT BRIDGE REPAIR: Change of tie',22.5,4,0),(165,'ENGINE: Engine removal and installation',375,4,0),(166,'ENGINE: Removal head',225,4,0),(167,'ENGINE: Change of eng. chain',120,4,0),(168,'ENGINE: Change of eng. belt',150,4,0),(169,'ENGINE: Replacement collector',75,4,0),(170,'ENGINE: Replacement oil seal',75,4,0),(171,'ENGINE: Replacement crankcase gasket',45,4,0),(172,'ENGINE: Replacement gasket valves',45,4,0),(173,'TRANSMISSION: Replacement transmission box ',225,4,0),(174,'STEERING SYSTEM: Change of steering box',112.5,4,0),(175,'STEERING SYSTEM: Change of steering rail',105,4,0),(176,'STEERING SYSTEM: Change of hydraulic rail',165,4,0),(177,'COOLING SYSTEM: Replacing the radiator',60,4,0),(178,'COOLING SYSTEM: Thermostat change',37.5,4,0),(179,'COOLING SYSTEM: Water change',15,4,0),(180,'COOLING SYSTEM: Replacement radiator heating',150,4,0),(181,'COOLING SYSTEM: Water pump replacement',105,4,0),(182,'CARDAN REPAIR: Changing the square',52.5,4,0),(183,'CARDAN REPAIR: Replacing the rubber box',37.5,4,0),(184,'CARDAN REPAIR: Replacement hanging bearing',52.5,4,0),(185,'CARDAN REPAIR: Cardan shaft change',75,4,0),(186,'REAR AXLE: Changing the drive shaft',60,4,0),(187,'REAR AXLE: Rear springs replacement',45,4,0),(188,'REAR AXLE: Shock absorber replacement',45,4,0),(189,'REAR AXLE: Differential oil seal replacement',75,4,0),(190,'BRAKING SYSTEM: Replacement breaking pump',45,4,0),(191,'BRAKING SYSTEM: Power-steering change',60,4,0),(192,'BRAKING SYSTEM: Replacing the hose',37.5,4,0),(193,'BRAKING SYSTEM: Rear brake pads replacement',45,4,0),(194,'BRAKING SYSTEM: Deaeration',15,4,0),(195,'BRAKING SYSTEM: Manual cable change',52.5,4,0),(196,'BRAKING SYSTEM: Adjustable parking brake',15,4,0),(197,'BRAKING SYSTEM: Change of a breaking disk',37.5,4,0),(198,'EL. INSTALLATION: Replacing the halogen bulb',22.5,4,0),(199,'EL. INSTALLATION: Stop machine change ',22.5,4,0),(200,'EL. INSTALLATION: Wiper repair',52.5,4,0),(201,'EL. INSTALLATION: Heating fan repair',180,4,0),(202,'EL. INSTALLATION: Repair of electric windows',52.5,4,0),(203,'EL. INSTALLATION: Installation of fog lights',37.5,4,0),(204,'EL. INSTALLATION: Installation of cd players',37.5,4,0),(205,'REPLACEMENT CLUTCH',300,5,0),(206,'FRONT BRIDGE REPAIR: Replacement hinge',40,5,0),(207,'FRONT BRIDGE REPAIR: Replacing the nozzle',30,5,0),(208,'FRONT BRIDGE REPAIR: Overlay change',40,5,0),(209,'FRONT BRIDGE REPAIR: Change stabilizing bar',60,5,0),(210,'FRONT BRIDGE REPAIR: Replacement of a ridge',60,5,0),(211,'FRONT BRIDGE REPAIR: Replacement front spring',100,5,0),(212,'FRONT BRIDGE REPAIR: Shank replacement',100,5,0),(213,'FRONT BRIDGE REPAIR: Change of square p-s',60,5,0),(214,'FRONT BRIDGE REPAIR: Changing the drive shaft',100,5,0),(215,'FRONT BRIDGE REPAIR: Change of tie',30,5,0),(216,'ENGINE: Engine removal and installation',500,5,0),(217,'ENGINE: Removal head',300,5,0),(218,'ENGINE: Change of eng. chain',160,5,0),(219,'ENGINE: Change of eng. belt',200,5,0),(220,'ENGINE: Replacement collector',100,5,0),(221,'ENGINE: Replacement oil seal',100,5,0),(222,'ENGINE: Replacement crankcase gasket',60,5,0),(223,'ENGINE: Replacement gasket valves',60,5,0),(224,'TRANSMISSION: Replacement transmission box ',300,5,0),(225,'STEERING SYSTEM: Change of steering box',150,5,0),(226,'STEERING SYSTEM: Change of steering rail',140,5,0),(227,'STEERING SYSTEM: Change of hydraulic rail',220,5,0),(228,'COOLING SYSTEM: Replacing the radiator',80,5,0),(229,'COOLING SYSTEM: Thermostat change',50,5,0),(230,'COOLING SYSTEM: Water change',20,5,0),(231,'COOLING SYSTEM: Replacement radiator heating',200,5,0),(232,'COOLING SYSTEM: Water pump replacement',140,5,0),(233,'CARDAN REPAIR: Changing the square',70,5,0),(234,'CARDAN REPAIR: Replacing the rubber box',50,5,0),(235,'CARDAN REPAIR: Replacement hanging bearing',70,5,0),(236,'CARDAN REPAIR: Cardan shaft change',100,5,0),(237,'REAR AXLE: Changing the drive shaft',80,5,0),(238,'REAR AXLE: Rear springs replacement',60,5,0),(239,'REAR AXLE: Shock absorber replacement',60,5,0),(240,'REAR AXLE: Differential oil seal replacement',100,5,0),(241,'BRAKING SYSTEM: Replacement breaking pump',60,5,0),(242,'BRAKING SYSTEM: Power-steering change',80,5,0),(243,'BRAKING SYSTEM: Replacing the hose',50,5,0),(244,'BRAKING SYSTEM: Rear brake pads replacement',60,5,0),(245,'BRAKING SYSTEM: Deaeration',20,5,0),(246,'BRAKING SYSTEM: Manual cable change',70,5,0),(247,'BRAKING SYSTEM: Adjustable parking brake',20,5,0),(248,'BRAKING SYSTEM: Change of a breaking disk',50,5,0),(249,'EL. INSTALLATION: Replacing the halogen bulb',30,5,0),(250,'EL. INSTALLATION: Stop machine change ',30,5,0),(251,'EL. INSTALLATION: Wiper repair',70,5,0),(252,'EL. INSTALLATION: Heating fan repair',240,5,0),(253,'EL. INSTALLATION: Repair of electric windows',70,5,0),(254,'EL. INSTALLATION: Installation of fog lights',50,5,0),(255,'EL. INSTALLATION: Installation of cd players',50,5,0),(256,'REPLACEMENT CLUTCH',450,6,0),(257,'FRONT BRIDGE REPAIR: Replacement hinge',60,6,0),(258,'FRONT BRIDGE REPAIR: Replacing the nozzle',45,6,0),(259,'FRONT BRIDGE REPAIR: Overlay change',60,6,0),(260,'FRONT BRIDGE REPAIR: Change stabilizing bar',90,6,0),(261,'FRONT BRIDGE REPAIR: Replacement of a ridge',90,6,0),(262,'FRONT BRIDGE REPAIR: Replacement front spring',150,6,0),(263,'FRONT BRIDGE REPAIR: Shank replacement',150,6,0),(264,'FRONT BRIDGE REPAIR: Change of square p-s',90,6,0),(265,'FRONT BRIDGE REPAIR: Changing the drive shaft',150,6,0),(266,'FRONT BRIDGE REPAIR: Change of tie',45,6,0),(267,'ENGINE: Engine removal and installation',750,6,0),(268,'ENGINE: Removal head',450,6,0),(269,'ENGINE: Change of eng. chain',240,6,0),(270,'ENGINE: Change of eng. belt',300,6,0),(271,'ENGINE: Replacement collector',150,6,0),(272,'ENGINE: Replacement oil seal',150,6,0),(273,'ENGINE: Replacement crankcase gasket',90,6,0),(274,'ENGINE: Replacement gasket valves',90,6,0),(275,'TRANSMISSION: Replacement transmission box ',450,6,0),(276,'STEERING SYSTEM: Change of steering box',225,6,0),(277,'STEERING SYSTEM: Change of steering rail',210,6,0),(278,'STEERING SYSTEM: Change of hydraulic rail',330,6,0),(279,'COOLING SYSTEM: Replacing the radiator',120,6,0),(280,'COOLING SYSTEM: Thermostat change',75,6,0),(281,'COOLING SYSTEM: Water change',30,6,0),(282,'COOLING SYSTEM: Replacement radiator heating',300,6,0),(283,'COOLING SYSTEM: Water pump replacement',210,6,0),(284,'CARDAN REPAIR: Changing the square',105,6,0),(285,'CARDAN REPAIR: Replacing the rubber box',75,6,0),(286,'CARDAN REPAIR: Replacement hanging bearing',105,6,0),(287,'CARDAN REPAIR: Cardan shaft change',150,6,0),(288,'REAR AXLE: Changing the drive shaft',120,6,0),(289,'REAR AXLE: Rear springs replacement',90,6,0),(290,'REAR AXLE: Shock absorber replacement',90,6,0),(291,'REAR AXLE: Differential oil seal replacement',150,6,0),(292,'BRAKING SYSTEM: Replacement breaking pump',90,6,0),(293,'BRAKING SYSTEM: Power-steering change',120,6,0),(294,'BRAKING SYSTEM: Replacing the hose',75,6,0),(295,'BRAKING SYSTEM: Rear brake pads replacement',90,6,0),(296,'BRAKING SYSTEM: Deaeration',30,6,0),(297,'BRAKING SYSTEM: Manual cable change',105,6,0),(298,'BRAKING SYSTEM: Adjustable parking brake',30,6,0),(299,'BRAKING SYSTEM: Change of a breaking disk',75,6,0),(300,'EL. INSTALLATION: Replacing the halogen bulb',45,6,0),(301,'EL. INSTALLATION: Stop machine change ',45,6,0),(302,'EL. INSTALLATION: Wiper repair',105,6,0),(303,'EL. INSTALLATION: Heating fan repair',360,6,0),(304,'EL. INSTALLATION: Repair of electric windows',105,6,0),(305,'EL. INSTALLATION: Installation of fog lights',75,6,0),(306,'EL. INSTALLATION: Installation of cd players',75,6,0),(322,'COOLING: Replacing the radiator',101,6,0),(323,'ENGINE: Replacement oil seal premuim',20,4,0),(324,'new service',29,2,0),(325,'new service',25.5,3,0),(326,'Tyre change ',45,3,0),(327,'Rim cleaning',14,3,0),(328,'Engine head cleanup',45,2,0);
+/*!40000 ALTER TABLE `services` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `tokens`
+--
 
--- -----------------------------------------------------
--- Table `smart_garage`.`tokens`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`tokens` (
-  `token_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `token` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`token_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 97
-DEFAULT CHARACTER SET = latin1;
+DROP TABLE IF EXISTS `tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tokens` (
+  `token_id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(255) NOT NULL,
+  PRIMARY KEY (`token_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `tokens`
+--
 
--- -----------------------------------------------------
--- Table `smart_garage`.`used_parts`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `smart_garage`.`used_parts` (
-  `visit_id` INT(11) NOT NULL,
-  `part_id` INT(11) NOT NULL,
-  `part_qty` INT(11) NOT NULL,
-  `price` FLOAT NOT NULL,
-  PRIMARY KEY (`part_id`, `visit_id`),
-  INDEX `fk_used_parts_services1_idx` (`part_id` ASC) VISIBLE,
-  INDEX `fk_used_parts_visits1_idx` (`visit_id` ASC) VISIBLE,
-  CONSTRAINT `fk_used_parts_parts1`
-    FOREIGN KEY (`part_id`)
-    REFERENCES `smart_garage`.`parts` (`part_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_used_parts_visits1`
-    FOREIGN KEY (`visit_id`)
-    REFERENCES `smart_garage`.`visits` (`visit_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+LOCK TABLES `tokens` WRITE;
+/*!40000 ALTER TABLE `tokens` DISABLE KEYS */;
+INSERT INTO `tokens` VALUES (1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrcmFzaUB0ZWxlcmlrLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMTUwMjE5MX0.4vaic4ZBbIQtik6RhgfEL126Aaoq1CxFrvW9X76prxQ'),(2,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrcmFzaUB0ZWxlcmlrLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMTUwMjE5MX0.4vaic4ZBbIQtik6RhgfEL126Aaoq1CxFrvW9X76prxQ'),(3,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrcmFzaUB0ZWxlcmlrLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMTUwMjE5MX0.4vaic4ZBbIQtik6RhgfEL126Aaoq1CxFrvW9X76prxQ'),(4,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrcmFzaUB0ZWxlcmlrLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMTUwMjE5MX0.4vaic4ZBbIQtik6RhgfEL126Aaoq1CxFrvW9X76prxQ'),(5,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrcmFzaUB0ZWxlcmlrLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMTUwMjUxMX0.0s5_sXNKv2SaC0mMKc1sJikS4ljp9_h1dOp2PzAoZY4'),(6,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIxNTAyMDA0fQ.HsS_SPXqSxherwXx4euojePCYmEwM0Cxs4i7l_PKHsY'),(7,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIxNTAyMDA0fQ.HsS_SPXqSxherwXx4euojePCYmEwM0Cxs4i7l_PKHsY'),(8,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIxNTAyMDA0fQ.HsS_SPXqSxherwXx4euojePCYmEwM0Cxs4i7l_PKHsY'),(9,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTAzOTgxfQ.hOhYtYZrNOpAMd721AsJWoxlpXN6sePJ8tJpYTOTcKk'),(10,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA0NDUyfQ.RNkoPWmzyVErCi3O8Lsx9FMj3cJcvQYyaS6I3KfOS2Q'),(11,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA0NTY4fQ.dmoRRz6LVHXH_WOz9eD-N6a6NAcnP-uhUWoJ1TbTviM'),(12,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA3MzAzfQ.UJIrsc5IHSqx-x7xA_m2oRnAkvT-Cy0knhKKtJgBv_E'),(13,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA4ODM1fQ.5uX_876SEFqPo5CLbpnwhsOC6T27-FBIeMlLEcJx1Uk'),(14,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA5MjQxfQ.YmDycnh-B-rPsedEHhgdI6zHHyaQQ97wYT-5O_sJOy8'),(15,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA5MjQxfQ.YmDycnh-B-rPsedEHhgdI6zHHyaQQ97wYT-5O_sJOy8'),(16,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTA5MjQxfQ.YmDycnh-B-rPsedEHhgdI6zHHyaQQ97wYT-5O_sJOy8'),(17,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIwOTgxfQ.cwBzjMOCXvQWT8C7jN188SKUThSDtMCMJN0DxS7Iwvc'),(18,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIxOTYyfQ.6iwyt1isR4Xlm6sOIpstJ4GFn5UTTcPlyBvRbkAk-3w'),(19,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIyNjM3fQ.-Tf4znEqRg2b4yZfRSqnKDW0r-BNMxksAziPB2QwBDs'),(20,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIyODU2fQ.65ER_LJOGVVL4D2XaT4VDkW3pbUGFpg6u-fPBkyIUAM'),(21,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIyOTI4fQ.KimCZGheYC6NHaPm4X5M6t3eN6w8rugeVnLR1917I1Y'),(22,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIyOTU1fQ.JSb_2Vug2zVfgJQtR1FZNEhiK5DGhFbJUwOkSJibrlY'),(23,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIzMjYyfQ.TUMZ4FkAn0isbJZs-ulWFCzOyFD7esThfEqNLYUxUtE'),(24,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIzMzY1fQ.0FYJ3RJ6E6pfr3FtDGnEoxe5zoL_fJYMOME8ued3wgU'),(25,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIzNDIxfQ.s3qs14b6KuNSIrQ1yGKWQ6ERZ8sQQA15iZGhImRtqXc'),(26,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTIzOTU0fQ.sg9Y1MKfezCveOwOWGVygqXGjc6FNz72LmkppKZmNFw'),(27,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI0MTIwfQ.4YHVMvU53mxyy_m_iZWxFCCjoCZJcbnK-ioR-HaL2M4'),(28,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI1MDA0fQ.pK7yjtzzJ7e0Lo2Hf9kqKmFWEmFwE2pu1-kG6ZVgh5A'),(29,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI1MDk1fQ.S8Q3Az5x9w4heJ-uLHs4jZcVDEdxcLzBmVRMMYW6OEA'),(30,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI1NDIxfQ.DjFkRzpIVzoB86uk3Lg6hiYRdJBJMOip49ltuw98EAg'),(31,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI1NTUzfQ.parSbN_HeA_j3FFTO31qNi9pg4hrAU_qou7PywXTt8c'),(32,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI1NzUyfQ.eFFN9GYstlL5gdVr6t1Grj_0nQfYI70gzYgCfnJST8w'),(33,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkaWRpQHRlbGVyaWsuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIyMTI1ODExfQ.E4GsY09xkk_SARzcIxU-fOnUMNOgnZk0yEL7sLR1Ekk'),(34,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjE0ODgzOX0.yd9vHk0NMvW0liiN9kwlPKI0r6fLMv_kvkJStVfe2us'),(35,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwMDQ3Nn0.VJZMm0j7k8buZ2RK2gnVoD0ytIPfKe1TTCPkpKwM82k'),(36,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwMTc0NH0.6C9W3tHDJjAF4jjVWYrd_P3nZ41NiAYStslnMlUswtA'),(37,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbHlhbmFfZGl5YW5vdmFAeWFob28uY29tIiwiaWQiOjEwMiwiaWF0IjoxNjIyMjAzMDk5LCJleHAiOjE2MjIyMDM5OTl9.zJEZfuDE_OkH-tCKc9LF1L53XvT5T1ClFs64JQqgWlc'),(38,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbHlhbmFfZGl5YW5vdmFAeWFob28uY29tIiwiaWQiOjEwMiwiaWF0IjoxNjIyMjA0MTI2LCJleHAiOjE2MjIyMDUwMjZ9.BwMHsGhTjrlurtQmL9twRQ_uE3WzKhlPROzl_YiARBg'),(39,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExMCwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNDUxMH0.8N4NJU1HdzcSJvmBL1LG09pL0FNYj_AQeA-jAARy0nE'),(40,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExMCwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNDc5OH0.HduwK9DQlOeg9iw9kz5TCZ9Pi1IAUvToFKIGPjpVIQY'),(41,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExMCwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNDgxMX0.0NJHLtpPljfaEydP0rzy2SHxPRIUD9VYG-9SGo8FCaY'),(42,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExMCwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNDkzOH0.yseL0CQOgRhRmJc49hO0EvV6miWCDDaV2P0Ij_8uNfs'),(43,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNDIyOH0.LG61V6viRvac8bRNxv4BEhwllBTeY5xvozZwTliWZtY'),(44,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbHlhbmFfZGl5YW5vdmFAeWFob28uY29tIiwiaWQiOjEwMiwiaWF0IjoxNjIyMjA2Nzc3LCJleHAiOjE2MjIyMDc2Nzd9.L4RYxwMqv65fwIWgcjXtevKYrb3PRuOh-uFrbK75yuU'),(45,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNzQ2NH0.74iocWf2YE6tWk-yLfr7-aEVvmrKh5WPWvEmJo1fRK4'),(46,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNzg3OH0.VOWQ87zY-LdIYISeEaFBhFhX5dSXTbBeq1xZcxWYhfQ'),(47,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExMCwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNTg1OX0.52s8gY3yIQs-DZG4Ufhy4vMsyL5wMSKmaEte3p2jgdI'),(48,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwNzk2OH0.wUoCVopzkUxOWBGKKlEFB0hpyMCndt5TlWaPvA4VcyY'),(49,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIwODIwMH0.6wHVeMBMNilCaxkBly4B_W7068GVpdIHHSme59aT-BU'),(50,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIyMzQ5Mn0.gO3wmrAq5fyAabC8GoIT-5TWjg_tuoyuPA2F3nU2JIA'),(51,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIyMzYwMn0.3I74HEJqXzfOfJxjJyP7Mqz9hg7ofiGybIMmiiScNXM'),(52,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIzNDAxMn0.WABMrDYk1Ry7ea5WYOGikxr6ROqcUcR-Q0IJqV2R0So'),(53,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjIzNDg0Nn0.WZuaqc_nbduG23RWEyJhRwb-yYuFnVKkchTk6-y1skM'),(54,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjI3OTUwMH0.NHNeIsclVCDuyqVb4Y13t46EAP-naZDeMC1J6Yp2FC8'),(55,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjI5ODU4Mn0.wqWBZhUAUT9x3OIfTAIBNGSnVnM8bhzmsFhxScXvk1A'),(56,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjQwODEzMX0.EoJYwQwtlH9OMC2vlHmz6SO1y_MeGaOzXKNcGtZC4vU'),(57,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMjQwODE3M30.c73VgmB427Rve0XzMUFnb290E_2TJoTjpWdasJgOLww'),(58,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMjQwODYyNH0.wXWH1QXSfNTKxIJ30lwaLQ3EWa4ba1C5Q7GqqlLE3x4'),(59,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMjQxMDk1Mn0.5lpIhlD2yTjvjwL0X8xJlWjafhn8LBRy-nJGaqQcEiU'),(60,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMjQxMjIwNH0.JCU1UEsiIXMN3IvOWeVEAkKd03sZd2jwtHqIN2BYtt4'),(61,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwNSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjQ1NzcxMn0.HxAzZ6caZc4AqSYzZi0zKFWoVzinSKDhtTWacHf-bk4'),(62,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjU2NzM5MH0.EvGRzrkLcA6mqIjU0xEO9URB830foiBv05KJCEFHGDI'),(63,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjYzNjMyMn0.IV4F5Ip6Kv62zDUmaAWrbQNESFUL8HyDLJEFGv9NTP8'),(64,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExMCwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjU2NzI5Mn0.PyK0zErXAV57deffPK4fOTKLyv862nJ038CjxP9c5oI'),(65,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrcmFzaUB0ZWxlcmlrLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMTUwMjUxMX0.0s5_sXNKv2SaC0mMKc1sJikS4ljp9_h1dOp2PzAoZY4'),(66,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjYzNjQ1MH0.Ozlho2_VX2j3dAHIODW1ZiK_gZ9J8E731b1RxqwjLj4'),(67,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjY0OTk3N30.zb2-a7Bk4_21NjH9_h91HqLt_AuDU6lQZyLVzstrN4c'),(68,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImttbGFkZW5vdmRAZ21haWwuY29tIiwiaWQiOjEwMSwiaWF0IjoxNjIyOTEyMDQyLCJleHAiOjE2MjI5MTI5NDJ9.ZSxAwjph-jpyU6da1_-1AKoGfBA-egs-u6hp6EXeW00'),(69,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjkxMjQ1NX0.iRxXJ0NOl6mES7euY-njmAeNJ0sKih3Z1YFqHqFi8RU'),(70,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjgyNTA0Mn0.C9X0pXWjor82MEGQuo9iEP0poQZNiwgxCzQi6cCWd_8'),(71,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbHlhbmFfZGl5YW5vdmFAeWFob28uY29tIiwiaWQiOjEwMiwiaWF0IjoxNjIzMTUyNjI3LCJleHAiOjE2MjMxNTM1Mjd9.fwl2M3tqJrjRcIQpTiekKkpD3557RG1ByUbUIqvWkIU'),(72,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMjkxMzIxOH0.rfeHkYHGdVLI5AzuLO5AUNUJlp9MhKe63C6RbFyOGJA'),(73,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImttbGFkZW5vdmRAZ21haWwuY29tIiwiaWQiOjEwMSwiaWF0IjoxNjIzMTcyMDg3LCJleHAiOjE2MjMxNzI5ODd9.Rkp-rlyYvQsdDO8nOLe4iZLq5z5qGynMVCC8h3U9MME'),(74,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzE3MjE1OX0.8bIgFUqN835VUp5e0DmnneDhMWh99cMrmjN-RkCu_pw'),(75,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMzE3MjQ3MX0.3iUK8EbAuVaVPoqBtxm8slJKSldvWolaHcnC4WV6zho'),(76,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMzE3MjQ4Mn0.5u1w_gRpKhNb5q2PpbveYcN_LPSijpRCPaKvjoPijfo'),(77,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImttbGFkZW5vdmRAZ21haWwuY29tIiwiaWQiOjEwMSwiaWF0IjoxNjIzMTcyNzA3LCJleHAiOjE2MjMxNzM2MDd9.AERRTNTYGmaCooyPGS5ZgAN8EzXj8tDIbe4b-lRKonc'),(78,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYyMzE3Mjc3OX0.O7L85r0-z9gvnFh7IeE5fgW6KFhWCywxsok0Iw_7Egs'),(79,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzE3MjgxMn0.Zhy114b0ksh6nGcjX4o2xYAMKsmsSCJ-YkX8GF76WVs'),(80,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImttbGFkZW5vdmRAZ21haWwuY29tIiwiaWQiOjEwMSwiaWF0IjoxNjIzMTc5MDM0LCJleHAiOjE2MjMxNzk5MzR9.kg_n_dVtD-w_f2m8XBZMG_xg65djF5_gQtwEE3YRNOc'),(81,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzE1MjgwMn0.3Y4LuPF68woYt-12Z-Q92GcA6n-s5t-3FPNTvtXUqDk'),(82,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI0ODAxMX0.4kA5vtJmcH1wlBDYsV3sAv3DjqTm-cmaZKSixki9fI8'),(83,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI1ODUzMH0.dv9QqiCeM8tOpMdHpctY5ZUiLzksVl5GLp9OuUJNSv0'),(84,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI2MDM4NH0.ofnwk642SqtUVVfPD1u3wGJiEvsHKXAKTFKn1m68DhM'),(85,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2MiwiZW1haWwiOiJzbWFydGdhcmFnZWtkQG91dGxvb2suY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjIzMjYxNTEyfQ.n_N_cbe1JJ-sh9zGuKuJQJIFnFeTM1Qlr8nq2nDRbh0'),(86,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI2MTU4N30.y-vL_sIoLhzgdR9svDAl3dCI7FeGehlKxyMf3npYmdw'),(87,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2NCwiZW1haWwiOiJzbWFydGdhcmFnZWtkQG91dGxvb2suY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIzMjYzNDQwfQ.UR4G4VqdA2ICRVlIx09zSijogsH0tGqNwyazY-Yyz3g'),(88,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2NSwiZW1haWwiOiJzbWFydGdhcmFnZWtkQG91dGxvb2suY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIzMjYzNjUzfQ.PVt_hD_zf7l21ls6VpXQypSBV4GqC3o5MCswwTUn5v8'),(89,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2NSwiZW1haWwiOiJzbWFydGdhcmFnZWtkQG91dGxvb2suY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjIzMjYzNzI5fQ.N5l7r9iaLSDUCCGN7UdUTQ_zmamG14tQcFLvoBsByyg'),(90,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI2MzkzMH0._bt1MLl3uyPy6mShM4WmINLWEeDOeUXD2qFxIFS0J0Y'),(91,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImttbGFkZW5vdmRAZ21haWwuY29tIiwiaWQiOjEwMSwiaWF0IjoxNjIzMjY0MTE0LCJleHAiOjE2MjMyNjUwMTR9.I1WCrR2KfF_WlGIkJo-IEIglxldXxVMPLfoDSuKKGeM'),(92,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI2NDE3M30.wdYhUabToiWBx9FAyorRKElRxzIAfllQnYeLs0-Augo'),(93,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMiwiZW1haWwiOiJkZWx5YW5hX2RpeWFub3ZhQHlhaG9vLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI1NjAwMX0.V-9MW7N0NacgTivuwC2PMwwwD_ze1ASdp8SwAKbfRvI'),(94,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI2NDIxMX0.Kp9f6d3dqZzB0GJjMCdfHcWnTldQ4GCn5AjuXf6wWyM'),(95,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMSwiZW1haWwiOiJrbWxhZGVub3ZkQGdtYWlsLmNvbSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTYyMzI3MTg1MH0.L3bbu8gWoHw-T9nx-h4RFnc7Xpql6FMNvhO6aIEJP_Q'),(96,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImttbGFkZW5vdmRAZ21haWwuY29tIiwiaWQiOjEwMSwiaWF0IjoxNjIzMjc0NzcwLCJleHAiOjE2MjMyNzU2NzB9.RnXvMxYarKfE5_-ucARQIGoT6k-uXqinbeG0zNv5M9o');
+/*!40000 ALTER TABLE `tokens` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `used_parts`
+--
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+DROP TABLE IF EXISTS `used_parts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `used_parts` (
+  `visit_id` int(11) NOT NULL,
+  `part_id` int(11) NOT NULL,
+  `part_qty` int(11) NOT NULL,
+  `price` float NOT NULL,
+  PRIMARY KEY (`part_id`,`visit_id`),
+  KEY `fk_used_parts_services1_idx` (`part_id`),
+  KEY `fk_used_parts_visits1_idx` (`visit_id`),
+  CONSTRAINT `fk_used_parts_parts1` FOREIGN KEY (`part_id`) REFERENCES `parts` (`part_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_used_parts_visits1` FOREIGN KEY (`visit_id`) REFERENCES `visits` (`visit_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `used_parts`
+--
+
+LOCK TABLES `used_parts` WRITE;
+/*!40000 ALTER TABLE `used_parts` DISABLE KEYS */;
+INSERT INTO `used_parts` VALUES (12,169,2,2.86),(20,177,2,2.86),(20,178,2,2.86),(11,209,1,7.18),(12,248,1,287.98),(7,268,1,8.62),(6,335,1,175.98),(13,513,1,2.37),(9,622,2,7.17),(8,652,3,211.16),(21,828,2,9.55),(22,860,3,76.75),(19,879,3,43.15),(25,893,3,105.55),(21,912,2,19.15),(2,921,1,158.35),(2,924,2,43.15),(3,924,1,43.15),(23,929,2,1319.95),(18,945,2,158.35),(1,957,4,115.15),(24,960,2,119.95),(10,974,2,235.15),(2,979,2,141.35),(3,980,1,158.55),(4,981,1,158.35),(4,982,1,43.15),(14,1004,7,3),(17,1005,4,45);
+/*!40000 ALTER TABLE `used_parts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `company_name` varchar(45) NOT NULL,
+  `phone` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `address_id` int(11) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
+  `role` enum('customer','employee') NOT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `fk_customers_addresses_idx` (`address_id`),
+  CONSTRAINT `fk_customers_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Arnaldo','OIlier','Thoughtbeat','0822370319','aoilier0@bbb.org',1,'Kwzur5R6I',0,'customer'),(2,'Simone','Oram','Linkbuzz','0871432560','soram1@alexa.com',2,'l1xr2gH',0,'employee'),(3,'Tori','Duester','Shufflebeat','0830698849','tduester2@google.com.br',3,'o6YL1ePH',0,'employee'),(4,'Dolores','Mousdall','Twinte','0895771671','dmousdall3@ocn.ne.jp',4,'siXSn5G2CwGY',0,'customer'),(5,'Benyamin','Beane','Bubblebox','0806815856','bbeane4@flavors.me',5,'h8iNN6',0,'employee'),(6,'Augie','Asty','Yombu','0817215417','aasty5@blogs.com',6,'go0j8d',0,'employee'),(7,'Glenden','Legion','Brainverse','0857538049','glegion6@shutterfly.com',7,'dIMOItP2e',0,'employee'),(8,'Ibbie','Petyakov','Fivespan','0839371845','ipetyakov7@cnbc.com',8,'pIsIIO95ult',0,'employee'),(9,'Eric','Hardware','Eayo','0846641534','ehardware8@amazon.co.uk',9,'ZcWso3Ux262',0,'employee'),(10,'Devonne','Fever','Yambee','0815727293','dfever9@studiopress.com',10,'xTka8Yj',0,'customer'),(11,'Vin','Haysar','Geba','0869314665','vhaysara@163.com',11,'P8Fn4kf4mP',0,'customer'),(12,'Roderigo','Snaddon','Dabfeed','0845997326','rsnaddonb@ibm.com',12,'AbQIRU',0,'employee'),(13,'Matt','Djekic','Minyx','0885308813','mdjekicc@phoca.cz',13,'Gy13HHBbeZ4',0,'customer'),(14,'Amitie','Goligher','Katz','0801405975','agoligherd@wsj.com',14,'9rJn3LiSiZWi',0,'employee'),(15,'Nerti','Cranmor','Tagfeed','0866565265','ncranmore@pcworld.com',15,'TAxNyKpyn30',0,'customer'),(16,'Puff','Fairfoot','Devbug','0801024052','pfairfootf@alexa.com',16,'bdHOtJ5jnLxc',0,'customer'),(17,'Alecia','Mockford','Gabcube','0871996273','amockfordg@goodreads.com',17,'tleYbddNCya',1,'customer'),(18,'Quinlan','Gleave','Vitz','0814672015','qgleaveh@toplist.cz',18,'pu3QcNzlRy9',0,'employee'),(19,'Florida','Nel','Skiba','0856686244','fneli@tinyurl.com',19,'ZXJT3WAr3k',0,'employee'),(20,'Tiffanie','Taplow','Skinte','0812649082','ttaplowj@hostgator.com',20,'SKQHMQPUY',0,'customer'),(21,'Eben','Delgardillo','Skajo','0871599673','edelgardillok@hhs.gov',21,'o3tlkr5sN',0,'employee'),(22,'Emlynne','Mance','Blognation','0846912194','emancel@ucoz.com',22,'EpCy3m8',0,'employee'),(23,'Kahlil','Huyton','Skippad','0838774370','khuytonm@seesaa.net',23,'zInyFOjTFlao',0,'employee'),(24,'Conny','Nucator','Abatz','0861371002','cnucatorn@nydailynews.com',24,'ykE1iohi9ezB',0,'employee'),(25,'Georgy','Challiss','Zooveo','0899159637','gchallisso@newyorker.com',25,'ruxHj96JQQ',0,'employee'),(26,'Stanley','Tuberfield','Jetwire','0863230223','stuberfieldp@state.gov',26,'0HH9w1dzZ',0,'customer'),(27,'Deerdre','Eddis','Mynte','0811051483','deddisq@weather.com',27,'FeCQ6ARqBa',0,'customer'),(28,'Mercie','Fiddymont','Gabcube','0836087549','mfiddymontr@narod.ru',28,'ummqUd4AbC3p',0,'customer'),(29,'Gilberte','Huckerby','Livefish','0821951899','ghuckerbys@google.es',29,'gPTRca6',0,'employee'),(30,'Izak','Lottrington','Eire','0869809300','ilottringtont@eepurl.com',30,'eEtqiOK',0,'employee'),(31,'Lyndsey','Le Blond','Pixonyx','0874658538','lleblondu@jigsy.com',31,'n7MSPHStQ4yx',0,'employee'),(32,'Cross','Willows','Thoughtblab','0889664942','cwillowsv@java.com',32,'Sj7gZVK',0,'customer'),(33,'Bobbi','Squibe','Blogpad','0825017758','bsquibew@myspace.com',33,'hKEA5mrLo',0,'customer'),(34,'Morgan','Collisson','Skibox','0853031111','mcollissonx@wunderground.com',34,'9prWe8L4',0,'customer'),(35,'Glynn','Bielfelt','Tekfly','0866522646','gbielfelty@xinhuanet.com',35,'D9R1ssTvs4W',0,'employee'),(36,'Christopher','Elmhurst','Topicblab','0841064647','celmhurstz@about.com',36,'NlIHx37QkCor',0,'employee'),(37,'Mariejeanne','Carlan','Oyope','0851586685','mcarlan10@php.net',37,'CgDxj57uo',0,'employee'),(38,'Mahalia','Stanyland','Buzzdog','0864386594','mstanyland11@sogou.com',38,'qVp7FXE5nZqR',0,'customer'),(39,'Bertie','Parradice','LiveZ','0855676849','bparradice12@google.ca',39,'v95tEDWGbx',0,'employee'),(40,'Melosa','Harrowell','Tazzy','0871082335','mharrowell13@columbia.edu',40,'MZ0Sx8PgF8K',0,'customer'),(41,'Florance','Huband','Oyonder','0801633949','fhuband14@i2i.jp',41,'JEn8EUdw',0,'employee'),(42,'Hillard','Kinneally','Gabtune','0862605988','hkinneally15@storify.com',42,'DLhGbV1xFADH',0,'employee'),(43,'Eldin','Soanes','Ooba','0880675672','esoanes16@vinaora.com',43,'azcx9n',0,'customer'),(44,'Anatol','Sylvaine','Divanoodle','0840856718','asylvaine17@rediff.com',44,'shN5V5SLM',1,'employee'),(45,'Keriann','Bownas','Jaxspan','0879488606','kbownas18@usgs.gov',45,'Tc0Hzm8wqmP',0,'employee'),(46,'Reinaldos','Le Teve','Youopia','0897972493','rleteve19@businessinsider.com',46,'bycimh09TX',0,'employee'),(47,'Leonora','Di Claudio','Kwideo','0855923374','ldiclaudio1a@bloglines.com',47,'kYdCinOa',0,'customer'),(48,'Nanice','Palumbo','Skibox','0882428519','npalumbo1b@google.com.au',48,'8pXv2PTzO',0,'customer'),(49,'Diane','Fiske','Brightbean','0874215950','dfiske1c@cbslocal.com',49,'SPvxj9chgPv4',0,'employee'),(50,'Bertha','Greenmon','Shuffletag','0873564385','bgreenmon1d@netlog.com',50,'3CbBc3',0,'employee'),(51,'Sheilakathryn','Juggings','Flipbug','0810278736','sjuggings1e@geocities.jp',51,'o89SfiJfeDNP',0,'customer'),(52,'Hector','Maisey','Thoughtmix','0837897489','hmaisey1f@noaa.gov',52,'YfT9YGjzb',0,'employee'),(53,'Rutter','Arden','Mycat','0884136687','rarden1g@pinterest.com',53,'GcBVnj',0,'employee'),(54,'Kristy','Griggs','Mybuzz','0858850112','kgriggs1h@shareasale.com',54,'tqsaRawZ',0,'customer'),(55,'Andros','Dovidian','Mynte','0888383024','adovidian1i@psu.edu',55,'Czl4ZCT',0,'employee'),(56,'Bel','O\'Doran','Fivechat','0836131293','bodoran1j@lulu.com',56,'91ttxlnwJ',0,'customer'),(57,'Koren','Kuschel','Yadel','0843003364','kkuschel1k@google.cn',57,'GQuP5wwP32Tq',0,'customer'),(58,'Sarah','Praundlin','Skimia','0854735479','spraundlin1l@reference.com',58,'BmSgA4V',0,'employee'),(59,'Kelcie','Goodband','Skynoodle','0850142740','kgoodband1m@flavors.me',59,'otmAwZIDM',0,'employee'),(60,'Hermione','Blackader','Kanoodle','0812379986','hblackader1n@chronoengine.com',60,'3MPquWGwuX',0,'customer'),(61,'Shaughn','Aldrin','Thoughtmix','0837795120','saldrin1o@indiatimes.com',61,'rkN0c6I',0,'customer'),(62,'Lulu','Sheards','Feedfish','0888210210','lsheards1p@miitbeian.gov.cn',62,'fHcaWFpoIGy',0,'employee'),(63,'Hunfredo','Ackred','Edgetag','0861177567','hackred1q@omniture.com',63,'WLd20ilWj',0,'customer'),(64,'Bax','Slimmon','Katz','0894155568','bslimmon1r@github.io',64,'cgULTOcWTnIo',0,'employee'),(65,'Merridie','Marchbank','Thoughtstorm','0865215515','mmarchbank1s@deliciousdays.com',65,'0gcvMHe',0,'employee'),(66,'Janek','Heggie','Oloo','0858384010','jheggie1t@google.com',66,'5cnUKoE',0,'customer'),(67,'Nettie','Arnaldo','Leenti','0830468464','narnaldo1u@netvibes.com',67,'RsMtUa2',0,'customer'),(68,'Carri','Leadbetter','Eayo','0851996023','cleadbetter1v@un.org',68,'9ER3P7g8eq',0,'customer'),(69,'Ulric','Northley','Talane','0816348552','unorthley1w@soundcloud.com',69,'S2ZAvi4N',0,'customer'),(70,'Brier','Jorg','Ozu','0816251375','bjorg1x@marriott.com',70,'1r8m10AXY',0,'employee'),(71,'Ximenez','Tirte','Youspan','0894396965','xtirte1y@jiathis.com',71,'8asOG2eSG',0,'employee'),(72,'Derril','Cashman','Kamba','0848707523','dcashman1z@slate.com',72,'CvUfjWTvbq6',0,'customer'),(73,'Pauletta','Simkins','Gigazoom','0821587946','psimkins20@google.ru',73,'qZepX2',0,'customer'),(74,'Toinette','Klosa','Divanoodle','0895977833','tklosa21@eventbrite.com',74,'nDji5VHK',0,'customer'),(75,'Stearne','Titcombe','Kare','0850674853','stitcombe22@hao123.com',75,'koIYxppCT',0,'employee'),(76,'Marietta','Littlekit','Topicblab','0896744021','mlittlekit23@elegantthemes.com',76,'JKX1d6BjU',0,'employee'),(77,'Lorain','Roskrug','Gigaclub','0858560263','lroskrug24@mayoclinic.com',77,'TIkQ8WxLiJF',0,'employee'),(78,'Harris','Crombie','Devshare','0845585081','hcrombie25@usgs.gov',78,'CbOhjgJNP8so',0,'employee'),(79,'Orv','Dufoure','Dabshots','0857135226','odufoure26@gravatar.com',79,'4RP8wlI',0,'customer'),(80,'Nyssa','Andrusov','Blogspan','0843563977','nandrusov27@gravatar.com',80,'aQwcLDBY',0,'employee'),(81,'Westbrook','Twallin','Twinder','0836601478','wtwallin28@typepad.com',81,'FmpfpHj',0,'customer'),(82,'Batsheva','Musgrove','Thoughtbeat','0895118973','bmusgrove29@rambler.ru',82,'BYnEZQpL',0,'employee'),(83,'Dix','Wardrop','Realcube','0818115841','dwardrop2a@harvard.edu',83,'lYEeo2dIQgJA',0,'customer'),(84,'Harmonie','Loseby','Ooba','0848228747','hloseby2b@hud.gov',84,'pBxZ7S19qeiy',0,'customer'),(85,'Yance','Gallager','Babbleopia','0869368526','ygallager2c@bbb.org',85,'W2WYimziEk',0,'employee'),(86,'Ofelia','Reucastle','Teklist','0840390584','oreucastle2d@scientificamerican.com',86,'oF618tI',0,'employee'),(87,'Cherey','Bletsoe','Gigazoom','0816379141','cbletsoe2e@youtu.be',87,'7a4pzQy',0,'customer'),(88,'Ximenes','Mart','Flashset','0803623560','xmart2f@unicef.org',88,'P8ZByO',0,'employee'),(89,'Elbert','Silman','Divape','0849275649','esilman2g@wunderground.com',89,'LyGpyQ2u',0,'employee'),(90,'Dud','Assandri','Agimba','0823588288','dassandri2h@elegantthemes.com',90,'CwUDhqrQZk',0,'customer'),(91,'Batsheva','Zettler','Mybuzz','0843053039','bzettler2i@cbslocal.com',91,'3EAKH9rJS5d',0,'employee'),(92,'Stern','Hart','Myworks','0829395237','shart2j@shop-pro.jp',92,'OLuEbJg7qvz',0,'customer'),(93,'Thomas','Mariault','Tagtune','0842702953','tmariault2k@soup.io',93,'phUPpUgUbE',0,'customer'),(94,'Tobin','Vearncombe','Twitterbridge','0842427059','tvearncombe2l@123-reg.co.uk',94,'iNqgUJ5FKqHn',0,'employee'),(95,'Debi','Screech','Vimbo','0888005905','dscreech2m@tamu.edu',95,'j3UFvlVSq',0,'employee'),(96,'Shalna','Airey','Mycat','0800919764','sairey2n@thetimes.co.uk',96,'nFIJmSHHg7CV',0,'employee'),(97,'Marybeth','Perritt','Viva','0818234471','mperritt2o@noaa.gov',97,'1XzTZlK',0,'customer'),(98,'Demetris','McPeake','Oyoloo','0841904248','dmcpeake2p@google.pl',98,'RjrCWP2d',0,'employee'),(99,'Kippie','Spurgeon','Twitterlist','0893872812','kspurgeon2q@huffingtonpost.com',99,'9pKE1yK',0,'employee'),(100,'Freda','Linfitt','Kimia','0878156420','flinfitt2r@oakley.com',100,'1eudenka6gCx',0,'customer'),(101,'Krasimir','Mladenov','Telerik','0898400401','kmladenovd@gmail.com',101,'$2b$10$3MPTpgPIJ1XvYBZfBDXV1eSl0EODPK0M13/Y7grI36ZZ7ZFVEBZt2',0,'employee'),(102,'Delyana','Yordanova','Telerik','0888888888','delyana_diyanova@yahoo.com',102,'$2b$10$3G5s9iEnSpbm59PKHpxCOe1LoLh0o85ZzyyJrNnRsLkuczIG7y5Ei',0,'employee');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vehicles`
+--
+
+DROP TABLE IF EXISTS `vehicles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vehicles` (
+  `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vin` varchar(45) NOT NULL,
+  `license_plate` varchar(45) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `manufactured_year` int(11) NOT NULL,
+  `engine_type` enum('gasoline','diesel','electric','hybrid') NOT NULL,
+  `transmission` enum('manual','automatic') NOT NULL DEFAULT 'manual',
+  `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`vehicle_id`),
+  KEY `fk_vehicles_models1_idx` (`model_id`),
+  KEY `fk_vehicles_customers1_idx` (`user_id`),
+  CONSTRAINT `fk_vehicles_models1` FOREIGN KEY (`model_id`) REFERENCES `models` (`model_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_vehicles_user1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vehicles`
+--
+
+LOCK TABLES `vehicles` WRITE;
+/*!40000 ALTER TABLE `vehicles` DISABLE KEYS */;
+INSERT INTO `vehicles` VALUES (1,'2D4RN4DE1AR190780','CA1111CB',102,74,2020,'electric','automatic',0),(2,'5TEPM62N31Z771391','CA0000CB',101,73,2019,'electric','automatic',0),(3,'1N6DD21S5WC353694','CA1235NH',102,28,2019,'gasoline','manual',0),(4,'2FTRX18W94CA59712','CA9999KM',101,1,2020,'diesel','automatic',0),(5,'4Y1SL63458Z411439','CA3499KM',101,64,2020,'diesel','manual',0),(6,'4Y1SL65848Z445629','CA4149KM',101,54,2020,'electric','manual',0),(7,'5TEPM62N31Z171891','CA239KM',101,29,2015,'diesel','automatic',0),(8,'4Y1SL45848Z411431','CA9139KM',101,53,2010,'diesel','automatic',0),(9,'1Y1SL65848Z411431','PK9999KM',101,74,2010,'diesel','manual',0),(10,'4Y1SL65848Z423431','CA9909KM',101,25,2017,'electric','automatic',0),(11,'2GKALMEK2F6183421','BT1235HH',55,44,2018,'gasoline','manual',0),(12,'5TEPM62N31Z451891','CA9913BM',101,41,2012,'diesel','automatic',0),(13,'5TEPM62N31Z471891','PB9999KM',101,60,2006,'diesel','automatic',0),(14,'JT3HN86R9Y0279473','P8756CH',14,40,2016,'diesel','manual',0),(15,'4Y1SL65848Z137439','PK4449KD',101,67,2013,'gasoline','automatic',0),(16,'4Y1SL65848Z434431','PP9999KM',101,38,2020,'gasoline','automatic',0),(17,'JT2HN86R9Y0279473','P1258BB',14,34,2016,'hybrid','manual',0);
+/*!40000 ALTER TABLE `vehicles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `visits`
+--
+
+DROP TABLE IF EXISTS `visits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `visits` (
+  `visit_id` int(11) NOT NULL AUTO_INCREMENT,
+  `notes` varchar(255) NOT NULL,
+  `visit_start` date NOT NULL DEFAULT current_timestamp(),
+  `visit_end` date DEFAULT NULL,
+  `vehicle_id` int(11) NOT NULL,
+  `status` enum('not started','in progress','ready') NOT NULL DEFAULT 'not started',
+  PRIMARY KEY (`visit_id`),
+  KEY `fk_visits_vehicles1_idx` (`vehicle_id`),
+  CONSTRAINT `fk_visits_vehicles1` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicle_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `visits`
+--
+
+LOCK TABLES `visits` WRITE;
+/*!40000 ALTER TABLE `visits` DISABLE KEYS */;
+INSERT INTO `visits` VALUES (1,'Maintenance','2021-06-06',NULL,3,'not started'),(2,'Maintenance','2021-05-21','2021-05-23',1,'ready'),(3,'Maintenance','2021-05-25',NULL,1,'in progress'),(4,'Maintenance cooling system','2021-05-31',NULL,2,'in progress'),(6,'Engine removal','2021-01-10',NULL,5,'not started'),(7,'El. installation repair','2021-06-02',NULL,6,'not started'),(8,'Breaking system repair','0000-00-00',NULL,7,'not started'),(9,'Sterring system maintenance','2021-03-10',NULL,8,'not started'),(10,'Cardan maintenance','2020-08-10',NULL,9,'not started'),(11,'Transmission and breaking system maintenance','2021-06-02',NULL,10,'not started'),(12,'Cooling system maintenance','2021-01-10',NULL,12,'not started'),(13,'Braking System Maintenance','2021-03-18',NULL,11,'not started'),(14,'Tyre change ','2021-02-23',NULL,13,'not started'),(15,'Engine maintenance','2021-05-10',NULL,15,'not started'),(16,'El. installation - bulbs replacement','2021-06-10',NULL,14,'not started'),(17,'Fron bridge repair','2021-06-10',NULL,16,'not started'),(18,'Rear axle annual maintenance','2021-06-03','2021-06-10',4,'ready'),(19,'Cardan repair','2021-02-15',NULL,4,'not started'),(20,'El installation maintenance','2020-09-10',NULL,17,'not started'),(21,'Rear axle spring replacement','2020-06-10',NULL,4,'not started'),(22,'Rear axle and engine repair','2021-06-01','2021-06-10',4,'ready'),(23,'Rear axle replacement','2021-02-10',NULL,4,'not started'),(24,'Transmission change','2021-03-10',NULL,4,'in progress'),(25,'Cooling system replacement of radiator','2021-04-10',NULL,4,'in progress');
+/*!40000 ALTER TABLE `visits` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-06-10  8:13:14
