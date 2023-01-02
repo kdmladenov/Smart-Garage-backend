@@ -61,7 +61,6 @@ partsController
       validatedPageSize = pageSize ? +pageSize : paging.parts.MIN_PAGE_SIZE;
     }
     page = page || 1;
-    console.log(validatedPageSize, 'validatedPageSize');
 
     partName = typeof partName === "string" ? partName : "";
     carSegment = typeof carSegment === "string" ? carSegment : "";

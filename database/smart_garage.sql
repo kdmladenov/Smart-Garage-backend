@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `smart_garage` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `smart_garage`;
+CREATE DATABASE  IF NOT EXISTS `smart_garage_upd` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `smart_garage_upd`;
 -- MariaDB dump 10.19  Distrib 10.5.9-MariaDB, for Win64 (AMD64)
 --
--- Host: triton.rdb.superhosting.bg    Database: smart_garage
+-- Host: triton.rdb.superhosting.bg    Database: smart_garage_upd
 -- ------------------------------------------------------
 -- Server version	10.3.29-MariaDB-log
 
