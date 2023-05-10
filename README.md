@@ -53,20 +53,6 @@ You will have to create it in the **root** folder, where `package.json` is place
 
 You can use the following content for your **.env** file. Keep in mind that you might need to replace `USER` and `PASSWORD` with the ones you have set in your `MySQL Workbench`. Also make sure that `DATABASE` name corresponds to the one with the data you will be using to run the application.
 
-```
-PORT=5555
-HOST=localhost
-DBPORT=3306
-USER=root
-PASSWORD=root
-DATABASE=smart_garage
-PRIVATE_KEY=sekreten_chasten_klu4
-TOKEN_LIFETIME=360000
-EMAIL_SERVICE=hotmail
-EMAIL_USER=smartgaragekd@outlook.com
-EMAIL_PASSWORD=BestSuperSekretenklu4
-```
-
 <br>
 
 
