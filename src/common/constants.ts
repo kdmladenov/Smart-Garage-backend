@@ -19,9 +19,9 @@ export const user = {
   MIN_PASSWORD_LENGTH: 8,
   MAX_PASSWORD_LENGTH: 20,
   EMAIL_REGEX: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
-  PHONE_REGEX: /^(08[0-9]{8})$/,
+  PHONE_REGEX: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
   PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
-  ROLES: [rolesEnum.customer, rolesEnum.employee],
+  ROLES: [rolesEnum.customer, rolesEnum.employee]
 };
 
 export const paging = {
