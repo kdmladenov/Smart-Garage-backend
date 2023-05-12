@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node .",
+    "build": "tsc",
     "start:dev": "nodemon dest/src/index.js",
     "build:dev": "tsc --watch --preserveWatchOutput",
     "dev": "concurrently \"npm:build:dev\" \"npm:start:dev\""
